@@ -150,17 +150,23 @@ class Applications(models.Model):
     def get_absolute_url(self):
         return reverse('applications_detail_url', kwargs={'id': self.id})
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.project_name
 
 
 class ApplicationsComments(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE)
     applications = models.ForeignKey(
         Applications,
         on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
     text = models.TextField(
         _('Текст комментария'))
-    create_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self) -> str:
+        return 'Комментарий {} от {}'.format(self.text, self.user.username)

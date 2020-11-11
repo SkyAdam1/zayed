@@ -43,13 +43,8 @@ class ApplicationsCreateView(CreateView):
 class ApplicationsDetailView(utils.ObjectDetailMixin, View):
     model = Applications
     template_name = 'applications/applications_detail.html'
+    form_class = forms.ApplicationsCreateComment
     success_url = reverse_lazy('applications_detail_url')
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
-        return super().form_valid(form)
 
 
 class ApplicationsReportingView(View):
