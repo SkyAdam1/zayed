@@ -124,6 +124,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#vscode
+# vscode
 .vscode/
+
+# Django media folder
 media
+
+# Django migrations
+***/migrations/*
+!__init__.py
