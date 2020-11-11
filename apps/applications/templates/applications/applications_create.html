@@ -1,0 +1,19 @@
+{% extends 'base_applications.html' %}
+
+
+{% block title %}
+    Applications create
+{% endblock title %}
+
+
+{% block content %}
+<div class="col-8" style="margin: 0 auto;">
+    <form id="add_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button form="add_form" type="submit" class="btn btn-primary mt-3">Отправить заявку</button>
+    </form>
+</div>
+{% endblock content %}
+    
+    

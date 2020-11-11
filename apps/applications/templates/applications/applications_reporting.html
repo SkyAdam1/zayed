@@ -1,0 +1,40 @@
+{% extends 'base_applications.html' %}
+
+
+{% block title %}
+    Appications reporting
+{% endblock title %}
+
+
+{% block content %}
+<div style="margin: 10px;">
+<table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Название проекта</th>
+        <th scope="col">Дата оформления</th>
+        <th scope="col">Документ</th>
+        <th scope="col">Статус заявки</th>
+        <th scope="col">Действие</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in application  %}
+      <tr>
+            <th scope="row">{{ item.id }}</th>
+            <td>{{ item.project_name }}</td>
+            <td>{{ item.data_create }}</td>
+            <td><a href="http://127.0.0.1:8000/media/{{ item.upload}}">Файл</a></td>
+            {% if item.status %}
+              <td>Проверено</td>
+            {% else %}
+              <td>Не проверено</td>
+            {% endif %}
+            <td><a class="btn btn-info" href="{{ item.get_absolute_url }}">Перейти</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

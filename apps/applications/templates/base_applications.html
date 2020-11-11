@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block tabs %}
+<div style="border:2px solid grey; border-radius: 10px; margin: 10px 0;">
+    <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'applications_output_url' %}">Заявки</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'applications_reporting_url' %}">Отчетность</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'applications_create_url' %}">Оформить заявку</a>
+        </li>
+        {% if request.user.is_staff %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'experts' %}">Заявки экспертов<sup>{{ experts_len }}</sup></a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+{% endblock tabs %}
+    
+    
