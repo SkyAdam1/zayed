@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      
+      {% block title %}
+        Zayed InnoHub
+      {% endblock title %}
+        
+    </title>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a href="/applications_output"><img src="{% static 'images/zayed.png' %}" width="80" height=""></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="blank" href="https://www.instagram.com/innohub_group/"><img src="{% static 'images/Instagram.svg' %}" width="30" height="30"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://www.instagram.com/innohub_group/"><img src="{% static 'images/Facebook.svg' %}" width="30" height="30"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://www.instagram.com/innohub_group/"><img src="{% static 'images/Twitter.svg' %}" width="30" height="30"></a>
+        </li>
+      </ul>
+
+      <form class="form-inline">
+          {% if request.user.is_authenticated %} 
+
+            <p class="mr-3 mt-3">{{request.user}}</p>
+            <a class="btn btn-danger" href="{% url 'logout_url' %}">Выйти</a>
+            
+          {% else %}
+
+          <a class="mr-3" href="{% url 'registration_url' %}">Регистрация</a>
+          <a class="btn btn-primary " href="{% url 'login_url' %}">Вход</a>
+
+          {% endif %}
+
+          
+      </form>
+    </nav>
+
+    
+    {% block tabs %}
+      
+    {% endblock tabs %}
+      
+    
+    {% block content %}
+    
+    {% endblock content %}
+      
+    
+</body>
+</html>
