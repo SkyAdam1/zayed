@@ -1,0 +1,23 @@
+{% extends 'base_users.html' %}
+
+
+{% block title %}
+    Login
+{% endblock title %}
+
+
+{% block content %}
+    {% csrf_token %}
+    <div style="padding-top: 8%;">
+    <div class="col-4" style="margin: 0 auto; border: 2px grey solid; border-radius: 10px; padding: 20px;  background-color: rgb(248,249,250);">
+      <h3 class="text-center mb-4">Авторизация</h3>
+      <form id="add_form" method="post">
+        {% csrf_token %}
+        {{form}}
+        <button form="add_form" type="submit" class="btn btn-primary mt-3">Войти</button>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
+    
+    

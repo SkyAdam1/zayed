@@ -1,0 +1,19 @@
+{% extends 'base_applications.html' %}
+
+
+{% block title %}
+    Experts output
+{% endblock title %}
+
+
+{% block content %}
+<div style="margin: 10px;">
+{% for expert in experts %}
+<div>
+<p>{{ expert.email }}</p> <a href="{% url 'active_expert' expert.pk %}">Активировать</a>
+</div>
+{% endfor %}
+</div>
+{% endblock content %}
+    
+    
