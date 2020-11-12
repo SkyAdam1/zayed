@@ -5,13 +5,13 @@ from apps.applications import models
 
 
 class ObjectDetailMixin:
-    model = models.Applications
-    form_class = forms.ApplicationsCreateForm
+    model = models.Application
+    form_class = forms.ApplicationCommentForm
     template_name = 'applications/applications_detail.html'
 
     def get(self, request, id):
         obj = get_object_or_404(self.model, id=id)
-        comments = models.ApplicationsComments.objects.filter(applications=id)
+        comments = models.ApplicationComment.objects.filter(application=id)
         return render(request, self.template_name, context={
             self.model.__name__.lower(): obj,
             'form': self.form_class,

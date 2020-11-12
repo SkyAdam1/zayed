@@ -1,10 +1,10 @@
 from django import forms
-from .models import Applications, ApplicationsComments
+from .models import Application, ApplicationComment
 
 
-class ApplicationsCreateForm(forms.ModelForm):
+class ApplicationCreateForm(forms.ModelForm):
     class Meta:
-        model = Applications
+        model = Application
         fields = (
             'project_name', 'project_site', 'data_project_start', 'legal_entity',
             'project_stage', 'project_description', 'businessmodel_description', 'problem_decision',
@@ -20,9 +20,9 @@ class ApplicationsCreateForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
 
 
-class ApplicationsCreateComment(forms.ModelForm):
+class ApplicationCommentForm(forms.ModelForm):
     class Meta:
-        model = ApplicationsComments
+        model = ApplicationComment
         fields = ('text', )
 
     def __init__(self, *args, **kwargs):

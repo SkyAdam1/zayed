@@ -3,8 +3,10 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
+from .validators import validate_file_extension
 
-class Applications(models.Model):
+
+class Application(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE)
@@ -54,7 +56,8 @@ class Applications(models.Model):
 
     photo_video_project = models.URLField(
         _("Ссылка на фото/видео продукта"),
-        max_length=200)
+        max_length=200,
+        blank=True)
 
     patentability = models.CharField(
         _("Насколько проработана патентоспособность продукта/услуги?"),
@@ -144,7 +147,8 @@ class Applications(models.Model):
         default=False)
 
     upload = models.FileField(
-        upload_to='files/', null=True, blank=True
+        upload_to='files/', null=True, blank=True,
+        validators=[validate_file_extension],
     )
 
     def get_absolute_url(self):
@@ -154,9 +158,9 @@ class Applications(models.Model):
         return self.project_name
 
 
-class ApplicationsComments(models.Model):
-    applications = models.ForeignKey(
-        Applications,
+class ApplicationComment(models.Model):
+    application = models.ForeignKey(
+        Application,
         on_delete=models.CASCADE)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
