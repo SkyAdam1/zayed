@@ -16,7 +16,10 @@
         <th scope="col">Дата оформления</th>
         <th scope="col">Ссылка на проект</th>
         <th scope="col">Статус заявки</th>
-        <th scope="col">Действие</th>
+        {% if request.user.is_staff or request.user.is_expert %}
+              <th scope="col">Действие</th>
+        {% endif %}
+        <th scope="col">Подробнее</th>
       </tr>
     </thead>
     <tbody>
@@ -25,13 +28,18 @@
             <th scope="row">{{ item.id }}</th>
             <td>{{ item.project_name }}</td>
             <td>{{ item.data_create }}</td>
-            <td>{{ item.project_site }}</td>
+            <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
             {% if item.status %}
               <td>Проверено</td>
-              <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Деактивировать</a></td>
+              {% if request.user.is_staff or request.user.is_expert %}
+                  <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Деактивировать</a>
+              {% endif %}
+              </td>
             {% else %}
               <td>Не проверено</td>
-              <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Проверить</a></td>
+              {% if request.user.is_staff or request.user.is_expert %}
+                  <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Проверить</a></td>
+              {% endif %}
             {% endif %}
             <td> <a class="btn btn-info" href="{{ item.get_absolute_url }}">Перейти</a> </td>
       </tr>
