@@ -22,7 +22,7 @@ class ObjectDetailMixin:
         form = self.form_class(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.applications = obj
+            comment.application = obj
             comment.user = request.user
             comment.save()
         return redirect('applications_detail_url', id=id)

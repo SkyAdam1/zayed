@@ -1,7 +1,8 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
+from django.views.generic.edit import UpdateView
 
 from . import forms, utils
 from .models import Application
@@ -24,7 +25,14 @@ class ApplicationsOutputView(View):
             elif(request.user.is_active):
                 application = Application.objects.filter(user=request.user)
             return render(request, 'applications/applications_output.html', context={'application': application})
-        return HttpResponse('Войдите в учетную запись')
+        return HttpResponseRedirect(reverse_lazy('login_url'))
+
+
+class ApplicationAddExpert(UpdateView):
+    model = Application
+    fields = ['designated_expert']
+    template_name = 'applications/applications_add_expert.html'
+    success_url = reverse_lazy('applications_output_url')
 
 
 class ApplicationsCreateView(CreateView):
@@ -56,7 +64,7 @@ class ApplicationsReportingView(View):
             elif(request.user.is_active):
                 application = Application.objects.filter(user=request.user)
             return render(request, 'applications/applications_reporting.html', context={'application': application})
-        return HttpResponse('Войдите в учетную запись')
+        return HttpResponseRedirect(reverse_lazy('login_url'))
 
 
 def switch_application_status(request, id):

@@ -148,8 +148,15 @@ class Application(models.Model):
 
     upload = models.FileField(
         upload_to='files/', null=True, blank=True,
-        validators=[validate_file_extension],
-    )
+        validators=[validate_file_extension])
+
+    designated_expert = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        default=None,
+        null=True,
+        related_name='Expert')
 
     def get_absolute_url(self):
         return reverse('applications_detail_url', kwargs={'id': self.id})

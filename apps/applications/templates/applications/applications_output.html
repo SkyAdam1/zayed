@@ -16,9 +16,7 @@
         <th scope="col">Дата оформления</th>
         <th scope="col">Ссылка на проект</th>
         <th scope="col">Статус заявки</th>
-        {% if request.user.is_staff or request.user.is_expert %}
-              <th scope="col">Действие</th>
-        {% endif %}
+        <th scope="col">Эксперт</th>
         <th scope="col">Подробнее</th>
       </tr>
     </thead>
@@ -30,18 +28,34 @@
             <td>{{ item.data_create }}</td>
             <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
             {% if item.status %}
-              <td>Проверено</td>
-              {% if request.user.is_staff or request.user.is_expert %}
-                  <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Деактивировать</a>
+              {% if request.user.is_staff %}
+                <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Деактивировать</a></td>
+                {% if item.designated_expert %}
+                  <td>{{ item.designated_expert.username }} <a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Изменить</a></td>
+                {% else %}
+                  <td><a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a></td>
+                {% endif %}
+                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
+              {% else %}
+                <td>Оправлено на проверку</td>
+                {% if item.designated_expert %}
+                  <td>{{ item.designated_expert.username }}</td>
+                {% else %}
+                  <td>Эксперт не назначен</td>
+                {% endif %}
+                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
               {% endif %}
-              </td>
             {% else %}
-              <td>Не проверено</td>
-              {% if request.user.is_staff or request.user.is_expert %}
-                  <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Проверить</a></td>
+              {% if request.user.is_staff %}
+                <td>Не отправлено на проверку</td>
+                <td>Эксперт не назначен</td>
+                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
+              {% else %}
+                <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a></td>
+                <td>Эксперт не назначен</td>
+                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Редактировать</a></td>
               {% endif %}
             {% endif %}
-            <td> <a class="btn btn-info" href="{{ item.get_absolute_url }}">Перейти</a> </td>
       </tr>
       {% endfor %}
     </tbody>
