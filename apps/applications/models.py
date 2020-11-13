@@ -150,6 +150,9 @@ class Application(models.Model):
         upload_to='files/', null=True, blank=True,
         validators=[validate_file_extension])
 
+    def get_update_url(self):
+         return reverse('application_update_url' , kwargs =  {'pk' : self.pk})
+
     designated_expert = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

@@ -21,16 +21,6 @@ class ApplicationCreateForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
 
 
-class ApplicationAddExpertForm(forms.ModelForm):
-    class Meta:
-        model = Application
-        fields = ('designated_expert', )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
-
 
 class ApplicationCommentForm(forms.ModelForm):
     class Meta:
@@ -41,3 +31,5 @@ class ApplicationCommentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+
+
