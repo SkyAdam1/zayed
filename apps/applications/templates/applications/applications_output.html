@@ -2,14 +2,14 @@
 
 
 {% block title %}
-    Appications output
+Appications output
 {% endblock title %}
 
 
 {% block content %}
-<div style="margin: 10px;">
-<table class="table">
-    <thead class="thead-light">
+<div class="table-responsive-md">
+  <table class="table table-striped">
+    <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Название проекта</th>
@@ -23,44 +23,43 @@
     <tbody>
       {% for item in application  %}
       <tr>
-            <th scope="row">{{ item.id }}</th>
-            <td>{{ item.project_name }}</td>
-            <td>{{ item.data_create }}</td>
-            <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
-            {% if item.status %}
-              {% if request.user.is_staff %}
-                <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Деактивировать</a></td>
-                {% if item.designated_expert %}
-                  <td>{{ item.designated_expert.username }} <a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Изменить</a></td>
-                {% else %}
-                  <td><a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a></td>
-                {% endif %}
-                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-              {% else %}
-                <td>Оправлено на проверку</td>
-                {% if item.designated_expert %}
-                  <td>{{ item.designated_expert.username }}</td>
-                {% else %}
-                  <td>Эксперт не назначен</td>
-                {% endif %}
-                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-              {% endif %}
-            {% else %}
-              {% if request.user.is_staff %}
-                <td>Не отправлено на проверку</td>
-                <td>Эксперт не назначен</td>
-                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-              {% else %}
-                <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a></td>
-                <td>Эксперт не назначен</td>
-                <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Редактировать</a></td>
-              {% endif %}
-            {% endif %}
+        <th scope="row">{{ item.id }}</th>
+        <td>{{ item.project_name }}</td>
+        <td>{{ item.data_create }}</td>
+        <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
+        {% if item.status %}
+        {% if request.user.is_staff %}
+        <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Деактивировать</a></td>
+        {% if item.designated_expert %}
+        <td>{{ item.designated_expert.username }} <a class="btn btn-info"
+            href="{% url 'applications_add_expert_url' item.pk %}">Изменить</a></td>
+        {% else %}
+        <td><a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a></td>
+        {% endif %}
+        <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
+        {% else %}
+        <td>Оправлено на проверку</td>
+        {% if item.designated_expert %}
+        <td>{{ item.designated_expert.username }}</td>
+        {% else %}
+        <td>Эксперт не назначен</td>
+        {% endif %}
+        <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
+        {% endif %}
+        {% else %}
+        {% if request.user.is_staff %}
+        <td>Не отправлено на проверку</td>
+        <td>Эксперт не назначен</td>
+        <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
+        {% else %}
+        <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a></td>
+        <td>Эксперт не назначен</td>
+        <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Редактировать</a></td>
+        {% endif %}
+        {% endif %}
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 {% endblock content %}
-    
-    
