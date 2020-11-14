@@ -2,16 +2,16 @@
 
 
 {% block title %}
-    Applicaton Add Expert
+Applicaton Add Expert
 {% endblock title %}
-    
+
 
 
 {% block content %}
-<div class="col-8" style="margin: 0 auto;">
+<div class="col-8">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }} 
+        {{ form.as_p }}
         <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
     </form>
 </div>
