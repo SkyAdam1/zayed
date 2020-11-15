@@ -27,15 +27,17 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item {% if request.resolver_match.url_name == 'applications_output_url' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'applications_output_url' %}">Заявки</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'applications_reporting_url' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'applications_reporting_url' %}">Отчетность</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'applications_create_url' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'applications_create_url' %}">Оформить заявку</a>
-        </li>
+        {% if request.user.is_authenticated %}
+            <li class="nav-item {% if request.resolver_match.url_name == 'applications_output_url' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'applications_output_url' %}">Заявки</a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'applications_reporting_url' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'applications_reporting_url' %}">Отчетность</a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'applications_create_url' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'applications_create_url' %}">Оформить заявку</a>
+            </li>
+        {% endif %}
         {% if request.user.is_staff %}
         <li class="nav-item {% if request.resolver_match.url_name == 'experts' %}active{% endif %}">
           <a class="nav-link" href="{% url 'experts' %}">Заявки экспертов
@@ -48,6 +50,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if request.user.is_authenticated %}
+        <button type="button" class="btn btn-secondary">{{request.user}}</button>
         <li class="nav-item">
           <a href="{% url 'logout_url' %}" class="nav-link">Выйти</a>
         </li>
@@ -62,7 +65,7 @@
       </ul>
     </div>
   </nav>
-
+  
   {% block tabs %}
 
   {% endblock tabs %}

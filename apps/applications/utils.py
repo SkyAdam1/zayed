@@ -13,7 +13,7 @@ class ObjectDetailMixin:
         obj = get_object_or_404(self.model, id=id)
         comments = models.ApplicationComment.objects.filter(application=id)
         return render(request, self.template_name, context={
-            self.model.__name__.lower(): obj,
+            'applications': obj,
             'form': self.form_class,
             'comments': comments})
 
