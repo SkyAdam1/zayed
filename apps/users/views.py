@@ -14,9 +14,10 @@ from django.views.generic import CreateView, View
 
 from .forms import CustomUserLoginForm, CustomUserRegistrationForm
 from .models import CustomUser, ExpertsList
+from .utils import UserAuthenticatedMixin
 
 
-class UserLoginView(views.LoginView):
+class UserLoginView(UserAuthenticatedMixin, views.LoginView):
     template_name = 'users/login.html'
     form_class = CustomUserLoginForm
     success_url = reverse_lazy('applications_output_url')
@@ -78,8 +79,6 @@ class UserActivateView(View):
 
 
 class Experts(LoginRequiredMixin, View):
-    login_url = reverse_lazy('login_url')
-
     def get(self, request):
         if request.user.is_superuser:
             users = CustomUser.objects.filter(is_expert=True, is_active=False)

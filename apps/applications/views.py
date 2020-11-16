@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
@@ -18,8 +18,6 @@ def output(request):
 
 
 class ApplicationsOutputView(LoginRequiredMixin, View):
-    login_url = reverse_lazy('login_url')
-
     def get(self, request):
         application = None
         if(request.user.is_superuser or request.user.is_expert):
@@ -41,7 +39,6 @@ class ApplicationsCreateView(LoginRequiredMixin, CreateView):
     model = Application
     template_name = 'applications/applications_create.html'
     form_class = forms.ApplicationCreateForm
-    login_url = reverse_lazy('login_url')
     success_url = reverse_lazy('applications_output_url')
 
     def form_valid(self, form):
@@ -55,7 +52,6 @@ class ApplicationsDetailView(LoginRequiredMixin, utils.ObjectDetailMixin, View):
     model = Application
     template_name = 'applications/applications_detail.html'
     form_class = forms.ApplicationCommentForm
-    login_url = reverse_lazy('login_url')
     success_url = reverse_lazy('applications_detail_url')
 
 
@@ -71,7 +67,7 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
 
 def switch_application_status(request, id):
     app = get_object_or_404(Application, pk=id)
-    if app.user == request.user:
+    if app.user == request.user or request.user.is_staff:
         if app.status:
             app.status = False
             app.save()
@@ -81,7 +77,7 @@ def switch_application_status(request, id):
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
 
 
-class ApplicationUpdateView(LoginRequiredMixin, UpdateView):
+class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Application
     fields = [
         'project_name', 'project_site', 'data_project_start', 'legal_entity',
@@ -92,5 +88,8 @@ class ApplicationUpdateView(LoginRequiredMixin, UpdateView):
         'fio_team', 'team_education', 'team_experience', 'position_member', 'team_create', 'ready_relocate',
         'ready_development', 'adress_company', 'inn_company', 'fio', 'email', 'upload']
     template_name = 'applications/application_update_form.html'
-    login_url = reverse_lazy('login_url')
     success_url = reverse_lazy('applications_output_url')
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
