@@ -41,7 +41,7 @@
         {% if request.user.is_staff %}
         <li class="nav-item {% if request.resolver_match.url_name == 'experts' %}active{% endif %}">
           <a class="nav-link" href="{% url 'experts' %}">Заявки экспертов
-            {% if experts_len < 0 %}
+            {% if experts_len > 0 %}
             <span class="badge badge-info">{{ experts_len }}</span>
             {% endif %}
           </a>
