@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'cl^sglcth^0ixg&!$nnq9@*0ah(h2bb11$)0dgmwh2#-3v80g1'
@@ -114,3 +116,5 @@ EMAIL_PORT = 587
 MEDIA_ROOT = BASE_DIR.joinpath('media')
 
 MEDIA_URL = '/media/'
+
+LOGIN_URL = reverse_lazy('login_url')
