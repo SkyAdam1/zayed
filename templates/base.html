@@ -41,7 +41,7 @@
         {% if request.user.is_staff %}
         <li class="nav-item {% if request.resolver_match.url_name == 'experts' %}active{% endif %}">
           <a class="nav-link" href="{% url 'experts' %}">Заявки экспертов
-            {% if experts_len < 0 %}
+            {% if experts_len > 0 %}
             <span class="badge badge-info">{{ experts_len }}</span>
             {% endif %}
           </a>
@@ -69,9 +69,11 @@
   {% block tabs %}
 
   {% endblock tabs %}
+  <div class="container">
   {% block content %}
-
+  
   {% endblock content %}
+  </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
   </script>
