@@ -80,12 +80,13 @@ def switch_application_status(request, id):
 
 class ApplicationUpdateView(UpdateView):
     model = Application
-    fields = ['project_name', 'project_site', 'data_project_start', 'legal_entity',
-            'project_stage', 'project_description', 'businessmodel_description', 'problem_decision',
-            'consumer_decision', 'product_difference', 'have_photo', 'photo_video_project', 'patentability',
-            'market_size', 'marketing_description', 'sale_strategy', 'desciption_risk', 'client_count',
-            'previous_investors', 'middle_cost', 'budget_development', 'middle_revenue', 'team_count',
-            'fio_team', 'team_education', 'team_experience', 'position_member', 'team_create', 'ready_relocate',
-            'ready_development', 'adress_company', 'inn_company', 'fio', 'email', 'upload']
+    fields = [
+        'project_name', 'project_site', 'data_project_start', 'legal_entity',
+        'project_stage', 'project_description', 'businessmodel_description', 'problem_decision',
+        'consumer_decision', 'product_difference', 'have_photo', 'photo_video_project', 'patentability',
+        'market_size', 'marketing_description', 'sale_strategy', 'desciption_risk', 'client_count',
+        'previous_investors', 'middle_cost', 'budget_development', 'middle_revenue', 'team_count',
+        'fio_team', 'team_education', 'team_experience', 'position_member', 'team_create', 'ready_relocate',
+        'ready_development', 'adress_company', 'inn_company', 'fio', 'email', 'upload']
     template_name = 'applications/application_update_form.html'
     success_url = reverse_lazy('applications_output_url')

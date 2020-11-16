@@ -4,6 +4,7 @@ from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from .validators import validate_file_extension
+from apps.users.models import ExpertsList
 
 
 class Application(models.Model):
@@ -150,16 +151,16 @@ class Application(models.Model):
         upload_to='files/', null=True, blank=True,
         validators=[validate_file_extension])
 
-    def get_update_url(self):
-         return reverse('application_update_url' , kwargs =  {'pk' : self.pk})
-
     designated_expert = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        ExpertsList,
         on_delete=models.CASCADE,
         blank=True,
         default=None,
         null=True,
-        related_name='Expert')
+        verbose_name='Эксперт')
+
+    def get_update_url(self):
+        return reverse('application_update_url', kwargs={'pk': self.pk})
 
     def get_absolute_url(self):
         return reverse('applications_detail_url', kwargs={'id': self.id})

@@ -12,7 +12,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, View
 
 from .forms import CustomUserLoginForm, CustomUserRegistrationForm
-from .models import CustomUser
+from .models import CustomUser, ExpertsList
 
 
 class UserLoginView(views.LoginView):
@@ -86,6 +86,7 @@ class ActiveExpert(View):
     def get(self, request, pk):
         user = CustomUser.objects.filter(pk=pk).first()
         user.is_active = True
+        ExpertsList(user=user).save()
         user.save()
         return HttpResponseRedirect(reverse_lazy('experts'))
 
