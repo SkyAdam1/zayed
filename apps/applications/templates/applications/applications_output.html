@@ -18,6 +18,7 @@ Appications output
         <th scope="col">Статус заявки</th>
         <th scope="col">Эксперт</th>
         <th scope="col">Подробнее</th>
+        <th scope="col">Редактировать</th>
       </tr>
     </thead>
     <tbody>
@@ -54,7 +55,8 @@ Appications output
         {% else %}
         <td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a></td>
         <td>Эксперт не назначен</td>
-        <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Редактировать</a></td>
+        <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
+        <td><a class="btn btn-info" href="{% url 'application_update_url' item.pk %}">Изменить</a></td>
         {% endif %}
         {% endif %}
       </tr>

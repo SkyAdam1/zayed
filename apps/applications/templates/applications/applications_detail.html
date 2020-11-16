@@ -15,6 +15,190 @@ Applicaton Detail
     <p>
         {{ applications.user }}
     </p>
+    <h4 class="mb-5">
+        Ссылка на официальный сайт проекта:
+        <a href = '{{ item.project_site }}' >{{applications.project_site}}</a>
+    </h4>
+    <h4>
+        Дата начала работы на проектом:
+        {{applications.data_project_start}}
+    </h4>
+    <h4 class="mb-5">
+        Является ли юридическим лицом : 
+        {{applications.legal_entity}}
+    </h4>
+    <h4 class="mb-5">
+        На какой стадии развития находится проект:
+        {{applications.project_stage}}
+    </h4>
+    <h4 class="mb-5">
+        Описание продукта/сервиса:
+        {{applications.project_description }}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Описание бизнес-модели:
+        {{applications.businessmodel_description}}
+    </h4>
+    <h4 class="mb-5">
+        Какую проблему решает продукт/сервис:
+        {{applications.problem_decision }}
+    </h4>
+    <h4 class="mb-5">
+        Как на данный момент потребители решают данную проблему:
+        {{applications.consumer_decision}}
+    </h4>
+    <h4 class="mb-5">
+        Чем продукт / сервис отличается от текущего способа решения проблемы:
+        {{applications.product_difference}}
+    </h4>
+    <h4 class="mb-5">
+        Ссылка на фото/видео продукта:
+        <a href = 'item.photo_video_project' >{{applications.photo_video_project}}</a>
+    </h4>
+    <h4 class="mb-5">
+        Насколько проработана патентоспособность продукта/услуги:
+        {{applications.patentability}}
+    </h4>
+    <h4 class="mb-5">
+        Оценка объема рынка:
+        {{applications.market_size}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Описание маркетинговой стратегии:
+        {{applications.marketing_description}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Описание стратегии продаж:
+        {{applications.sale_strategy}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Описание существующих рисков:
+        {{applications.desciption_risk }}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Количество клиентов на данный момент:
+        {{applications.client_count}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Предыдущие инвесторы (ФИО, сумма инвестиций):
+        {{applications.previous_investors}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Какая среднегодовая сумма издержек у компании / проекта за последние 2 года:
+        {{applications.middle_cost}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Какая сумма инвестирования необходима для дальнейшего развития:
+        {{applications.budget_development}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Какая среднегодовая сумма выручки у компании / проекта за последние 2 года:
+        {{applications.middle_revenue }}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Количество человек в команде:
+        {{applications.team_count}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        ФИО членов команды:
+        {{applications.fio_team}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Полученное образование членов команды:
+        {{applications.team_education}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Опыт работы членов команды:
+        {{applications.team_experience}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Текущая занимаемая должность членов команды:
+        {{applications.position_member}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Текущее место жительства членов команды:
+        {{applications.residence_member}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Как познакомились и пришли к решению работать вместе:
+        {{applications.team_create}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Готова ли команда переехать на время акселерационной программы в г.Грозный Чеченская Республика:
+        {{applications.ready_relocate}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Готова ли ваша команда посвятить все свое время развитию проекта в соответствии с акселерационной программой:
+        {{applications.ready_development}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Адрес компании:
+        {{applications.adress_company}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        ИНН компании:
+        {{applications.inn_company}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        ФИО контактного лица:
+        {{applications.fio}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Почта контактного лица:
+        {{applications.email}}
+
+
+    </h4>
+    <h4 class="mb-5">
+        Прикрепленный документ:
+        {{applications.upload}}
+
+
+    </h4>
     <form id="add_form" method="post">
         {% csrf_token %}
         {{ form }}
