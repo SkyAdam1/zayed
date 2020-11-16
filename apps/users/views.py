@@ -1,4 +1,5 @@
 from django.contrib.auth import login, views
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -76,18 +77,23 @@ class UserActivateView(View):
             return HttpResponse('Ссылка на активацию аккаунта недействительна!')
 
 
-class Experts(View):
+class Experts(LoginRequiredMixin, View):
+    login_url = reverse_lazy('login_url')
+
     def get(self, request):
-        users = CustomUser.objects.filter(is_expert=True, is_active=False)
-        return render(request, 'users/experts_output.html', context={'experts': users})
+        if request.user.is_superuser:
+            users = CustomUser.objects.filter(is_expert=True, is_active=False)
+            return render(request, 'users/experts_output.html', context={'experts': users})
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class ActiveExpert(View):
     def get(self, request, pk):
-        user = CustomUser.objects.filter(pk=pk).first()
-        user.is_active = True
-        ExpertsList(user=user).save()
-        user.save()
+        if request.user.is_superuser:
+            user = CustomUser.objects.filter(pk=pk).first()
+            user.is_active = True
+            ExpertsList(user=user).save()
+            user.save()
         return HttpResponseRedirect(reverse_lazy('experts'))
 
 
