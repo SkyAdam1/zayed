@@ -148,8 +148,7 @@ class Application(models.Model):
         default=False)
 
     upload = models.FileField(
-        upload_to='files/', null=True, blank=True,
-        validators=[validate_file_extension])
+        upload_to='files/', null=True, blank=True)
 
     designated_expert = models.ForeignKey(
         ExpertsList,
@@ -188,3 +187,17 @@ class ApplicationComment(models.Model):
 
     def __str__(self) -> str:
         return 'Комментарий {} от {}'.format(self.text, self.user.username)
+
+
+
+class ApplicationReport(models.Model):
+    app =  models.ForeignKey(Application,
+    on_delete=models.CASCADE,
+    blank=True,
+    default=None,
+    null=True,
+    verbose_name='Отчет')
+
+    upload1 = models.FileField(
+        upload_to='reporting/', null=True, 
+        validators=[validate_file_extension])
