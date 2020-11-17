@@ -193,7 +193,7 @@ class ApplicationReport(models.Model):
         blank=True,
         default=None,
         null=True,
-        verbose_name='Отчет')
+        verbose_name='Заявка')
 
     upload = models.FileField(
         upload_to='reporting/', null=True,
