@@ -164,9 +164,6 @@ class Application(models.Model):
     def get_absolute_url(self):
         return reverse('applications_detail_url', kwargs={'id': self.id})
 
-    # def get_absolute_media_url(self):
-    #     return reverse(settings.MEDIA_URL, args=[self.upload])
-
     def __str__(self) -> str:
         return self.project_name
 
@@ -189,15 +186,15 @@ class ApplicationComment(models.Model):
         return 'Комментарий {} от {}'.format(self.text, self.user.username)
 
 
-
 class ApplicationReport(models.Model):
-    app =  models.ForeignKey(Application,
-    on_delete=models.CASCADE,
-    blank=True,
-    default=None,
-    null=True,
-    verbose_name='Отчет')
+    app = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        blank=True,
+        default=None,
+        null=True,
+        verbose_name='Отчет')
 
-    upload1 = models.FileField(
-        upload_to='reporting/', null=True, 
+    upload = models.FileField(
+        upload_to='reporting/', null=True,
         validators=[validate_file_extension])
