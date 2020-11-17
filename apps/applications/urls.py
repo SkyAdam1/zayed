@@ -11,4 +11,5 @@ urlpatterns = [
     path('applications_detail/<int:id>', views.ApplicationsDetailView.as_view(), name='applications_detail_url'),
     path('applications_reporting/', views.ApplicationsReportingView.as_view(), name='applications_reporting_url'),
     path('applications_status/<int:id>', views.switch_application_status, name='switch_status'),
+    path('applications_add_report/', views.ApplicationReportView.as_view(), name='applications_add_report_url'),
 ]

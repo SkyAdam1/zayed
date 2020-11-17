@@ -163,13 +163,21 @@ Applicaton Detail
     </h4>
     <h4 class="mb-4">
         Готова ли команда переехать на время акселерационной программы в г.Грозный Чеченская Республика:
-        {{applications.ready_relocate}}
+        {% if applications.legal_entity %}
+            Да
+        {% else %}
+            Нет
+        {% endif %}
 
 
     </h4>
     <h4 class="mb-4">
         Готова ли ваша команда посвятить все свое время развитию проекта в соответствии с акселерационной программой:
-        {{applications.ready_development}}
+        {% if applications.legal_entity %}
+            Да
+        {% else %}
+            Нет
+        {% endif %}
 
 
     </h4>
@@ -188,6 +196,13 @@ Applicaton Detail
     <h4 class="mb-4">
         ФИО контактного лица:
         {{applications.fio}}
+
+
+    </h4>
+
+    <h4 class="mb-4">
+        Загруженный файл:
+        {{applications.upload}}
 
 
     </h4>
