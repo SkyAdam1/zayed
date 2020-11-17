@@ -165,6 +165,9 @@ class Application(models.Model):
     def get_absolute_url(self):
         return reverse('applications_detail_url', kwargs={'id': self.id})
 
+    # def get_absolute_media_url(self):
+    #     return reverse(settings.MEDIA_URL, args=[self.upload])
+
     def __str__(self) -> str:
         return self.project_name
 
