@@ -27,7 +27,6 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
             application = Application.objects.filter(user=request.user)
         for item in application:
             statuses.append(item.status)
-            print(item)
         return render(request, 'applications/applications_output.html', context={'application': application, 'statuses': statuses})
 
 
