@@ -20,11 +20,15 @@ def output(request):
 class ApplicationsOutputView(LoginRequiredMixin, View):
     def get(self, request):
         application = None
+        statuses = []
         if(request.user.is_superuser or request.user.is_expert):
             application = Application.objects.all()
         elif(request.user.is_active):
             application = Application.objects.filter(user=request.user)
-        return render(request, 'applications/applications_output.html', context={'application': application})
+        for item in application:
+            statuses.append(item.status)
+            print(item)
+        return render(request, 'applications/applications_output.html', context={'application': application, 'statuses': statuses})
 
 
 class ApplicationAddExpert(LoginRequiredMixin, UpdateView):
