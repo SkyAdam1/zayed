@@ -6,7 +6,7 @@ from django.views.generic import CreateView, View
 from django.views.generic.edit import UpdateView
 
 from . import forms, utils
-from .models import Application , ApplicationReport
+from .models import Application, ApplicationReport
 
 
 def index(request):
@@ -59,9 +59,9 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
     def get(self, request):
         application = None
         if(request.user.is_superuser or request.user.is_expert):
-            application = Application.objects.all()
+            application = ApplicationReport.objects.all()
         elif(request.user.is_active):
-            application = Application.objects.filter(user=request.user)
+            application = ApplicationReport.objects.filter(user=request.user)
         return render(request, 'applications/applications_reporting.html', context={'application': application})
 
 
@@ -95,8 +95,7 @@ class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         return obj.user == self.request.user
 
 
-
-class ApplicationReportView(LoginRequiredMixin,CreateView):
+class ApplicationReportView(LoginRequiredMixin, CreateView):
     model = ApplicationReport
     template_name = 'applications/applications_add_report.html'
     login_url = reverse_lazy('login_url')
