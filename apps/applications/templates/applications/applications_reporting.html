@@ -30,7 +30,7 @@ Appications reporting
         {% else %}
         <td>Не проверено</td>
         {% endif %}
-        <td><a class="btn btn-info" href="{{ item.get_absolute_url }}">Перейти</a></td>
+        <td><a class="btn btn-info" href="{% url 'reports_detail_url' item.pk %}">Перейти</a></td>
       </tr>
       {% endfor %}
     </tbody>

@@ -34,12 +34,14 @@
             <li class="nav-item {% if request.resolver_match.url_name == 'applications_reporting_url' %}active{% endif %}">
               <a class="nav-link" href="{% url 'applications_reporting_url' %}">Отчетность</a>
             </li>
-            <li class="nav-item {% if request.resolver_match.url_name == 'applications_create_url' %}active{% endif %}">
-              <a class="nav-link" href="{% url 'applications_create_url' %}">Оформить заявку</a>
-            </li>
-            <li class="nav-item {% if request.resolver_match.url_name == 'applications_create_url' %}active{% endif %}">
-              <a class="nav-link" href="{% url 'applications_add_report_url' %}">Добавить отчетность</a>
-            </li>
+            {% if not request.user.is_staff or not request.user.is_expert %}
+                  <li class="nav-item {% if request.resolver_match.url_name == 'applications_create_url' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'applications_create_url' %}">Оформить заявку</a>
+                  </li>
+                  <li class="nav-item {% if request.resolver_match.url_name == 'applications_create_url' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'applications_add_report_url' %}">Добавить отчетность</a>
+                  </li>
+            {% endif %}
         {% endif %}
         {% if request.user.is_staff %}
         <li class="nav-item {% if request.resolver_match.url_name == 'experts' %}active{% endif %}">

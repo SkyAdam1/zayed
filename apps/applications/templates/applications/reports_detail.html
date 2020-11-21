@@ -1,0 +1,23 @@
+{% extends 'base_applications.html' %}
+
+{% block title %}
+Reports remark
+{% endblock title %}
+
+{% block content %}
+	<div class="col-8">
+    <form id="add_form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <button form="add_form" type="submit" class="btn btn-primary mt-3">Добавить замечание</button>
+    </form>
+	</div>
+    {% for remark in remark %}
+    <div class="remarks">
+        <hr>
+        <h4>{{ remark.user.username }}</h4>
+        <p>{{ remark.text }}</p>
+        <small class="text-muted">{{ remark.created_at }}</small>
+    </div>
+{% endfor %}
+{% endblock content %}

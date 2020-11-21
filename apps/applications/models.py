@@ -198,3 +198,21 @@ class ApplicationReport(models.Model):
     upload = models.FileField(
         upload_to='reporting/', null=True,
         validators=[validate_file_extension])
+
+
+class ApplicationRemark(models.Model):
+    application = models.ForeignKey(
+        ApplicationReport,
+        on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
+    text = models.TextField(
+        _('Текст замечания'))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self) -> str:
+        return 'Замечание {} от {}'.format(self.text, self.user.username)

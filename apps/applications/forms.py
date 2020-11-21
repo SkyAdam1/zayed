@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Application, ApplicationComment , ApplicationReport
+from .models import Application, ApplicationComment , ApplicationReport , ApplicationRemark
 
 
 class ApplicationCreateForm(forms.ModelForm):
@@ -36,6 +36,18 @@ class ApplicationReportForm(forms.ModelForm):
     class Meta:
         model = ApplicationReport
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+
+class ApplicationRemarkForm(forms.ModelForm):
+    class Meta:
+        model = ApplicationRemark
+        fields = ('text', )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.views.generic.edit import UpdateView
-
+from .utils import *
 from . import forms, utils
 from .models import Application, ApplicationReport
 
@@ -16,7 +16,7 @@ def index(request):
 def output(request):
     return render(request, 'applications/applications_output.html')
 
-
+#список заявок
 class ApplicationsOutputView(LoginRequiredMixin, View):
     def get(self, request):
         application = None
@@ -29,7 +29,7 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
             statuses.append(item.status)
         return render(request, 'applications/applications_output.html', context={'application': application, 'statuses': statuses})
 
-
+#добавление эксперта для заявки
 class ApplicationAddExpert(LoginRequiredMixin, UpdateView):
     model = Application
     fields = ['designated_expert']
@@ -37,8 +37,8 @@ class ApplicationAddExpert(LoginRequiredMixin, UpdateView):
     login_url = reverse_lazy('login_url')
     success_url = reverse_lazy('applications_output_url')
 
-
-class ApplicationsCreateView(LoginRequiredMixin, CreateView):
+#создание заявки
+class ApplicationsCreateView(UserAuthenticatedMixin ,  LoginRequiredMixin, CreateView):
     model = Application
     template_name = 'applications/applications_create.html'
     form_class = forms.ApplicationCreateForm
@@ -50,24 +50,24 @@ class ApplicationsCreateView(LoginRequiredMixin, CreateView):
         self.object.save()
         return super().form_valid(form)
 
-
+#обзор заявки
 class ApplicationsDetailView(LoginRequiredMixin, utils.ObjectDetailMixin, View):
     model = Application
     template_name = 'applications/applications_detail.html'
     form_class = forms.ApplicationCommentForm
     success_url = reverse_lazy('applications_detail_url')
 
-
-class ApplicationsReportingView(LoginRequiredMixin, View):
+#список отчетов
+class ApplicationsReportingView(UserAuthenticatedMixin , LoginRequiredMixin, View):
     def get(self, request):
         application = None
         if(request.user.is_superuser or request.user.is_expert):
             application = ApplicationReport.objects.all()
         elif(request.user.is_active):
-            application = ApplicationReport.objects.filter(user=request.user)
+            application = ApplicationReport.objects.filter()
         return render(request, 'applications/applications_reporting.html', context={'application': application})
 
-
+#одобрение или отклонение заявки
 def switch_application_status(request, id):
     app = get_object_or_404(Application, pk=id)
     if app.user == request.user or request.user.is_staff:
@@ -79,7 +79,7 @@ def switch_application_status(request, id):
             app.save()
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
 
-
+#редактирование заявки
 class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Application
     fields = [
@@ -97,10 +97,17 @@ class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
         obj = self.get_object()
         return obj.user == self.request.user
 
-
-class ApplicationReportView(LoginRequiredMixin, CreateView):
+#Добавление отчетности
+class ApplicationReportView(UserAuthenticatedMixin , LoginRequiredMixin, CreateView):
     model = ApplicationReport
     template_name = 'applications/applications_add_report.html'
     login_url = reverse_lazy('login_url')
     success_url = reverse_lazy('applications_output_url')
     form_class = forms.ApplicationReportForm
+
+
+class ReportsDetail(LoginRequiredMixin, utils.ReportsDetailMixin, View):
+    model = ApplicationReport
+    template_name = 'applications/reports_detail.html'
+    form_class = forms.ApplicationRemarkForm
+    success_url = reverse_lazy('applications_output_url')
