@@ -12,8 +12,8 @@ Reports remark
         <button form="add_form" type="submit" class="btn btn-primary mt-3">Добавить замечание</button>
     </form>
 	</div>
-    {% for remark in remark %}
-    <div class="remarks">
+    {% for remark in remarks %}
+    <div class="remark">
         <hr>
         <h4>{{ remark.user.username }}</h4>
         <p>{{ remark.text }}</p>

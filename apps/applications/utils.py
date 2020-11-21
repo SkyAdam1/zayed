@@ -6,8 +6,10 @@ from apps.applications import models
 from django.contrib.auth.decorators import user_passes_test
 
 from django.utils.decorators import method_decorator
-#миксин для обзора заявки
+
+
 class ObjectDetailMixin:
+    """миксин для обзора заявки"""
     model = models.Application
     form_class = forms.ApplicationCommentForm
     template_name = 'applications/applications_detail.html'
@@ -30,21 +32,23 @@ class ObjectDetailMixin:
             comment.save()
         return redirect('applications_detail_url', id=id)
 
-#ограничение доступа для админов и экспертов
+
 class UserAuthenticatedMixin:
-    @method_decorator(user_passes_test(lambda u: not u.is_staff or u.is_expert, login_url=reverse_lazy('applications_output_url')))
+    """ограничение доступа для админов и экспертов"""
+    @method_decorator(user_passes_test(lambda u: not u.is_staff or not u.is_expert, login_url=reverse_lazy('applications_output_url')))
     def dispatch(self, *args, **kwargs):
         return super(UserAuthenticatedMixin, self).dispatch(*args, **kwargs)
 
-#замечания
+
 class ReportsDetailMixin:
+    """замечания"""
     model = models.ApplicationReport
     form_class = forms.ApplicationRemarkForm
     template_name = 'applications/reports_detail.html'
 
     def get(self, request, id):
         obj = get_object_or_404(self.model, id=id)
-        remarks = models.ApplicationReport.objects.filter(applicationremark=id)
+        remarks = models.ApplicationRemark.objects.filter(application=obj)
         return render(request, self.template_name, context={
             'applications': obj,
             'form': self.form_class,
