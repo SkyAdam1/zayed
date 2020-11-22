@@ -190,14 +190,15 @@ class ApplicationReport(models.Model):
     app = models.ForeignKey(
         Application,
         on_delete=models.CASCADE,
-        blank=True,
         default=None,
-        null=True,
         verbose_name='Заявка')
 
     upload = models.FileField(
         upload_to='reporting/', null=True,
         validators=[validate_file_extension])
+
+    def __str__(self):
+        return self.app.project_name
 
 
 class ApplicationRemark(models.Model):

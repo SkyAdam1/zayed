@@ -43,7 +43,6 @@ class ApplicationReportForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
 
 
-
 class ApplicationRemarkForm(forms.ModelForm):
     class Meta:
         model = ApplicationRemark

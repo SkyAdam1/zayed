@@ -1,3 +1,4 @@
+from apps.users.models import ExpertsList
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -22,8 +23,11 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
     def get(self, request):
         application = None
         statuses = []
-        if(request.user.is_superuser or request.user.is_expert):
+        if(request.user.is_superuser):
             application = Application.objects.all()
+        elif(request.user.is_expert):
+            obj = get_object_or_404(ExpertsList, user=request.user)
+            application = Application.objects.filter(designated_expert=obj)
         elif(request.user.is_active):
             application = Application.objects.filter(user=request.user)
         for item in application:
@@ -66,10 +70,13 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
     """список отчетов"""
     def get(self, request):
         application = None
-        if(request.user.is_superuser or request.user.is_expert):
+        if(request.user.is_superuser):
             application = ApplicationReport.objects.all()
+        elif(request.user.is_expert):
+            obj = get_object_or_404(ExpertsList, user=request.user)
+            application = ApplicationReport.objects.filter(app__designated_expert=obj)
         elif(request.user.is_active):
-            application = ApplicationReport.objects.filter()
+            application = ApplicationReport.objects.filter(app__user=request.user)
         return render(request, 'applications/applications_reporting.html', context={'application': application})
 
 
