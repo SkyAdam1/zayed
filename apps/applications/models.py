@@ -153,13 +153,11 @@ class Application(models.Model):
     status = BooleanField(
         _("Статус заявки"),
         default=False)
-    prinyato_ne_prinyato = BooleanField(
+    approved = BooleanField(
         _("Одобрено/Не добрено"),
         default=False)
     upload = FileField(
         upload_to='files/', null=True, blank=True)
-
-    # FIXME исправить designated_expert во всем проекте
 
     def get_update_url(self):
         return reverse('application_update_url', kwargs={'pk': self.pk})

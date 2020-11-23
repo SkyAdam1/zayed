@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -37,6 +37,8 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
         elif(request.user.is_active):
             application = Application.objects.filter(user=request.user)
         for item in application:
+            ex = DesignatedExpert.objects.filter(app=item.pk)
+            item.experts = ex
             statuses.append(item.status)
         return render(request, 'applications/applications_output.html', context={'application': application, 'statuses': statuses})
 
@@ -78,7 +80,7 @@ def remove_expert(request, app, user):
     return redirect('applications_add_expert_url', app)
 
 
-class ApplicationsCreateView(UserAuthenticatedMixin,  LoginRequiredMixin, CreateView):
+class ApplicationsCreateView(LoginRequiredMixin, UserAuthenticatedMixin, CreateView):
     """создание заявки"""
     model = Application
     template_name = 'applications/applications_create.html'
@@ -134,7 +136,7 @@ def switch_application_status(request, id):
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
 
 
-class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ApplicationUpdateView(LoginRequiredMixin, UpdateView):
     """редактирование заявки"""
     model = Application
     fields = [
@@ -149,7 +151,7 @@ class ApplicationUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
     success_url = reverse_lazy('applications_output_url')
 
 
-class ApplicationReportView(UserAuthenticatedMixin, LoginRequiredMixin, CreateView):
+class ApplicationReportView(LoginRequiredMixin, UserAuthenticatedMixin, CreateView):
     """Добавление отчетности"""
     model = ApplicationReport
     template_name = 'applications/applications_add_report.html'
@@ -166,8 +168,7 @@ class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
 
 
 def switch_report_status(request, id):
-    """ща придумаю"""
-    report = get_object_or_404(ApplicationsReport, pk=id)
+    report = get_object_or_404(ApplicationReport, pk=id)
     if report.user == request.user or request.user.is_staff:
         if report.status:
             report.status = False
@@ -178,16 +179,15 @@ def switch_report_status(request, id):
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
 
-
-
 def switch_application_status_final(request, id):
     """одобрение или отклонение заявки прям до конца"""
-    app1 = get_object_or_404(Application, pk=id)
-    if app1.user == request.user or request.user.is_staff:
-        if app1.prinyato_ne_prinyato:
-            app1.prinyato_ne_prinyato = False
-            app1.save()
+    app = get_object_or_404(Application, pk=id)
+    if app.user == request.user or request.user.is_staff:
+        if app.approved:
+            app.approved = False
+            app.status = False
+            app.save()
         else:
-            app1.prinyato_ne_prinyato = True
-            app1.save()
+            app.approved = True
+            app.save()
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
