@@ -44,7 +44,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'apps.users.context_processors.experts'
+                'apps.applications.context_processors.notifications',
+                'apps.users.context_processors.experts',
             ],
         },
     },
