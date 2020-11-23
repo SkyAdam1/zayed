@@ -43,7 +43,7 @@ class CustomUser(AbstractUser):
 class ExpertsList(models.Model):
     """Модель экспертов"""
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, unique=True)
 
     def __str__(self):
         return self.user.username
