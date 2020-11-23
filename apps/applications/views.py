@@ -8,7 +8,7 @@ from django.views.generic.edit import UpdateView
 from apps.users.models import ExpertsList
 
 from . import forms
-from .models import Application, ApplicationReport, DesignatedExpert
+from .models import Application, ApplicationRemark, ApplicationReport, DesignatedExpert
 from .utils import (ObjectDetailMixin, ReportsDetailMixin,
                     UserAuthenticatedMixin)
 
@@ -115,6 +115,9 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
                 application.append(ApplicationReport.objects.get(app=a_.pk))
         elif(request.user.is_active):
             application = ApplicationReport.objects.filter(app__user=request.user)
+        for app in application:
+            notifications = len(ApplicationRemark.objects.filter(application=app.id))
+            app.notifications = notifications
         return render(request, 'applications/applications_reporting.html', context={'application': application})
 
 
