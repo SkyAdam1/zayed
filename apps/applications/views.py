@@ -160,3 +160,31 @@ class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
     template_name = 'applications/reports_detail.html'
     form_class = forms.ApplicationRemarkForm
     success_url = reverse_lazy('applications_output_url')
+
+
+def switch_report_status(request, id):
+    """ща придумаю"""
+    report = get_object_or_404(ApplicationsReport, pk=id)
+    if report.user == request.user or request.user.is_staff:
+        if report.status:
+            report.status = False
+            report.save()
+        else:
+            report.status = True
+            report.save()
+    return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
+
+
+
+
+def switch_application_status_final(request, id):
+    """одобрение или отклонение заявки прям до конца"""
+    app1 = get_object_or_404(Application, pk=id)
+    if app1.user == request.user or request.user.is_staff:
+        if app1.prinyato_ne_prinyato:
+            app1.prinyato_ne_prinyato = False
+            app1.save()
+        else:
+            app1.prinyato_ne_prinyato = True
+            app1.save()
+    return HttpResponseRedirect(reverse_lazy('applications_output_url'))

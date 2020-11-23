@@ -153,7 +153,9 @@ class Application(models.Model):
     status = BooleanField(
         _("Статус заявки"),
         default=False)
-
+    prinyato_ne_prinyato = BooleanField(
+        _("Одобрено/Не добрено"),
+        default=False)
     upload = FileField(
         upload_to='files/', null=True, blank=True)
 
@@ -213,6 +215,10 @@ class ApplicationReport(models.Model):
     upload = FileField(
         upload_to='reporting/', null=True,
         validators=[validate_file_extension])
+
+    status_reporta = BooleanField(
+        _("Статус отчетности"),
+        default=False)
 
     def __str__(self):
         return self.app.project_name
