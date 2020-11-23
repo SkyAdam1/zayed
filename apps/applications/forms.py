@@ -1,6 +1,7 @@
 from django import forms
 
-from .models import Application, ApplicationComment , ApplicationReport , ApplicationRemark
+from .models import (Application, ApplicationComment, ApplicationRemark,
+                     ApplicationReport, DesignatedExpert)
 
 
 class ApplicationCreateForm(forms.ModelForm):
@@ -14,6 +15,17 @@ class ApplicationCreateForm(forms.ModelForm):
             'previous_investors', 'middle_cost', 'budget_development', 'middle_revenue', 'team_count',
             'fio_team', 'team_education', 'team_experience', 'position_member', 'team_create', 'ready_relocate',
             'ready_development', 'adress_company', 'inn_company', 'fio', 'email', 'upload')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+class DesignatedExpertForm(forms.ModelForm):
+    class Meta:
+        model = DesignatedExpert
+        fields = ('expert', )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

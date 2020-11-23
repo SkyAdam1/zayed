@@ -8,6 +8,11 @@ Applicaton Add Expert
 
 
 {% block content %}
+
+{% for expert in experts %}
+<p>{{ expert.expert }} <a href="{% url 'remove_expert_url' expert.app.id expert.expert.id %}">X</a></p>
+{% endfor %}
+
 <div class="container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

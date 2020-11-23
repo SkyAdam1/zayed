@@ -1,13 +1,16 @@
-from apps.users.models import ExpertsList
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.views.generic.edit import UpdateView
-from .utils import UserAuthenticatedMixin, ObjectDetailMixin, ReportsDetailMixin
+
+from apps.users.models import ExpertsList
+
 from . import forms
-from .models import Application, ApplicationReport
+from .models import Application, ApplicationReport, DesignatedExpert
+from .utils import (ObjectDetailMixin, ReportsDetailMixin,
+                    UserAuthenticatedMixin)
 
 
 def index(request):
@@ -19,7 +22,7 @@ def output(request):
 
 
 class ApplicationsOutputView(LoginRequiredMixin, View):
-    """писок заявок"""
+    """cписок заявок"""
     def get(self, request):
         application = None
         statuses = []
@@ -27,7 +30,10 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
             application = Application.objects.all()
         elif(request.user.is_expert):
             obj = get_object_or_404(ExpertsList, user=request.user)
-            application = Application.objects.filter(designated_expert=obj)
+            apps = DesignatedExpert.objects.filter(expert=obj)
+            application = []
+            for app in apps:
+                application.append(get_object_or_404(Application, pk=app.app.pk))
         elif(request.user.is_active):
             application = Application.objects.filter(user=request.user)
         for item in application:
@@ -35,13 +41,41 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
         return render(request, 'applications/applications_output.html', context={'application': application, 'statuses': statuses})
 
 
-class ApplicationAddExpert(LoginRequiredMixin, UpdateView):
+class ApplicationAddExpert(LoginRequiredMixin, CreateView):
     """добавление эксперта для заявки"""
-    model = Application
-    fields = ['designated_expert']
+    model = DesignatedExpert
+    form_class = forms.DesignatedExpertForm
     template_name = 'applications/applications_add_expert.html'
-    login_url = reverse_lazy('login_url')
     success_url = reverse_lazy('applications_output_url')
+
+    def get(self, request, pk):
+        obj = get_object_or_404(Application, pk=pk)
+        experts = self.model.objects.filter(app=obj)
+        return render(request, self.template_name, context={
+            'applications': obj,
+            'form': self.form_class,
+            'experts': experts})
+
+    def post(self, request, pk):
+        obj = get_object_or_404(Application, pk=pk)
+        experts = self.model.objects.filter(app=obj)
+        if len(experts) < 3:
+            for ex in experts:
+                if str(ex.expert.id) == request.POST['expert']:
+                    return redirect('applications_add_expert_url', pk)
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                exp = form.save(commit=False)
+                exp.app = obj
+                exp.save()
+        return redirect('applications_add_expert_url', pk)
+
+
+def remove_expert(request, app, user):
+    obj = get_object_or_404(DesignatedExpert, app=app, expert=user)
+    if request.user.is_staff:
+        obj.delete()
+    return redirect('applications_add_expert_url', app)
 
 
 class ApplicationsCreateView(UserAuthenticatedMixin,  LoginRequiredMixin, CreateView):
@@ -74,7 +108,11 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
             application = ApplicationReport.objects.all()
         elif(request.user.is_expert):
             obj = get_object_or_404(ExpertsList, user=request.user)
-            application = ApplicationReport.objects.filter(app__designated_expert=obj)
+            apps = DesignatedExpert.objects.filter(expert=obj)
+            application = []
+            for app in apps:
+                a_ = get_object_or_404(Application, pk=app.app.pk)
+                application.append(ApplicationReport.objects.get(app=a_.pk))
         elif(request.user.is_active):
             application = ApplicationReport.objects.filter(app__user=request.user)
         return render(request, 'applications/applications_reporting.html', context={'application': application})
