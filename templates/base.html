@@ -32,8 +32,11 @@
               <a class="nav-link" href="{% url 'applications_output_url' %}">Заявки</a>
             </li>
             <li class="nav-item {% if request.resolver_match.url_name == 'applications_reporting_url' %}active{% endif %}">
-              <a class="nav-link" href="{% url 'applications_reporting_url' %}">Отчетность</a>
-            </li>
+            <a class="nav-link" href="{% url 'applications_reporting_url' %}">Отчетность
+              {% if notifications_len > 0 %}
+              <span class="badge badge-info">{{ notifications_len }}</span>
+              {% endif %}
+            </a>
             {% if not request.user.is_staff or not request.user.is_expert %}
                   <li class="nav-item {% if request.resolver_match.url_name == 'applications_create_url' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'applications_create_url' %}">Оформить заявку</a>

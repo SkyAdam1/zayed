@@ -22,7 +22,7 @@ Appications reporting
       {% for item in application  %}
       <tr>
         <th scope="row">{{ item.id }}</th>
-        <td>{{ item.app.project_name }}</td>
+        <td>{{ item.app.project_name }} <span class="badge badge-info">{{ item.notifications }}</span></td>
         <td>{{ item.app.data_create }}</td>
         <td><a href="http://{{ request.get_host }}/media/{{ item.upload }}">Файл</a></td>
         {% if item.status %}
