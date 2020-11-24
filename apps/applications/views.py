@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView , DeleteView
 
 from . import forms
 from .models import (Application, ApplicationRemark, ApplicationReport,
@@ -136,7 +136,7 @@ def switch_application_status(request, id):
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
 
 
-class ApplicationUpdateView(LoginRequiredMixin, UpdateView):
+class ApplicationUpdateView(LoginRequiredMixin, UpdateView , UserAuthenticatedMixin):
     """редактирование заявки"""
     model = Application
     fields = [
@@ -191,3 +191,24 @@ def switch_application_status_final(request, id):
             app.approved = True
             app.save()
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
+
+
+
+class ReportUpdateView(LoginRequiredMixin, UpdateView , UserAuthenticatedMixin):
+    """редактирование отчета"""
+    model = ApplicationReport
+    fields = ['upload']
+    template_name = 'applications/report_update_form.html'
+    success_url = reverse_lazy('applications_reporting_url')
+
+class ApplicationDelete(DeleteView , UserAuthenticatedMixin , LoginRequiredMixin) :
+    ''' удаление заявки '''
+    model = Application
+    success_url = reverse_lazy('applications_output_url')
+    template_name = 'applications/application_delete.html'
+
+class ReportDelete(DeleteView , UserAuthenticatedMixin , LoginRequiredMixin) :
+    ''' удаление отчета '''
+    model = ApplicationReport
+    success_url = reverse_lazy('applications_reporting_url')
+    template_name = 'applications/report_delete.html'

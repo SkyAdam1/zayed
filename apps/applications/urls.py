@@ -15,4 +15,7 @@ urlpatterns = [
     path('applications_add_report/', views.ApplicationReportView.as_view(), name='applications_add_report_url'),
     path('reports_detail/<int:id>', views.ReportsDetail.as_view(), name='reports_detail_url'),
     path('applications_status/<int:id>', views.switch_application_status_final, name='switch_status_reporta'),
+    path('report_update/<slug:pk>', views.ReportUpdateView.as_view(), name='report_update_url'),
+    path('applications_delete/<int:pk>/', views.ApplicationDelete.as_view(), name='application_delete_url'),
+    path('report_delete/<int:pk>/', views.ReportDelete.as_view(), name='report_delete_url'),
 ]

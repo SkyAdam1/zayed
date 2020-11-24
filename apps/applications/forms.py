@@ -47,7 +47,7 @@ class ApplicationCommentForm(forms.ModelForm):
 class ApplicationReportForm(forms.ModelForm):
     class Meta:
         model = ApplicationReport
-        fields = '__all__'
+        fields = ['app', 'upload' , 'year' , 'quarter' ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

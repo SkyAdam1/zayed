@@ -15,7 +15,14 @@ Appications reporting
         <th scope="col">Дата оформления</th>
         <th scope="col">Документ</th>
         <th scope="col">Статус заявки</th>
-        <th scope="col">Действие</th>
+        <th scope="col">Замечания</th>
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <th scope="col">Редактировать</th>
+        {% endif %}
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <th scope="col">Удалить отчет</th>
+        {% endif %}
+        <th scope="col">Период</th>
       </tr>
     </thead>
     <tbody>
@@ -31,6 +38,13 @@ Appications reporting
         <td>Не проверено</td>
         {% endif %}
         <td><a class="btn btn-info" href="{% url 'reports_detail_url' item.pk %}">Перейти</a></td>
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <td><a class="btn btn-info" href="{% url 'report_update_url' item.pk %}">Изменить</a></td>
+        {% endif %}
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <td><a class="btn btn-danger" href="{% url 'report_delete_url' item.pk %}">Удалить</a></td>
+        {% endif %}
+        <td>{{item.year}} год , {{item.quarter}}-й квартал</td>
       </tr>
       {% endfor %}
     </tbody>

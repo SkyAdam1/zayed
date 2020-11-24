@@ -1,0 +1,14 @@
+{% extends 'base_applications.html' %}
+
+{% block title %}
+	Delete Report  '{{application.title}}' - {{block.super}}
+{% endblock %}
+
+{% block content %}
+	<form action = '{{ applicationreport.get_delete_url }}' method="post">
+		{% csrf_token %}
+			<h3>точно удалить?</h3>
+			<a  class="btn btn-info" href="{% url 'applications_output_url' %}"> Нет </a>
+			<button type="submit" name = 'button' class="btn btn-danger"> ДА</button>
+	</form>
+{% endblock %}

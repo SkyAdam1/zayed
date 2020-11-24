@@ -26,6 +26,10 @@ Appications output
               <th scope="col">Редактировать</th>
           {% endif %}
         {% endif %}
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <th scope="col">Удалить</th>
+        {% endif %}
+
       </tr>
 
     </thead>
@@ -89,12 +93,15 @@ Appications output
         </td>
 
         <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-
         {% if request.user == item.user and not item.status%}
           <td>
             <a class="btn btn-info" href="{% url 'application_update_url' item.pk %}">Редактировать</a>
           </td>
         {% endif %}
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <td><a class="btn btn-danger" href="{% url 'application_delete_url' item.pk %}">Удалить</a></td>
+        {% endif %}
+
 
       {% endfor %}
 
