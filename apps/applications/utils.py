@@ -1,11 +1,9 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from apps.applications import forms
-from apps.applications import models
-
-from django.contrib.auth.decorators import user_passes_test
-
 from django.utils.decorators import method_decorator
+
+from apps.applications import forms, models
 
 
 class ObjectDetailMixin:

@@ -9,7 +9,7 @@ from django.db.models.fields.related import ForeignKey
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
-from apps.users.models import ExpertsList
+from apps.users.models import CustomUser
 
 from .validators import validate_file_extension
 
@@ -178,7 +178,11 @@ class DesignatedExpert(models.Model):
         (5, 5),
     ]
     app = ForeignKey(Application, CASCADE)
-    expert = ForeignKey(ExpertsList, CASCADE, verbose_name='Эксперт')
+    expert = ForeignKey(
+        CustomUser,
+        CASCADE,
+        verbose_name=_('Эксперт'),
+        limit_choices_to={'is_expert': True, 'is_active': True})
     rating = PositiveIntegerField(_('Оценка'), choices=rate, blank=True, null=True)
 
     def __str__(self):

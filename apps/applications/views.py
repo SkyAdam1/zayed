@@ -5,10 +5,9 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.views.generic.edit import UpdateView
 
-from apps.users.models import ExpertsList
-
 from . import forms
-from .models import Application, ApplicationRemark, ApplicationReport, DesignatedExpert
+from .models import (Application, ApplicationRemark, ApplicationReport,
+                     DesignatedExpert)
 from .utils import (ObjectDetailMixin, ReportsDetailMixin,
                     UserAuthenticatedMixin)
 
@@ -29,8 +28,7 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
         if(request.user.is_superuser):
             application = Application.objects.all()
         elif(request.user.is_expert):
-            obj = get_object_or_404(ExpertsList, user=request.user)
-            apps = DesignatedExpert.objects.filter(expert=obj)
+            apps = DesignatedExpert.objects.filter(expert=request.user)
             application = []
             for app in apps:
                 application.append(get_object_or_404(Application, pk=app.app.pk))
@@ -109,12 +107,14 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
         if(request.user.is_superuser):
             application = ApplicationReport.objects.all()
         elif(request.user.is_expert):
-            obj = get_object_or_404(ExpertsList, user=request.user)
-            apps = DesignatedExpert.objects.filter(expert=obj)
+            apps = DesignatedExpert.objects.filter(expert=request.user)
             application = []
             for app in apps:
-                a_ = get_object_or_404(Application, pk=app.app.pk)
-                application.append(ApplicationReport.objects.get(app=a_.pk))
+                try:
+                    a_ = get_object_or_404(Application, pk=app.app.pk)
+                    application.append(ApplicationReport.objects.get(app=a_.pk))
+                except Exception as e:
+                    print(e)
         elif(request.user.is_active):
             application = ApplicationReport.objects.filter(app__user=request.user)
         for app in application:
