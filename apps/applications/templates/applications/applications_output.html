@@ -14,62 +14,102 @@ Appications output
         <th scope="col">#</th>
         <th scope="col">Название проекта</th>
         <th scope="col">Дата оформления</th>
+        {% if True in statuses %}
+          <th scope='col'>Одобрено/Не одобрено</th>
+        {% endif %}
         <th scope="col">Ссылка на проект</th>
         <th scope="col">Статус заявки</th>
-        <th scope="col">Эксперт</th>
+        <th scope="col">Эксперты</th>
         <th scope="col">Подробнее</th>
-        {% if request.user.is_staff %}
-        {% else %}
+        {% if not request.user.is_staff or not request.user.is_expert %}
           {% if False in statuses %}
-            <th scope="col">Редактировать</th>
+              <th scope="col">Редактировать</th>
           {% endif %}
         {% endif %}
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <th scope="col">Удалить</th>
+        {% endif %}
+
       </tr>
+
     </thead>
+
     <tbody>
+
       {% for item in application  %}
+
       <tr>
+
         <th scope="row">{{ item.id }}</th>
+
         <td>{{ item.project_name }}</td>
+
         <td>{{ item.data_create }}</td>
-        <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
         {% if item.status %}
-          	{% if request.user.is_staff %}
-				<td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Деактивировать</a></td>
-				{% if item.designated_expert %}
-					<td>{{ item.designated_expert.username }} <a class="btn btn-info"
-						href="{% url 'applications_add_expert_url' item.pk %}">Изменить</a></td>
-				{% else %}
-					<td><a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a></td>
-				{% endif %}
-				<td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-			{% else %}
-        		<td>Оправлено на проверку</td>
-			{% if item.designated_expert %}
-				<td>{{ item.designated_expert.username }}</td>
-			{% else %}
-       			<td>Эксперт не назначен</td>
-        	{% endif %}
-        	<td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-			{% if False in statuses %}
-				<td>Нельзя редактировать</td>
-			{% endif %}
+        <td>
+          {% if request.user.is_staff %}
+            {% if not item.approved %}
+              <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Одобрить</a>
+              <p>Не одобрено</p>
+            {% else %}
+              <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Деактивировать</a>
+              <p>Одобрено</p>
+            {% endif %}
+          {% else %}
+            {% if item.approved %}
+              Одобрено
+            {% else %}
+              Не одобрено
+            {% endif %}
+          {% endif %}
+        </td>
         {% endif %}
-			{% else %}
-				{% if request.user.is_staff %}
-					<td>Не отправлено на проверку</td>
-					<td>Эксперт не назначен</td>
-					<td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-				{% else %}
-					<td><a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a></td>
-					<td>Эксперт не назначен</td>
-					<td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
-					<td><a class="btn btn-info" href="{% url 'application_update_url' item.pk %}">Изменить</a></td>
-			{% endif %}
+
+        <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
+        
+        <td>
+          {% if item.status %}
+            <p>Отправлено</p>
+          {% else %}
+            {% if request.user == item.user %}
+                <a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a>
+            {% else %}
+                <p>Не отправлено</p>
+            {% endif %}
+          {% endif %}
+        </td>
+        
+        <td>
+          {% if request.user.is_staff %}
+            <a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a>
+          {% endif %}
+          {% if item.experts|length != 0 %}
+            {% for expert in item.experts %}
+              <small>{{ expert.expert }},</small>
+            {% endfor %}
+          {% else %}
+            <p>Эксперты не назначены</p>
+          {% endif %}
+        </td>
+
+        <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
+        {% if request.user == item.user and not item.status%}
+          <td>
+            <a class="btn btn-info" href="{% url 'application_update_url' item.pk %}">Редактировать</a>
+          </td>
         {% endif %}
-      </tr>
+        {% if not request.user.is_staff or not request.user.is_expert %}
+        <td><a class="btn btn-danger" href="{% url 'application_delete_url' item.pk %}">Удалить</a></td>
+        {% endif %}
+
+
       {% endfor %}
+
     </tbody>
+
   </table>
+
+
 </div>
+
 {% endblock tabs %}

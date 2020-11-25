@@ -13,7 +13,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, View
 
 from .forms import CustomUserLoginForm, CustomUserRegistrationForm
-from .models import CustomUser, ExpertsList
+from .models import CustomUser
 from .utils import UserAuthenticatedMixin
 
 
@@ -91,7 +91,6 @@ class ActiveExpert(View):
         if request.user.is_superuser:
             user = CustomUser.objects.filter(pk=pk).first()
             user.is_active = True
-            ExpertsList(user=user).save()
             user.save()
         return HttpResponseRedirect(reverse_lazy('experts'))
 

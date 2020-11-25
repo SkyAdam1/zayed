@@ -8,9 +8,9 @@ from django.db.models.fields.files import FileField
 from django.db.models.fields.related import ForeignKey
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
-
-from apps.users.models import ExpertsList
-
+from django.db.models.fields import BinaryField , DurationField
+from apps.users.models import CustomUser
+from datetime import datetime
 from .validators import validate_file_extension
 
 
@@ -153,14 +153,17 @@ class Application(models.Model):
     status = BooleanField(
         _("Статус заявки"),
         default=False)
-
+    approved = BooleanField(
+        _("Одобрено/Не добрено"),
+        default=False)
     upload = FileField(
         upload_to='files/', null=True, blank=True)
 
-    # FIXME исправить designated_expert во всем проекте
-
     def get_update_url(self):
         return reverse('application_update_url', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        return reverse('application_delete_url', kwargs={'pk': self.pk})
 
     def get_absolute_url(self):
         return reverse('applications_detail_url', kwargs={'id': self.id})
@@ -178,7 +181,11 @@ class DesignatedExpert(models.Model):
         (5, 5),
     ]
     app = ForeignKey(Application, CASCADE)
-    expert = ForeignKey(ExpertsList, CASCADE, verbose_name='Эксперт')
+    expert = ForeignKey(
+        CustomUser,
+        CASCADE,
+        verbose_name=_('Эксперт'),
+        limit_choices_to={'is_expert': True, 'is_active': True})
     rating = PositiveIntegerField(_('Оценка'), choices=rate, blank=True, null=True)
 
     def __str__(self):
@@ -214,6 +221,21 @@ class ApplicationReport(models.Model):
         upload_to='reporting/', null=True,
         validators=[validate_file_extension])
 
+    year = IntegerField(default=datetime.now().year)
+    quarters = [
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+    ]
+    quarter = IntegerField(_("За какой квартал отчет?"), choices=quarters)
+
+    status_reporta = BooleanField(
+        _("Статус отчетности"),
+        default=False)
+
+    def get_delete_url(self):
+        return reverse('report_delete_url', kwargs={'pk': self.pk})
     def __str__(self):
         return self.app.project_name
 
