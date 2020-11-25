@@ -95,11 +95,14 @@ Appications output
 
         <td>
           {% if request.user.is_expert and not request.user.is_staff %}
-            <div class="modal" id="myModal">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ item }}">
+              Оценить
+            </button>
+            <div class="modal" id="{{ item }}">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Modal Heading</h4>
+                    <h4 class="modal-title">Заявка: {{ item }}</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                   </div>
                   <div class="modal-body">
@@ -110,14 +113,11 @@ Appications output
                       </form>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
                   </div>
                 </div>
               </div>
             </div>
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
-              Оценить
-            </button>
           {% endif %}
           <p>{{item.rating}}</p>
         </td>
