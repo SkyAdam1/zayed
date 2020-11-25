@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.index, name='index_url'),
     path('applications_update/<slug:pk>', views.ApplicationUpdateView.as_view(), name='application_update_url'),
     path('applications_output/', views.ApplicationsOutputView.as_view(), name='applications_output_url'),
+    path('applications_output/<int:pk>/', views.ApplicationsOutputView.as_view(), name='applications_output_pk_url'),
     path('applications_add_expert/<int:pk>/', views.ApplicationAddExpert.as_view(), name='applications_add_expert_url'),
     path('remove_expert/<int:app>/<int:user>/', views.remove_expert, name='remove_expert_url'),
     path('applications_create/', views.ApplicationsCreateView.as_view(), name='applications_create_url'),
