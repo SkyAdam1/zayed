@@ -199,7 +199,7 @@ def switch_report_status(request, id):
 def switch_application_status_final(request, id):
     """одобрение или отклонение заявки прям до конца"""
     app = get_object_or_404(Application, pk=id)
-    if app.user == request.user or request.user.is_staff:
+    if request.user.is_staff:
         if app.approved:
             app.approved = False
             app.status = False
