@@ -22,7 +22,7 @@ Appications output
         <th scope="col">Эксперты</th>
         <th scope="col">Оценка</th>
         <th scope="col">Подробнее</th>
-        {% if not request.user.is_staff or not request.user.is_expert %}
+        {% if not request.user.is_staff and not request.user.is_expert %}
           {% if False in statuses %}
               <th scope="col">Редактировать</th>
           {% endif %}
@@ -129,7 +129,7 @@ Appications output
           </td>
         {% endif %}
         
-        {% if not request.user.is_staff or not request.user.is_expert %}
+        {% if not request.user.is_staff and not request.user.is_expert %}
           <td><a class="btn btn-danger" href="{% url 'application_delete_url' item.pk %}">Удалить</a></td>
         {% endif %}
 
