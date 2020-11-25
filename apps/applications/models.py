@@ -211,6 +211,11 @@ class ApplicationComment(models.Model):
 
 
 class ApplicationReport(models.Model):
+
+    user = ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=CASCADE,
+        default = 1)
     app = ForeignKey(
         Application,
         on_delete=CASCADE,

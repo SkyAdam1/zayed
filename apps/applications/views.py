@@ -187,11 +187,11 @@ class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
 def switch_report_status(request, id):
     report = get_object_or_404(ApplicationReport, pk=id)
     if report.user == request.user or request.user.is_staff:
-        if report.status:
-            report.status = False
+        if report.status_reporta:
+            report.status_reporta = False
             report.save()
         else:
-            report.status = True
+            report.status_reporta = True
             report.save()
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
