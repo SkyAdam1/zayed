@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from . import forms
 from .models import (Application, ApplicationRemark, ApplicationReport,
@@ -187,16 +187,16 @@ class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
 def switch_report_status(request, id):
     report = get_object_or_404(ApplicationReport, pk=id)
     if report.user == request.user or request.user.is_staff:
-        if report.status_reporta:
-            report.status_reporta = False
+        if report.status:
+            report.status = False
             report.save()
         else:
-            report.status_reporta = True
+            report.status = True
             report.save()
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
 
-def switch_application_status_final(request, id):
+def switch_application_approve(request, id):
     """одобрение или отклонение заявки прям до конца"""
     app = get_object_or_404(Application, pk=id)
     if request.user.is_staff:

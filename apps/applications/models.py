@@ -237,7 +237,7 @@ class ApplicationReport(models.Model):
     ]
     quarter = IntegerField(_("За какой квартал отчет?"), choices=quarters)
 
-    status_reporta = BooleanField(
+    status = BooleanField(
         _("Статус отчетности"),
         default=False)
 
