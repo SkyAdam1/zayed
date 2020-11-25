@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.db import models
 from django.db.models.deletion import CASCADE
@@ -8,9 +10,9 @@ from django.db.models.fields.files import FileField
 from django.db.models.fields.related import ForeignKey
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
-from django.db.models.fields import BinaryField , DurationField
+
 from apps.users.models import CustomUser
-from datetime import datetime
+
 from .validators import validate_file_extension
 
 
@@ -215,7 +217,7 @@ class ApplicationReport(models.Model):
     user = ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=CASCADE,
-        default = 1)
+        default=1)
     app = ForeignKey(
         Application,
         on_delete=CASCADE,
@@ -241,6 +243,7 @@ class ApplicationReport(models.Model):
 
     def get_delete_url(self):
         return reverse('report_delete_url', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.app.project_name
 
