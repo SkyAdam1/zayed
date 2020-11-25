@@ -18,11 +18,13 @@ Appications output
           <th scope='col'>Одобрено/Не одобрено</th>
         {% endif %}
         <th scope="col">Ссылка на проект</th>
-        <th scope="col">Статус заявки</th>
+        {% if False in statuses %}
+          <th scope="col">Статус заявки</th>
+        {% endif %}
         <th scope="col">Эксперты</th>
         <th scope="col">Оценка</th>
         <th scope="col">Подробнее</th>
-        {% if not request.user.is_staff or not request.user.is_expert %}
+        {% if not request.user.is_staff and not request.user.is_expert %}
           {% if False in statuses %}
               <th scope="col">Редактировать</th>
           {% endif %}
@@ -46,40 +48,47 @@ Appications output
         <td>{{ item.project_name }}</td>
 
         <td>{{ item.data_create }}</td>
-        {% if item.status %}
-        <td>
-          {% if request.user.is_staff %}
-            {% if not item.approved %}
-              <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Одобрить</a>
-              <p>Не одобрено</p>
+
+        {% if True in statuses %}
+          <td>
+            {% if request.user.is_staff %}
+              {% if item.status %}
+                {% if not item.approved %}
+                  <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Одобрить</a>
+                  <p>Не одобрено</p>
+                {% else %}
+                  <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Деактивировать</a>
+                  <p>Одобрено</p>
+                {% endif %}
+              {% else %}
+                <p>Не отправлено</p>
+              {% endif %}
             {% else %}
-              <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Деактивировать</a>
-              <p>Одобрено</p>
+              {% if item.approved %}
+                Одобрено
+              {% else %}
+                Не одобрено
+              {% endif %}
             {% endif %}
-          {% else %}
-            {% if item.approved %}
-              Одобрено
-            {% else %}
-              Не одобрено
-            {% endif %}
-          {% endif %}
-        </td>
+          </td>
         {% endif %}
 
         <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
         
-        <td>
-          {% if item.status %}
-            <p>Отправлено</p>
-          {% else %}
-            {% if request.user == item.user %}
-                <a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a>
+        {% if False in statuses %}
+          <td>
+            {% if item.status %}
+              <p>Отправлено</p>
             {% else %}
-                <p>Не отправлено</p>
+              {% if request.user == item.user %}
+                  <a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a>
+              {% else %}
+                  <p>Не отправлено</p>
+              {% endif %}
             {% endif %}
-          {% endif %}
-        </td>
-        
+          </td>
+        {% endif %}
+
         <td>
           {% if request.user.is_staff %}
             <a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a>
@@ -129,7 +138,7 @@ Appications output
           </td>
         {% endif %}
         
-        {% if not request.user.is_staff or not request.user.is_expert %}
+        {% if not request.user.is_staff and not request.user.is_expert %}
           <td><a class="btn btn-danger" href="{% url 'application_delete_url' item.pk %}">Удалить</a></td>
         {% endif %}
 
