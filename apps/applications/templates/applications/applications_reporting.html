@@ -17,10 +17,10 @@ Appications reporting
         <th scope="col">Статус отчета</th>
         <th scope="col">Замечания</th>
         {% if not request.user.is_staff or not request.user.is_expert %}
-        <th scope="col">Редактировать</th>
+          <th scope="col">Редактировать</th>
         {% endif %}
         {% if not request.user.is_staff or not request.user.is_expert %}
-        <th scope="col">Удалить отчет</th>
+          <th scope="col">Удалить отчет</th>
         {% endif %}
         <th scope="col">Период</th>
       </tr>
@@ -33,31 +33,35 @@ Appications reporting
         <td>{{ item.app.data_create }}</td>
         <td><a href="http://{{ request.get_host }}/media/{{ item.upload }}">Файл</a></td>
         <td>
-            {% if request.user.is_staff or request.user.is_expert %}
-
-                {% if not item.status_reporta %}
-                    <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
-                    <p>Не одобрено</p>
-                {% else %}
-                    <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Не одобрять</a>
-                    <p>Одобрено</p>
-                {% endif %}
+          {% if request.user.is_staff or request.user.is_expert %}
+            {% if not item.status %}
+                <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
+                <p>Не одобрено</p>
             {% else %}
-              {% if item.status_reporta%}
+                <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Отказать</a>
+                <p>Одобрено</p>
+            {% endif %}
+          {% else %}
+              {% if item.status %}
                 Одобрено
               {% else %}
                 Не одобрено
               {% endif %}
-            {% endif %}
+          {% endif %}
         </td>
+
         <td><a class="btn btn-info" href="{% url 'reports_detail_url' item.pk %}">Перейти</a></td>
+
         {% if not request.user.is_staff or not request.user.is_expert %}
-        <td><a class="btn btn-info" href="{% url 'report_update_url' item.pk %}">Изменить</a></td>
+          <td><a class="btn btn-info" href="{% url 'report_update_url' item.pk %}">Изменить</a></td>
         {% endif %}
+
         {% if not request.user.is_staff or not request.user.is_expert %}
-        <td><a class="btn btn-danger" href="{% url 'report_delete_url' item.pk %}">Удалить</a></td>
+          <td><a class="btn btn-danger" href="{% url 'report_delete_url' item.pk %}">Удалить</a></td>
         {% endif %}
+
         <td>{{item.year}} год , {{item.quarter}}-й квартал</td>
+
       </tr>
     {% endfor %}
     </tbody>

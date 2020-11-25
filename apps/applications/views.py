@@ -213,7 +213,7 @@ def switch_application_approve(request, id):
 class ReportUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
     """редактирование отчета"""
     model = ApplicationReport
-    fields = ['upload']
+    form_class = forms.ApplicationsReportUpdateForm
     template_name = 'applications/report_update_form.html'
     success_url = reverse_lazy('applications_reporting_url')
 

@@ -19,5 +19,5 @@ urlpatterns = [
     path('report_update/<slug:pk>', views.ReportUpdateView.as_view(), name='report_update_url'),
     path('applications_delete/<int:pk>/', views.ApplicationDelete.as_view(), name='application_delete_url'),
     path('report_delete/<int:pk>/', views.ReportDelete.as_view(), name='report_delete_url'),
-    path('report_approve/<int:id>', views.switch_report_status, name='switch_status_rep'),
+    path('report_approve/<int:id>/', views.switch_report_status, name='switch_status_rep'),
 ]
