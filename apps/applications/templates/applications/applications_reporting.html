@@ -35,7 +35,7 @@ Appications reporting
         <td>
             {% if request.user.is_staff or request.user.is_expert %}
 
-                {% if not item.status_reporta %}
+                {% if not item.status %}
                     <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
                     <p>Не одобрено</p>
                 {% else %}
@@ -43,10 +43,13 @@ Appications reporting
                     <p>Одобрено</p>
                 {% endif %}
             {% else %}
-              {% if item.status_reporta%}
+              {% if item.status%}
                 Одобрено
               {% else %}
-                Не одобрено
+                Не одобрено/На проверке
+                {% if remark in remarks %}
+                    <p>сделано замечание</p>
+                {% endif %}
               {% endif %}
             {% endif %}
         </td>
