@@ -29,24 +29,31 @@ Appications reporting
     {% for item in application  %}
       <tr>
         <th scope="row">{{ item.id }}</th>
-        <td>{{ item.app.project_name }} <span class="badge badge-info">{{ item.notifications }}</span></td>
+        <td>{{ item.app.project_name }}
+          {% if item.notifications > 0 %}
+            <span class="badge badge-info">{{ item.notifications }}</span></td>
+          {% endif %}
         <td>{{ item.app.data_create }}</td>
         <td><a href="http://{{ request.get_host }}/media/{{ item.upload }}">Файл</a></td>
         <td>
-          {% if request.user.is_staff or request.user.is_expert %}
-            {% if not item.status %}
-                <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
-                <p>Не одобрено</p>
+          {% if item.notifications == 0%}
+            {% if request.user.is_staff or request.user.is_expert %}
+              {% if not item.status %}
+                  <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
+                  <p>Не одобрено</p>
+              {% else %}
+                  <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Отказать</a>
+                  <p>Одобрено</p>
+              {% endif %}
             {% else %}
-                <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Отказать</a>
-                <p>Одобрено</p>
+                {% if item.status %}
+                  Одобрено
+                {% else %}
+                  Не одобрено/На проверке
+                {% endif %}
             {% endif %}
           {% else %}
-              {% if item.status %}
-                Одобрено
-              {% else %}
-                Не одобрено
-              {% endif %}
+            <p>Имеется замечание</p>
           {% endif %}
         </td>
 
