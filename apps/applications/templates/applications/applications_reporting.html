@@ -36,25 +36,28 @@ Appications reporting
         <td>{{ item.app.data_create }}</td>
         <td><a href="http://{{ request.get_host }}/media/{{ item.upload }}">Файл</a></td>
         <td>
-        {% if item.notifications == 0%}
-          {% if request.user.is_staff or request.user.is_expert %}
-            {% if not item.status %}
-                <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
-                <p>Не одобрено</p>
+          {% if item.notifications == 0%}
+            {% if request.user.is_staff or request.user.is_expert %}
+              {% if not item.status %}
+                  <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
+                  <p>Не одобрено</p>
+              {% else %}
+                  <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Отказать</a>
+                  <p>Одобрено</p>
+              {% endif %}
             {% else %}
-                <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Отказать</a>
-                <p>Одобрено</p>
+                {% if item.status %}
+                  Одобрено
+                {% else %}
+                  Не одобрено/На проверке
+                  {% if remark in remarks %}
+                      <p>сделано замечание</p>
+                  {% endif %}
+                {% endif %}
             {% endif %}
           {% else %}
-              {% if item.status %}
-                Одобрено
-              {% else %}
-                Не одобрено
-              {% endif %}
+            <p>Имеется замечание</p>
           {% endif %}
-        {% else %}
-          <p>Имеется замечание</p>
-        {% endif %}
         </td>
 
         <td><a class="btn btn-info" href="{% url 'reports_detail_url' item.pk %}">Перейти</a></td>
