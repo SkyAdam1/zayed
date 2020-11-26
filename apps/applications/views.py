@@ -217,6 +217,16 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
     template_name = 'applications/report_update_form.html'
     success_url = reverse_lazy('applications_reporting_url')
 
+    def get_success_url(self):
+        return reverse_lazy('update_remarks_url', kwargs={'pk': self.object.pk})
+
+
+def delete_remarks(request, pk):
+    obj = get_object_or_404(ApplicationReport, app=pk)
+    remarks = ApplicationRemark.objects.filter(application=obj)
+    remarks.delete()
+    return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
+
 
 class ApplicationDelete(DeleteView, UserAuthenticatedMixin, LoginRequiredMixin):
     ''' удаление заявки '''
