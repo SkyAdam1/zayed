@@ -29,10 +29,14 @@ Appications reporting
     {% for item in application  %}
       <tr>
         <th scope="row">{{ item.id }}</th>
-        <td>{{ item.app.project_name }} <span class="badge badge-info">{{ item.notifications }}</span></td>
+        <td>{{ item.app.project_name }}
+          {% if item.notifications > 0 %}
+            <span class="badge badge-info">{{ item.notifications }}</span></td>
+          {% endif %}
         <td>{{ item.app.data_create }}</td>
         <td><a href="http://{{ request.get_host }}/media/{{ item.upload }}">Файл</a></td>
         <td>
+        {% if item.notifications == 0%}
           {% if request.user.is_staff or request.user.is_expert %}
             {% if not item.status %}
                 <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
@@ -48,6 +52,9 @@ Appications reporting
                 Не одобрено
               {% endif %}
           {% endif %}
+        {% else %}
+          <p>Имеется замечание</p>
+        {% endif %}
         </td>
 
         <td><a class="btn btn-info" href="{% url 'reports_detail_url' item.pk %}">Перейти</a></td>
