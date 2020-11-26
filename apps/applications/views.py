@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
-from django.views.generic.edit import UpdateView , DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from . import forms
 from .models import (Application, ApplicationRemark, ApplicationReport,
@@ -22,23 +22,40 @@ def output(request):
 
 class ApplicationsOutputView(LoginRequiredMixin, View):
     """cписок заявок"""
-    def get(self, request):
+    def get(self, request, pk=None):
         application = None
         statuses = []
         if(request.user.is_superuser):
             application = Application.objects.all()
         elif(request.user.is_expert):
             apps = DesignatedExpert.objects.filter(expert=request.user)
+            form = forms.RatingForm
             application = []
             for app in apps:
-                application.append(get_object_or_404(Application, pk=app.app.pk))
+                _a = get_object_or_404(Application, pk=app.app.pk)
+                _a.form = form
+                application.append(_a)
         elif(request.user.is_active):
             application = Application.objects.filter(user=request.user)
         for item in application:
             ex = DesignatedExpert.objects.filter(app=item.pk)
             item.experts = ex
+            item.rating = 0
+            i = 0
+            for el in ex:
+                if type(el.rating) == int:
+                    item.rating += el.rating
+                    i += 1
+            if i > 0:
+                item.rating = item.rating / i
             statuses.append(item.status)
         return render(request, 'applications/applications_output.html', context={'application': application, 'statuses': statuses})
+
+    def post(self, request, pk):
+        obj = get_object_or_404(DesignatedExpert, app=pk, expert=request.user.pk)
+        obj.rating = request.POST['rating']
+        obj.save()
+        return redirect('applications_output_url')
 
 
 class ApplicationAddExpert(LoginRequiredMixin, CreateView):
@@ -136,7 +153,7 @@ def switch_application_status(request, id):
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
 
 
-class ApplicationUpdateView(LoginRequiredMixin, UpdateView , UserAuthenticatedMixin):
+class ApplicationUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
     """редактирование заявки"""
     model = Application
     fields = [
@@ -179,10 +196,10 @@ def switch_report_status(request, id):
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
 
-def switch_application_status_final(request, id):
+def switch_application_approve(request, id):
     """одобрение или отклонение заявки прям до конца"""
     app = get_object_or_404(Application, pk=id)
-    if app.user == request.user or request.user.is_staff:
+    if request.user.is_staff:
         if app.approved:
             app.approved = False
             app.status = False
@@ -193,21 +210,32 @@ def switch_application_status_final(request, id):
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
 
 
-
-class ReportUpdateView(LoginRequiredMixin, UpdateView , UserAuthenticatedMixin):
+class ReportUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
     """редактирование отчета"""
     model = ApplicationReport
-    fields = ['upload']
+    form_class = forms.ApplicationsReportUpdateForm
     template_name = 'applications/report_update_form.html'
     success_url = reverse_lazy('applications_reporting_url')
 
-class ApplicationDelete(DeleteView , UserAuthenticatedMixin , LoginRequiredMixin) :
+    def get_success_url(self):
+        return reverse_lazy('update_remarks_url', kwargs={'pk': self.object.pk})
+
+
+def delete_remarks(request, pk):
+    obj = get_object_or_404(ApplicationReport, app=pk)
+    remarks = ApplicationRemark.objects.filter(application=obj)
+    remarks.delete()
+    return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
+
+
+class ApplicationDelete(DeleteView, UserAuthenticatedMixin, LoginRequiredMixin):
     ''' удаление заявки '''
     model = Application
     success_url = reverse_lazy('applications_output_url')
     template_name = 'applications/application_delete.html'
 
-class ReportDelete(DeleteView , UserAuthenticatedMixin , LoginRequiredMixin) :
+
+class ReportDelete(DeleteView, UserAuthenticatedMixin,  LoginRequiredMixin):
     ''' удаление отчета '''
     model = ApplicationReport
     success_url = reverse_lazy('applications_reporting_url')
