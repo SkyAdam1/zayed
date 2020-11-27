@@ -2,9 +2,9 @@ from .models import Application, ApplicationRemark
 
 
 def notifications(request):
-    rems = []
+    rems = 0
     if request.user.is_authenticated:
         apps = Application.objects.filter(user=request.user)
         for app in apps:
-            rems = ApplicationRemark.objects.filter(application__app=app.id)
-    return {'notifications_len': len(rems)}
+            rems += len(ApplicationRemark.objects.filter(application__app=app.id))
+    return {'notifications_len': rems}
