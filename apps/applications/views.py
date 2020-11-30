@@ -138,7 +138,9 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
         for app in application:
             notifications = len(ApplicationRemark.objects.filter(application=app.id))
             app.notifications = notifications
-        return render(request, 'applications/applications_reporting.html', context={'application': application})
+        for item in application:
+            statuses.append(item.status)
+        return render(request, 'applications/applications_reporting.html', context={'application': application, 'statuses': statuses})
 
 
 def switch_application_status(request, id):
@@ -152,6 +154,7 @@ def switch_application_status(request, id):
             app.status = True
             app.save()
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
+
 
 def send_report(request, id):
     """отправление отчета"""
