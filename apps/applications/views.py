@@ -121,6 +121,7 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
     """список отчетов"""
     def get(self, request):
         application = None
+        statuses = []
         if(request.user.is_superuser):
             application = ApplicationReport.objects.all()
         elif(request.user.is_expert):
@@ -141,7 +142,7 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
 
 
 def switch_application_status(request, id):
-    """одобрение или отклонение заявки"""
+    """отправление заявки"""
     app = get_object_or_404(Application, pk=id)
     if app.user == request.user or request.user.is_staff:
         if app.status:
@@ -151,6 +152,18 @@ def switch_application_status(request, id):
             app.status = True
             app.save()
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
+
+def send_report(request, id):
+    """отправление отчета"""
+    app_report = get_object_or_404(ApplicationReport, pk=id)
+    if app_report.user == request.user or request.user.is_staff:
+        if app_report.status:
+            app_report.status = False
+            app_report.save()
+        else:
+            app_report.status = True
+            app_report.save()
+    return HttpResponseRedirect(reverse_lazy('applications_report_url'))
 
 
 class ApplicationUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):

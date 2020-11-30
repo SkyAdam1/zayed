@@ -14,6 +14,7 @@ Appications reporting
         <th scope="col">Название проекта</th>
         <th scope="col">Дата оформления</th>
         <th scope="col">Документ</th>
+        <th scope='col'>Одобрено/Не одобрено</th>
         <th scope="col">Статус отчета</th>
         <th scope="col">Замечания</th>
         {% if not request.user.is_staff or not request.user.is_expert %}
@@ -49,6 +50,22 @@ Appications reporting
               {% endif %}
           {% endif %}
         </td>
+
+        {% if False in statuses %}
+          <td>
+            {% if item.status %}
+              <p>Отправлено</p>
+            {% else %}
+              {% if request.user == item.user %}
+                  <a class="btn btn-info" href="{% url 'send_report' item.pk %}">Отправить на проверку</a>
+              {% else %}
+                  <p>Не отправлено</p>
+              {% endif %}
+            {% endif %}
+          </td>
+        {% endif %}
+
+        <td>
 
         <td><a class="btn btn-info" href="{% url 'reports_detail_url' item.pk %}">Перейти</a></td>
 
