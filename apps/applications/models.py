@@ -238,7 +238,11 @@ class ApplicationReport(models.Model):
     quarter = IntegerField(_("За какой квартал отчет?"), choices=quarters)
 
     status = BooleanField(
-        _("Статус отчетности"),
+        _("одобрен или нет"),
+        default=False)
+
+    approved = BooleanField(
+        _("отправлен или нет"),
         default=False)
 
     def get_delete_url(self):

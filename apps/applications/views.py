@@ -166,7 +166,7 @@ def send_report(request, id):
         else:
             app_report.status = True
             app_report.save()
-    return HttpResponseRedirect(reverse_lazy('applications_report_url'))
+    return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
 
 class ApplicationUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
@@ -202,12 +202,13 @@ class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
 
 def switch_report_status(request, id):
     report = get_object_or_404(ApplicationReport, pk=id)
-    if report.user == request.user or request.user.is_staff:
-        if report.status:
+    if request.user.is_staff:
+        if report.approved:
+            report.approved = False
             report.status = False
             report.save()
         else:
-            report.status = True
+            report.approved = True
             report.save()
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 

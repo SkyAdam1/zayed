@@ -39,7 +39,7 @@ Appications reporting
         <td>
           {% if item.notifications == 0%}
             {% if request.user.is_staff or request.user.is_expert %}
-              {% if not item.status %}
+              {% if not item.approved %}
                   <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
                   <p>Не одобрено</p>
               {% else %}
@@ -47,7 +47,7 @@ Appications reporting
                   <p>Одобрено</p>
               {% endif %}
             {% else %}
-                {% if item.status %}
+                {% if item.approved %}
                   Одобрено
                 {% else %}
                   Не одобрено/На проверке
@@ -58,8 +58,8 @@ Appications reporting
           {% endif %}
         </td>
 
-        {% if False in statuses %}
           <td>
+          {% if False in statuses %}
             {% if item.status %}
               <p>Отправлено</p>
             {% else %}
@@ -69,10 +69,8 @@ Appications reporting
                   <p>Не отправлено</p>
               {% endif %}
             {% endif %}
-          </td>
         {% endif %}
-
-        <td>
+          </td>
 
         <td><a class="btn btn-info" href="{% url 'reports_detail_url' item.pk %}">Перейти</a></td>
 
