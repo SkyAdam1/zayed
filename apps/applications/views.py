@@ -7,7 +7,7 @@ from django.views.generic.edit import DeleteView, UpdateView
 
 from . import forms
 from .models import (Application, ApplicationRemark, ApplicationReport,
-                     DesignatedExpert)
+                     DesignatedExpert, ApplicationComment)
 from .utils import (ObjectDetailMixin, ReportsDetailMixin,
                     UserAuthenticatedMixin)
 
@@ -37,6 +37,9 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
                 application.append(_a)
         elif(request.user.is_active):
             application = Application.objects.filter(user=request.user)
+        for app in application:
+            notifications = len(ApplicationComment.objects.filter(application=app.id))
+            app.notifications = notifications
         for item in application:
             ex = DesignatedExpert.objects.filter(app=item.pk)
             item.experts = ex

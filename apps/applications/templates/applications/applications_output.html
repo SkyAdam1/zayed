@@ -15,7 +15,7 @@ Appications output
         <th scope="col">Название проекта</th>
         <th scope="col">Дата оформления</th>
         {% if True in statuses %}
-          <th scope='col'>Одобрено/Не одобрено</th>
+          <th scope='col'>Принята/Не принята</th>
         {% endif %}
         <th scope="col">Ссылка на проект</th>
         {% if False in statuses %}
@@ -45,7 +45,10 @@ Appications output
 
         <th scope="row">{{ item.id }}</th>
 
-        <td>{{ item.project_name }}</td>
+        <td>{{ item.project_name }}
+          {% if item.notifications > 0 %}
+            <span class="badge badge-info">{{ item.notifications }}</span></td>
+          {% endif %}
 
         <td>{{ item.data_create }}</td>
 
@@ -54,20 +57,20 @@ Appications output
             {% if request.user.is_staff %}
               {% if item.status %}
                 {% if not item.approved %}
-                  <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Одобрить</a>
-                  <p>Не одобрено</p>
+                  <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Принять</a>
+                  <p>Не принята</p>
                 {% else %}
-                  <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Деактивировать</a>
-                  <p>Одобрено</p>
+                  <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Отказать</a>
+                  <p>Принята</p>
                 {% endif %}
               {% else %}
                 <p>Не отправлено</p>
               {% endif %}
             {% else %}
               {% if item.approved %}
-                Одобрено
+                Принята
               {% else %}
-                Не одобрено
+                Не принята
               {% endif %}
             {% endif %}
           </td>
@@ -78,12 +81,12 @@ Appications output
         {% if False in statuses %}
           <td>
             {% if item.status %}
-              <p>Отправлено</p>
+              <p>Заявка отправлена</p>
             {% else %}
               {% if request.user == item.user %}
                   <a class="btn btn-info" href="{% url 'switch_status' item.pk %}">Отправить на проверку</a>
               {% else %}
-                  <p>Не отправлено</p>
+                  <p>Заявка не отправленa</p>
               {% endif %}
             {% endif %}
           </td>
@@ -141,14 +144,8 @@ Appications output
         {% if not request.user.is_staff and not request.user.is_expert %}
           <td><a class="btn btn-danger" href="{% url 'application_delete_url' item.pk %}">Удалить</a></td>
         {% endif %}
-
-
       {% endfor %}
-
     </tbody>
-
   </table>
-
 </div>
-
 {% endblock tabs %}
