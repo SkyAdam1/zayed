@@ -242,7 +242,7 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
 
 
 def delete_remarks(request, pk):
-    obj = get_object_or_404(ApplicationReport, app=pk)
+    obj = get_object_or_404(ApplicationReport, pk=pk)
     remarks = ApplicationRemark.objects.filter(application=obj)
     remarks.delete()
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))

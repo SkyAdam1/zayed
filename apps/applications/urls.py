@@ -27,7 +27,7 @@ urlpatterns = [
     path('reports_detail/<int:id>', views.ReportsDetail.as_view(), name='reports_detail_url'),
 
     path('applications_approve/<int:id>', views.switch_application_approve, name='switch_status_reporta'),
-
+    path('update_remarks/<int:pk>/', views.delete_remarks, name='update_remarks_url'),
     path('report_update/<slug:pk>', views.ReportUpdateView.as_view(), name='report_update_url'),
 
     path('applications_delete/<int:pk>/', views.ApplicationDelete.as_view(), name='application_delete_url'),
@@ -36,7 +36,7 @@ urlpatterns = [
 
     path('report_approve/<int:id>/', views.switch_report_status, name='switch_status_rep'),
 
-    path('update_remarks/<int:pk>/', views.delete_remarks, name='update_remarks_url'),
+
 
     path('report_send/<int:id>/', views.send_report, name='send_report'),
 
