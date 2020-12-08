@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import forms as user_forms
 
-from .models import CustomUser
+from .models import CustomUser , UserProfil
 
 
 class CustomUserCreationForm(user_forms.UserCreationForm):
@@ -40,3 +40,13 @@ class CustomUserRegistrationForm(user_forms.UserCreationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+
+
+
+
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfil
+        fields = ('profile', 'phone_number', 'mail', 'inn' , 'legal_address' , 'director_fio' , 'rs' , 'bank')

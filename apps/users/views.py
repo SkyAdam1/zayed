@@ -11,11 +11,16 @@ from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, View
-
-from .forms import CustomUserLoginForm, CustomUserRegistrationForm
-from .models import CustomUser
+from django.shortcuts import get_object_or_404, redirect, render
+from .forms import CustomUserLoginForm, CustomUserRegistrationForm , ProfileForm
+from .models import CustomUser , UserProfil
 from .utils import UserAuthenticatedMixin
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class UserLoginView(UserAuthenticatedMixin, views.LoginView):
     template_name = 'users/login.html'
@@ -112,3 +117,13 @@ class PasswordResetConfirmView(views.PasswordResetConfirmView):
 
 class PasswordResetCompleteView(views.PasswordResetCompleteView):
     template_name = 'users/password_reset_complete.html'
+
+
+class ProfileView(LoginRequiredMixin, CreateView):
+    """ профиль """
+    model = UserProfil
+    template_name = 'users/user_profile.html'
+    success_url = reverse_lazy('profile_url')
+    form_class = ProfileForm
+
+
