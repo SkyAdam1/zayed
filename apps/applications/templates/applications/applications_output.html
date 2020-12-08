@@ -131,7 +131,13 @@ Appications output
               </div>
             </div>
           {% endif %}
-          <p>{{item.rating}}</p>
+          {% for i in item.experts %}
+          {% if i.rating %}
+            <p>{{ i.expert }}</p>
+          {% else %}
+            <p><s>{{ i.expert }}</s></p>
+          {% endif %}
+          {% endfor %}
         </td>
         <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
         

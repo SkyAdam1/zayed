@@ -213,11 +213,9 @@ class ApplicationComment(models.Model):
 
 
 class ApplicationReport(models.Model):
-
     user = ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=CASCADE,
-        default=1)
+        on_delete=CASCADE)
     app = ForeignKey(
         Application,
         on_delete=CASCADE,
@@ -238,11 +236,11 @@ class ApplicationReport(models.Model):
     quarter = IntegerField(_("За какой квартал отчет?"), choices=quarters)
 
     status = BooleanField(
-        _("одобрен или нет"),
+        _("отправлен или нет"),
         default=False)
 
     approved = BooleanField(
-        _("отправлен или нет"),
+        _("одобрен или нет"),
         default=False)
 
     def get_delete_url(self):
@@ -250,6 +248,10 @@ class ApplicationReport(models.Model):
 
     def __str__(self):
         return self.app.project_name
+
+    def save(self, *args, **kwargs):
+        self.user = self.app.user
+        super(self.__class__, self).save(*args, **kwargs)
 
 
 class ApplicationRemark(models.Model):

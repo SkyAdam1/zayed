@@ -36,8 +36,5 @@ urlpatterns = [
 
     path('report_approve/<int:id>/', views.switch_report_status, name='switch_status_rep'),
 
-
-
     path('report_send/<int:id>/', views.send_report, name='send_report'),
-
 ]
