@@ -135,7 +135,8 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
             app.notifications = notifications
         for item in application:
             statuses.append(item.status)
-        return render(request, 'applications/applications_reporting.html', context={'application': application, 'statuses': statuses})
+        return render(request, 'applications/applications_reporting.html', context={
+            'application': application, 'statuses': statuses})
 
 
 def switch_application_status(request, id):
