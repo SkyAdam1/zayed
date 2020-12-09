@@ -58,7 +58,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if request.user.is_authenticated %}
-        <button type="button" class="btn btn-secondary"><a href="{% url 'profile_url' user.pk %}">{{request.user}}</a></button>
+        <a class="btn btn-secondary" href="{% url 'profile_url' user.pk %}">{{request.user}}</a>
         <li class="nav-item">
           <a href="{% url 'logout_url' %}" class="nav-link">Выйти</a>
         </li>

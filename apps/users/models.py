@@ -1,34 +1,30 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-from django.conf import settings
-from .managers import CustomUserManager
-from django.db.models.fields import (BooleanField, CharField, DateField,
-                                     DateTimeField, EmailField, IntegerField,
-                                     PositiveIntegerField, TextField, URLField)
-from django.db.models.deletion import CASCADE
-from django.contrib.auth.decorators import login_required
-from django.db import transaction
-
-from django.contrib.auth.models import User
+from django.db.models.fields import BooleanField, CharField, EmailField
+from django.db.models.fields.related import OneToOneField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
+
+from .managers import CustomUserManager
+
+
 class CustomUser(AbstractUser):
     """Кастомная модель пользователей"""
 
-    email = models.EmailField(
+    email = EmailField(
         ("email address"),
         unique=True,
         error_messages={
             'unique': _("Такой email уже зарегистрирован")
         }
     )
-    is_expert = models.BooleanField(
+    is_expert = BooleanField(
         _("cтатус эксперта"),
         default=False,
         help_text=_("Отметьте, если пользователь является экспертом.")
     )
-    is_active = models.BooleanField(
+    is_active = BooleanField(
         _('active'),
         default=True,
         help_text=_(
@@ -36,7 +32,7 @@ class CustomUser(AbstractUser):
             'Unselect this instead of deleting accounts.'
         ),
     )
-    middle_name = models.CharField(
+    middle_name = CharField(
         _('отчество'),
         max_length=150,
         blank=True
@@ -48,37 +44,21 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-class UserProfil(models.Model):
-    profile = models.OneToOneField(CustomUser ,
-        on_delete=CASCADE ,
-    )
+class UserProfile(models.Model):
+    profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
+    phone_number = CharField(_("Номер телефона для связи"), null=True, max_length=200)
+    mail = CharField(_("Почтовый адрес"), max_length=200, null=True)
+    inn = CharField(_('Ваш ИНН'), null=True, max_length=200)
+    legal_address = CharField(_('Юридический адрес'), max_length=200, null=True)
+    director_fio = CharField(_('ФИО Ген.Директора'), max_length=200, null=True)
+    rs = CharField(_('Расчетный счет'), null=True, max_length=200)
+    bank = CharField(_('Банк'), max_length=200, null=True)
 
-    phone_number = IntegerField(
-        _("Номер телефона для связи")
-    )
+    @receiver(post_save, sender=CustomUser)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile.objects.create(profile=instance)
 
-    mail = CharField(_("Почтовый адрес"),max_length=200, blank=True
-    )
-
-    inn = IntegerField(_('Ваш ИНН')
-    )
-
-    legal_address = CharField(_('Юридический адрес'),max_length=200, blank=True
-    )
-
-    director_fio = CharField(_('ФИО Ген.Директора' ),max_length=200 , blank=True
-    )
-
-    rs = IntegerField(_('Расчетный счет')
-    )
-
-    bank = CharField(_('Банк'),max_length=200 , blank=True)
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-
-@receiver(post_save, sender=CustomUser)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    @receiver(post_save, sender=CustomUser)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.userprofile.save()

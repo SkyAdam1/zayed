@@ -6,8 +6,8 @@ from django.views.generic import CreateView, View
 from django.views.generic.edit import DeleteView, UpdateView
 
 from . import forms
-from .models import (Application, ApplicationRemark, ApplicationReport,
-                     DesignatedExpert, ApplicationComment)
+from .models import (Application, ApplicationComment, ApplicationRemark,
+                     ApplicationReport, DesignatedExpert)
 from .utils import (ObjectDetailMixin, ReportsDetailMixin,
                     UserAuthenticatedMixin)
 
