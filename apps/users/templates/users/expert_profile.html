@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-User Profile
+Expert Profile
 {% endblock title %}
 
 
@@ -11,7 +11,8 @@ User Profile
 <div class="container">
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ user_form.as_p }}
+  {{ profile_form.as_p }}
   <button type="submit">Save changes</button>
 </form>
 {% endblock content %}

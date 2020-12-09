@@ -11,9 +11,9 @@ from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, View
-
-from .forms import CustomUserLoginForm, CustomUserRegistrationForm, ProfileForm
-from .models import CustomUser, UserProfile
+from . import forms
+from .forms import CustomUserLoginForm, CustomUserRegistrationForm, ProfileForm , ExpertProfileForm
+from .models import CustomUser, UserProfile , ExpertProfile
 from .utils import UserAuthenticatedMixin
 
 
@@ -119,4 +119,16 @@ class ProfileView(LoginRequiredMixin, CreateView):
     model = UserProfile
     template_name = 'users/user_profile.html'
     success_url = reverse_lazy('profile_url')
-    form_class = ProfileForm
+    form_class = forms.ProfileForm
+class ProfileDetailView(LoginRequiredMixin,View):
+    model = UserProfile
+    template_name = 'users/user_profile_detail.html'
+    success_url = reverse_lazy('profile_detail_url')
+    
+
+class ExpertProfileView(LoginRequiredMixin, CreateView):
+    """ профиль эксперта """
+    model = ExpertProfile
+    template_name = 'users/expert_profile.html'
+    success_url = reverse_lazy('expert_profile_url')
+    form_class = forms.ExpertProfileForm

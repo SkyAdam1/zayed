@@ -62,3 +62,17 @@ class UserProfile(models.Model):
     @receiver(post_save, sender=CustomUser)
     def save_user_profile(sender, instance, **kwargs):
         instance.userprofile.save()
+
+
+class ExpertProfile(models.Model):
+    profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
+    phone_number = CharField(_("Номер телефона для связи"), null=True, max_length=200)
+    work_place = CharField(_('Место работы'),null=True, max_length=200)
+    position = CharField(_('Занимаемая должность'),null=True, max_length=200)
+    interests = CharField(_('Сфера профессиональных интересов'),null=True, max_length=200)
+    edu = [
+        ('Высшее', 'Высшее'),
+        ('Среднее профессиональное','Среднее профессиональное'),
+    ]
+    education = CharField(_('Образование'), choices=edu, blank=True, null=True , max_length=200)
+    degree = CharField(_('Степень образования'),null=True, max_length=200)

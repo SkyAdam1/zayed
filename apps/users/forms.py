@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import forms as user_forms
 
-from .models import CustomUser, UserProfile
+from .models import CustomUser, UserProfile , ExpertProfile
 
 
 class CustomUserCreationForm(user_forms.UserCreationForm):
@@ -46,3 +46,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('profile', 'phone_number', 'mail', 'inn', 'legal_address', 'director_fio', 'rs', 'bank')
+
+
+class ExpertProfileForm(forms.ModelForm):
+    class Meta:
+        model = ExpertProfile
+        fields = ('profile' , 'phone_number' , 'work_place' , 'position', 'interests', 'education' , 'degree')
