@@ -11,9 +11,10 @@ from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, View
+from django.views.generic.edit import UpdateView
 from . import forms
-from .forms import CustomUserLoginForm, CustomUserRegistrationForm, ProfileForm , ExpertProfileForm
-from .models import CustomUser, UserProfile , ExpertProfile
+from .forms import CustomUserLoginForm, CustomUserRegistrationForm
+from .models import CustomUser, UserProfile, ExpertProfile
 from .utils import UserAuthenticatedMixin
 
 
@@ -114,17 +115,22 @@ class PasswordResetCompleteView(views.PasswordResetCompleteView):
     template_name = 'users/password_reset_complete.html'
 
 
-class ProfileView(LoginRequiredMixin, CreateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль """
     model = UserProfile
     template_name = 'users/user_profile.html'
     success_url = reverse_lazy('profile_url')
     form_class = forms.ProfileForm
-class ProfileDetailView(LoginRequiredMixin,View):
+
+    def get_success_url(self):
+        return reverse_lazy('profile_url', kwargs={'pk': self.object.pk})
+
+
+class ProfileDetailView(LoginRequiredMixin, View):
     model = UserProfile
     template_name = 'users/user_profile_detail.html'
     success_url = reverse_lazy('profile_detail_url')
-    
+
 
 class ExpertProfileView(LoginRequiredMixin, CreateView):
     """ профиль эксперта """

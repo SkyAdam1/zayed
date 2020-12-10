@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import forms as user_forms
 
-from .models import CustomUser, UserProfile , ExpertProfile
+from .models import CustomUser, UserProfile, ExpertProfile
 
 
 class CustomUserCreationForm(user_forms.UserCreationForm):
@@ -45,10 +45,20 @@ class CustomUserRegistrationForm(user_forms.UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('profile', 'phone_number', 'mail', 'inn', 'legal_address', 'director_fio', 'rs', 'bank')
+        fields = ('phone_number', 'mail', 'inn', 'legal_address', 'director_fio', 'rs', 'bank')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
 
 
 class ExpertProfileForm(forms.ModelForm):
     class Meta:
         model = ExpertProfile
-        fields = ('profile' , 'phone_number' , 'work_place' , 'position', 'interests', 'education' , 'degree')
+        fields = ('profile', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'

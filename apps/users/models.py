@@ -54,25 +54,42 @@ class UserProfile(models.Model):
     rs = CharField(_('Расчетный счет'), null=True, max_length=200)
     bank = CharField(_('Банк'), max_length=200, null=True)
 
+    def __str__(self):
+        return self.profile.username
+
     @receiver(post_save, sender=CustomUser)
     def create_user_profile(sender, instance, created, **kwargs):
-        if created:
+        if created and not instance.is_expert:
             UserProfile.objects.create(profile=instance)
 
     @receiver(post_save, sender=CustomUser)
     def save_user_profile(sender, instance, **kwargs):
-        instance.userprofile.save()
+        if not instance.is_expert:
+            instance.userprofile.save()
 
 
 class ExpertProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
     phone_number = CharField(_("Номер телефона для связи"), null=True, max_length=200)
-    work_place = CharField(_('Место работы'),null=True, max_length=200)
-    position = CharField(_('Занимаемая должность'),null=True, max_length=200)
-    interests = CharField(_('Сфера профессиональных интересов'),null=True, max_length=200)
+    work_place = CharField(_('Место работы'), null=True, max_length=200)
+    position = CharField(_('Занимаемая должность'), null=True, max_length=200)
+    interests = CharField(_('Сфера профессиональных интересов'), null=True, max_length=200)
     edu = [
         ('Высшее', 'Высшее'),
-        ('Среднее профессиональное','Среднее профессиональное'),
+        ('Среднее профессиональное', 'Среднее профессиональное'),
     ]
-    education = CharField(_('Образование'), choices=edu, blank=True, null=True , max_length=200)
-    degree = CharField(_('Степень образования'),null=True, max_length=200)
+    education = CharField(_('Образование'), choices=edu, blank=True, null=True, max_length=200)
+    degree = CharField(_('Степень образования'), null=True, max_length=200)
+
+    def __str__(self):
+        return self.profile.username
+
+    @receiver(post_save, sender=CustomUser)
+    def create_expert_profile(sender, instance, created, **kwargs):
+        if created and instance.is_expert:
+            ExpertProfile.objects.create(profile=instance)
+
+    @receiver(post_save, sender=CustomUser)
+    def save_expert_profile(sender, instance, **kwargs):
+        if instance.is_expert:
+            instance.expertprofile.save()
