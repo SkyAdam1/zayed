@@ -16,7 +16,7 @@ from . import forms
 from .forms import CustomUserLoginForm, CustomUserRegistrationForm
 from .models import CustomUser, UserProfile, ExpertProfile
 from .utils import UserAuthenticatedMixin
-
+from django.views.generic import ListView, DetailView
 
 class UserLoginView(UserAuthenticatedMixin, views.LoginView):
     template_name = 'users/login.html'
@@ -118,23 +118,27 @@ class PasswordResetCompleteView(views.PasswordResetCompleteView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль """
     model = UserProfile
-    template_name = 'users/user_profile.html'
-    success_url = reverse_lazy('profile_url')
-    form_class = forms.ProfileForm
-
+    template_name = 'users/user_profile_update.html'
+    fields = ('phone_number', 'mail', 'inn', 'legal_address', 'director_fio', 'rs', 'bank')
     def get_success_url(self):
-        return reverse_lazy('profile_url', kwargs={'pk': self.object.pk})
+        return reverse_lazy('user_profile_detail_url', kwargs={'pk': self.object.pk})
 
-
-class ProfileDetailView(LoginRequiredMixin, View):
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    ''' обзор профиля юзера '''
     model = UserProfile
     template_name = 'users/user_profile_detail.html'
-    success_url = reverse_lazy('profile_detail_url')
 
 
-class ExpertProfileView(LoginRequiredMixin, CreateView):
+class ExpertUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль эксперта """
     model = ExpertProfile
-    template_name = 'users/expert_profile.html'
-    success_url = reverse_lazy('expert_profile_url')
-    form_class = forms.ExpertProfileForm
+    template_name = 'users/expert_profile_update.html'
+    fields = ('profile', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
+    
+    def get_success_url(self):
+        return reverse_lazy('expert_profile_detail_url', kwargs={'pk': self.object.pk})
+
+class ExpertProfileDetailView(LoginRequiredMixin, DetailView):
+    ''' обзор профиля эксперта'''
+    model = ExpertProfile
+    template_name = 'users/expert_profile_detail.html'
