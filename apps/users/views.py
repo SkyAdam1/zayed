@@ -119,7 +119,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль """
     model = UserProfile
     template_name = 'users/user_profile_update.html'
-    fields = ('phone_number', 'mail', 'inn', 'legal_address', 'director_fio', 'rs', 'bank')
+    fields = ('photo','phone_number', 'mail', 'inn','ogrn', 'legal_address', 'director_fio', 'rs', 'bank')
     def get_success_url(self):
         return reverse_lazy('user_profile_detail_url', kwargs={'pk': self.object.pk})
 
@@ -133,7 +133,7 @@ class ExpertUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль эксперта """
     model = ExpertProfile
     template_name = 'users/expert_profile_update.html'
-    fields = ('profile', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
+    fields = ('photo', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
     
     def get_success_url(self):
         return reverse_lazy('expert_profile_detail_url', kwargs={'pk': self.object.pk})

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-User Profile
+User Profile Update
 {% endblock title %}
 
 
@@ -12,7 +12,7 @@ User Profile
 <form action=""  method="post">
   {% csrf_token %}
   {{ form.as_p}}
-  <button type="submit" value="Update" class='btn btn-primary'>Изменить данные</button>
+  <button type="submit" value="Update" class='btn btn-primary'>Сохранить</button>
 </form>
 {% endblock content %}
 </div>

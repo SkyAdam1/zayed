@@ -9,17 +9,21 @@ User profile
    div.box {
     width: 210px;
     height: 210px;
-    background: black; /* Цвет фона */
     border: 2px solid black; /* Параметры рамки */
     padding: 5px; /* Поля вокруг текста */
     margin-top: 100px; /* Отступ сверху */
+    display: inline-block;
+  	vertical-align: top;
 }
-	div.personal_text{
-            border: 1px solid #E8E8E9;
-            padding: 8px;
-            float: right;
-            background-color: #59D1F6;
-        }
+    div.information {
+    	display: inline-block;
+    	vertical-align: top;
+    	margin-top: 100px; /* Отступ сверху */
+    	margin-left: 100px;
+    }
+    div.container1{
+    	margin-top: 10%;
+    }
 </style>
 <div class="box">
 	<p text-align = 'center'><img src="/media/files/1.jpg" width="200" height="200"></p>
@@ -27,22 +31,15 @@ User profile
 
 
 
-<p text-align = 'center'>
-	<div class="personal_text">
-	<h6>это</h6>
+<div class="information">
 	<h3>все</h3>
 	<h4>еще</h4>
 	<ul class="list basic_info">
-	<li><a href="#"><i class="lnr lnr-calendar-full"></i> нужно</a></li>
-	<li><a href="#"><i class="lnr lnr-phone-handset"></i> доделать</a></li>
-	<li><a href="#"><i class="lnr lnr-envelope"></i> businessplan@donald</a></li>
-	<li><a href="#"><i class="lnr lnr-home"></i> Santa monica bullevard</a></li>
+	<li>нужно</li>
+	<li>доделать</li>
+	<li>businessplan@donald</li>
+	<li>Santa monica bullevard</li>
 	</ul>
-	<ul class="list personal_social">
-	<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-	<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-	<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-	</ul>
-	</div>
-</p>
+</div>
+<div class="container1"><a class="btn btn-info" href="{% url 'profile_update_url' user.pk %}">Редактировать профиль</a></div>
 {% endblock content %}
