@@ -45,7 +45,7 @@ class CustomUserRegistrationForm(user_forms.UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('photo' ,'phone_number', 'mail', 'inn','ogrn', 'legal_address', 'director_fio', 'rs', 'bank')
+        fields = ('photo', 'phone_number', 'mail', 'inn', 'ogrn', 'legal_address', 'director_fio', 'rs', 'bank')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -56,7 +56,7 @@ class ProfileForm(forms.ModelForm):
 class ExpertProfileForm(forms.ModelForm):
     class Meta:
         model = ExpertProfile
-        fields = ('photo' , 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
+        fields = ('photo', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
