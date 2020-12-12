@@ -117,7 +117,7 @@ class PasswordResetCompleteView(views.PasswordResetCompleteView):
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-    """ профиль """
+    ''' профиль '''
     model = UserProfile
     template_name = 'users/user_profile_update.html'
     form_class = ProfileForm
@@ -139,7 +139,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
 
 class ExpertUpdateView(LoginRequiredMixin, UpdateView):
-    """ профиль эксперта """
+    ''' профиль эксперта '''
     model = ExpertProfile
     template_name = 'users/expert_profile_update.html'
     form_class = ExpertProfileForm

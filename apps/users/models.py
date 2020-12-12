@@ -15,17 +15,17 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-    """Кастомная модель пользователей"""
+    '''Кастомная модель пользователей'''
 
     email = EmailField(
-        ("email address"),
+        ('email address'),
         unique=True,
         error_messages={
-            'unique': _("Такой email уже зарегистрирован")})
+            'unique': _('Такой email уже зарегистрирован')})
     is_expert = BooleanField(
-        _("cтатус эксперта"),
+        _('cтатус эксперта'),
         default=False,
-        help_text=_("Отметьте, если пользователь является экспертом."))
+        help_text=_('Отметьте, если пользователь является экспертом.'))
     is_active = BooleanField(
         _('active'),
         default=True,
@@ -46,8 +46,8 @@ class CustomUser(AbstractUser):
 class UserProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
     photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
-    phone_number = CharField(_("Номер телефона для связи"), blank=True, null=True, max_length=200)
-    mail = CharField(_("Почтовый адрес"), max_length=200, blank=True, null=True,)
+    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200)
+    mail = CharField(_('Почтовый адрес'), max_length=200, blank=True, null=True,)
     inn = CharField(_('Ваш ИНН'), blank=True, null=True, max_length=200)
     ogrn = CharField(_('ОГРН'), blank=True, null=True, max_length=200)
     legal_address = CharField(_('Юридический адрес'), max_length=200, blank=True, null=True,)
@@ -85,7 +85,7 @@ class UserProfile(models.Model):
 class ExpertProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
     photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
-    phone_number = CharField(_("Номер телефона для связи"), blank=True, null=True, max_length=200)
+    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200)
     work_place = CharField(_('Место работы'), blank=True, null=True, max_length=200)
     position = CharField(_('Занимаемая должность'), blank=True, null=True, max_length=200)
     interests = CharField(_('Сфера профессиональных интересов'), blank=True, null=True, max_length=200)
