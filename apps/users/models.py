@@ -21,27 +21,21 @@ class CustomUser(AbstractUser):
         ("email address"),
         unique=True,
         error_messages={
-            'unique': _("Такой email уже зарегистрирован")
-        }
-    )
+            'unique': _("Такой email уже зарегистрирован")})
     is_expert = BooleanField(
         _("cтатус эксперта"),
         default=False,
-        help_text=_("Отметьте, если пользователь является экспертом.")
-    )
+        help_text=_("Отметьте, если пользователь является экспертом."))
     is_active = BooleanField(
         _('active'),
         default=True,
         help_text=_(
             'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
-        ),
-    )
+            'Unselect this instead of deleting accounts.'))
     middle_name = CharField(
         _('отчество'),
         max_length=150,
-        blank=True
-    )
+        blank=True)
 
     objects = CustomUserManager()
 
