@@ -10,13 +10,13 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.views.generic import CreateView, View
+from django.views.generic import CreateView, DetailView, View
 from django.views.generic.edit import UpdateView
-from . import forms
+
 from .forms import CustomUserLoginForm, CustomUserRegistrationForm
-from .models import CustomUser, UserProfile, ExpertProfile
+from .models import CustomUser, ExpertProfile, UserProfile
 from .utils import UserAuthenticatedMixin
-from django.views.generic import ListView, DetailView
+
 
 class UserLoginView(UserAuthenticatedMixin, views.LoginView):
     template_name = 'users/login.html'
@@ -119,9 +119,11 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль """
     model = UserProfile
     template_name = 'users/user_profile_update.html'
-    fields = ('photo','phone_number', 'mail', 'inn','ogrn', 'legal_address', 'director_fio', 'rs', 'bank')
+    fields = ('photo', 'phone_number', 'mail', 'inn', 'ogrn', 'legal_address', 'director_fio', 'rs', 'bank')
+
     def get_success_url(self):
         return reverse_lazy('user_profile_detail_url', kwargs={'pk': self.object.pk})
+
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     ''' обзор профиля юзера '''
@@ -134,9 +136,10 @@ class ExpertUpdateView(LoginRequiredMixin, UpdateView):
     model = ExpertProfile
     template_name = 'users/expert_profile_update.html'
     fields = ('photo', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
-    
+
     def get_success_url(self):
         return reverse_lazy('expert_profile_detail_url', kwargs={'pk': self.object.pk})
+
 
 class ExpertProfileDetailView(LoginRequiredMixin, DetailView):
     ''' обзор профиля эксперта'''
