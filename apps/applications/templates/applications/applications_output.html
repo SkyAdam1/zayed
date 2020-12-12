@@ -22,7 +22,9 @@ Appications output
           <th scope="col">Статус заявки</th>
         {% endif %}
         <th scope="col">Эксперты</th>
-        <th scope="col">Оценка</th>
+        {% if request.user.is_expert and request.user.is_staff %}
+          <th scope="col">Оценка</th>
+        {% endif %}
         <th scope="col">Подробнее</th>
         {% if not request.user.is_staff and not request.user.is_expert %}
           {% if False in statuses %}
@@ -105,40 +107,43 @@ Appications output
           {% endif %}
         </td>
 
-        <td>
-          {% if request.user.is_expert and not request.user.is_staff %}
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ item }}">
-              Оценить
-            </button>
-            <div class="modal" id="{{ item }}">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title">Заявка: {{ item }}</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="{% url 'applications_output_pk_url' item.pk %}" method="post">
-                        {% csrf_token %}
-                        {{ item.form.as_p }}
-                        <button type="submit" class="btn btn-info">Сохранить</button>
-                      </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+        {% if request.user.is_expert and request.user.is_staff %}
+          <td>
+            {% if request.user.is_expert and not request.user.is_staff %}
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ item }}">
+                Оценить
+              </button>
+              <div class="modal" id="{{ item }}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Заявка: {{ item }}</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{% url 'applications_output_pk_url' item.pk %}" method="post">
+                          {% csrf_token %}
+                          {{ item.form.as_p }}
+                          <button type="submit" class="btn btn-info">Сохранить</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          {% endif %}
-          {% for i in item.experts %}
-            {% if i.rating > 0 %}
-              <p>{{ i.expert }} - {{ i.rating }}</p>
-            {% else %}
-              <p><s>{{ i.expert }}</s></p>
             {% endif %}
-          {% endfor %}
-        </td>
+            {% for i in item.experts %}
+              {% if i.rating > 0 %}
+                <p>{{ i.expert }} - {{ i.rating }}</p>
+              {% else %}
+                <p><s>{{ i.expert }}</s></p>
+              {% endif %}
+            {% endfor %}
+          </td>
+        {% endif %}
+
         <td><a class="btn btn-info" href="{% url 'applications_detail_url' item.pk %}">Перейти</a></td>
         
         {% if request.user == item.user and not item.status%}
