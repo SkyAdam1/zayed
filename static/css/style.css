@@ -3,3 +3,18 @@
   width: auto;
 }
 
+.remark {
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-bottom: 2%;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.not-seen {
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+.seen {
+  box-shadow: 0 0 10px rgba(9, 255, 0, 0.3);
+}

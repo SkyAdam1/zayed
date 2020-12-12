@@ -58,7 +58,11 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if request.user.is_authenticated %}
-        <button type="button" class="btn btn-secondary">{{request.user}}</button>
+          {% if request.user.is_expert %}
+            <a class="btn btn-secondary" href="{% url 'expert_profile_detail_url' user.expertprofile.pk %}">{{request.user}}</a> 
+          {% else %}
+            <a class="btn btn-secondary" href="{% url 'user_profile_detail_url' user.userprofile.pk %}">{{request.user}}</a>
+          {% endif %}
         <li class="nav-item">
           <a href="{% url 'logout_url' %}" class="nav-link">Выйти</a>
         </li>

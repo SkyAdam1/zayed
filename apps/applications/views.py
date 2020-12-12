@@ -6,8 +6,8 @@ from django.views.generic import CreateView, View
 from django.views.generic.edit import DeleteView, UpdateView
 
 from . import forms
-from .models import (Application, ApplicationRemark, ApplicationReport,
-                     DesignatedExpert)
+from .models import (Application, ApplicationComment, ApplicationRemark,
+                     ApplicationReport, DesignatedExpert)
 from .utils import (ObjectDetailMixin, ReportsDetailMixin,
                     UserAuthenticatedMixin)
 
@@ -26,9 +26,9 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
         application = None
         statuses = []
         if(request.user.is_superuser):
-            application = Application.objects.all()
+            application = Application.objects.filter(status=True)
         elif(request.user.is_expert):
-            apps = DesignatedExpert.objects.filter(expert=request.user)
+            apps = DesignatedExpert.objects.filter(app__status=True, expert=request.user)
             form = forms.RatingForm
             application = []
             for app in apps:
@@ -37,17 +37,12 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
                 application.append(_a)
         elif(request.user.is_active):
             application = Application.objects.filter(user=request.user)
+        for app in application:
+            notifications = len(ApplicationComment.objects.filter(application=app.id))
+            app.notifications = notifications
         for item in application:
             ex = DesignatedExpert.objects.filter(app=item.pk)
             item.experts = ex
-            item.rating = 0
-            i = 0
-            for el in ex:
-                if type(el.rating) == int:
-                    item.rating += el.rating
-                    i += 1
-            if i > 0:
-                item.rating = item.rating / i
             statuses.append(item.status)
         return render(request, 'applications/applications_output.html', context={'application': application, 'statuses': statuses})
 
@@ -121,27 +116,28 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
     """список отчетов"""
     def get(self, request):
         application = None
-        if(request.user.is_superuser):
-            application = ApplicationReport.objects.all()
+        statuses = []
+        if(request.user.is_staff):
+            application = ApplicationReport.objects.filter(status=True)
         elif(request.user.is_expert):
-            apps = DesignatedExpert.objects.filter(expert=request.user)
-            application = []
+            apps = DesignatedExpert.objects.filter(app__status=True, expert=request.user)
+            application = list()
             for app in apps:
-                try:
-                    a_ = get_object_or_404(Application, pk=app.app.pk)
-                    application.append(ApplicationReport.objects.get(app=a_.pk))
-                except Exception as e:
-                    print(e)
-        elif(request.user.is_active):
+                reports = ApplicationReport.objects.filter(app__pk=app.app.pk, status=True)
+                [application.append(i) for i in reports]
+        elif(not request.user.is_expert and not request.user.is_staff):
             application = ApplicationReport.objects.filter(app__user=request.user)
         for app in application:
-            notifications = len(ApplicationRemark.objects.filter(application=app.id))
+            notifications = len(ApplicationRemark.objects.filter(application=app.id, status=False))
             app.notifications = notifications
-        return render(request, 'applications/applications_reporting.html', context={'application': application})
+        for item in application:
+            statuses.append(item.status)
+        return render(request, 'applications/applications_reporting.html', context={
+            'application': application, 'statuses': statuses})
 
 
 def switch_application_status(request, id):
-    """одобрение или отклонение заявки"""
+    """отправление заявки"""
     app = get_object_or_404(Application, pk=id)
     if app.user == request.user or request.user.is_staff:
         if app.status:
@@ -151,6 +147,32 @@ def switch_application_status(request, id):
             app.status = True
             app.save()
     return HttpResponseRedirect(reverse_lazy('applications_output_url'))
+
+
+def send_report(request, id):
+    """отправление отчета"""
+    report = get_object_or_404(ApplicationReport, pk=id)
+    if report.user == request.user or request.user.is_staff:
+        if report.status:
+            report.status = False
+            report.save()
+        else:
+            report.status = True
+            report.save()
+    return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
+
+
+def switch_report_status(request, id):
+    report = get_object_or_404(ApplicationReport, pk=id)
+    if report.user == request.user or request.user.is_staff:
+        if report.approved:
+            report.approved = False
+            report.status = False
+            report.save()
+        else:
+            report.approved = True
+            report.save()
+    return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
 
 class ApplicationUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
@@ -184,18 +206,6 @@ class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
     success_url = reverse_lazy('applications_output_url')
 
 
-def switch_report_status(request, id):
-    report = get_object_or_404(ApplicationReport, pk=id)
-    if report.user == request.user or request.user.is_staff:
-        if report.status:
-            report.status = False
-            report.save()
-        else:
-            report.status = True
-            report.save()
-    return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
-
-
 def switch_application_approve(request, id):
     """одобрение или отклонение заявки прям до конца"""
     app = get_object_or_404(Application, pk=id)
@@ -222,9 +232,11 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
 
 
 def delete_remarks(request, pk):
-    obj = get_object_or_404(ApplicationReport, app=pk)
-    remarks = ApplicationRemark.objects.filter(application=obj)
-    remarks.delete()
+    obj = get_object_or_404(ApplicationReport, pk=pk)
+    remarks = ApplicationRemark.objects.filter(application=obj, status=False)
+    for remark in remarks:
+        remark.status = True
+        remark.save()
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
 

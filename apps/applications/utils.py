@@ -14,6 +14,13 @@ class ObjectDetailMixin:
 
     def get(self, request, id):
         obj = get_object_or_404(self.model, id=id)
+        if self.request.user != obj.user and not self.request.user.is_staff:
+            if self.request.user.is_expert:
+                ex = [i.expert for i in models.DesignatedExpert.objects.filter(app=obj)]
+                if self.request.user not in ex:
+                    return redirect('applications_output_url')
+            else:
+                return redirect('applications_output_url')
         comments = models.ApplicationComment.objects.filter(application=id)
         return render(request, self.template_name, context={
             'applications': obj,
@@ -46,6 +53,13 @@ class ReportsDetailMixin:
 
     def get(self, request, id):
         obj = get_object_or_404(self.model, id=id)
+        if self.request.user != obj.user and not self.request.user.is_staff:
+            if self.request.user.is_expert:
+                ex = [i.expert for i in models.DesignatedExpert.objects.filter(app=obj.app)]
+                if self.request.user not in ex:
+                    return redirect('applications_reporting_url')
+            else:
+                return redirect('applications_reporting_url')
         remarks = models.ApplicationRemark.objects.filter(application=obj)
         return render(request, self.template_name, context={
             'applications': obj,
@@ -59,5 +73,9 @@ class ReportsDetailMixin:
             remark = form.save(commit=False)
             remark.application = obj
             remark.user = request.user
+            if remark.user == obj.user:
+                remark.status = True
             remark.save()
+        obj.status = False
+        obj.save()
         return redirect('reports_detail_url', id=id)
