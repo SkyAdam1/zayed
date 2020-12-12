@@ -13,7 +13,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, DetailView, View
 from django.views.generic.edit import UpdateView
 
-from .forms import CustomUserLoginForm, CustomUserRegistrationForm
+from .forms import CustomUserLoginForm, CustomUserRegistrationForm, ExpertProfileForm
 from .models import CustomUser, ExpertProfile, UserProfile
 from .utils import UserAuthenticatedMixin
 
@@ -135,7 +135,7 @@ class ExpertUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль эксперта """
     model = ExpertProfile
     template_name = 'users/expert_profile_update.html'
-    fields = ('photo', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
+    form_class = ExpertProfileForm
 
     def get_success_url(self):
         return reverse_lazy('expert_profile_detail_url', kwargs={'pk': self.object.pk})

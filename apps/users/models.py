@@ -51,7 +51,7 @@ class CustomUser(AbstractUser):
 
 class UserProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
-    photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True, default='media/files/1.jpg')
+    photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
     phone_number = CharField(_("Номер телефона для связи"), blank=True, null=True, max_length=200)
     mail = CharField(_("Почтовый адрес"), max_length=200, blank=True, null=True,)
     inn = CharField(_('Ваш ИНН'), blank=True, null=True, max_length=200)
@@ -90,7 +90,7 @@ class UserProfile(models.Model):
 
 class ExpertProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
-    photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True, default='media/files/1.jpg')
+    photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
     phone_number = CharField(_("Номер телефона для связи"), blank=True, null=True, max_length=200)
     work_place = CharField(_('Место работы'), blank=True, null=True, max_length=200)
     position = CharField(_('Занимаемая должность'), blank=True, null=True, max_length=200)
