@@ -133,3 +133,7 @@ media
 # Django migrations
 ***/migrations/*
 !__init__.py
+
+# myconfig
+.secrets.*
+settings.toml
