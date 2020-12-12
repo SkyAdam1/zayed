@@ -5,7 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_text
@@ -13,7 +13,8 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import CreateView, DetailView, View
 from django.views.generic.edit import UpdateView
 
-from .forms import CustomUserLoginForm, CustomUserRegistrationForm, ExpertProfileForm
+from .forms import (CustomUserLoginForm, CustomUserRegistrationForm,
+                    ExpertProfileForm, ProfileForm)
 from .models import CustomUser, ExpertProfile, UserProfile
 from .utils import UserAuthenticatedMixin
 
@@ -119,7 +120,13 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """ профиль """
     model = UserProfile
     template_name = 'users/user_profile_update.html'
-    fields = ('photo', 'phone_number', 'mail', 'inn', 'ogrn', 'legal_address', 'director_fio', 'rs', 'bank')
+    form_class = ProfileForm
+
+    def dispatch(self, *args, **kwargs):
+        user = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        if self.request.user == user.profile:
+            return super(ExpertUpdateView, self).dispatch(*args, **kwargs)
+        return HttpResponseRedirect(reverse_lazy('user_profile_detail_url', kwargs=self.kwargs))
 
     def get_success_url(self):
         return reverse_lazy('user_profile_detail_url', kwargs={'pk': self.object.pk})
@@ -136,6 +143,12 @@ class ExpertUpdateView(LoginRequiredMixin, UpdateView):
     model = ExpertProfile
     template_name = 'users/expert_profile_update.html'
     form_class = ExpertProfileForm
+
+    def dispatch(self, *args, **kwargs):
+        user = get_object_or_404(self.model, pk=self.kwargs['pk'])
+        if self.request.user == user.profile:
+            return super(ExpertUpdateView, self).dispatch(*args, **kwargs)
+        return HttpResponseRedirect(reverse_lazy('user_profile_detail_url', kwargs=self.kwargs))
 
     def get_success_url(self):
         return reverse_lazy('expert_profile_detail_url', kwargs={'pk': self.object.pk})
