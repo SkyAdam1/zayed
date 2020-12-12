@@ -6,5 +6,5 @@ def notifications(request):
     if request.user.is_authenticated:
         apps = Application.objects.filter(user=request.user)
         for app in apps:
-            rems += len(ApplicationRemark.objects.filter(application__app=app.id))
+            rems += len(ApplicationRemark.objects.filter(application__app=app.id, status=False))
     return {'notifications_len': rems}

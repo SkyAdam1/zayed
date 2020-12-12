@@ -26,9 +26,9 @@ class ApplicationsOutputView(LoginRequiredMixin, View):
         application = None
         statuses = []
         if(request.user.is_superuser):
-            application = Application.objects.all()
+            application = Application.objects.filter(status=True)
         elif(request.user.is_expert):
-            apps = DesignatedExpert.objects.filter(expert=request.user)
+            apps = DesignatedExpert.objects.filter(app__status=True, expert=request.user)
             form = forms.RatingForm
             application = []
             for app in apps:
@@ -120,18 +120,15 @@ class ApplicationsReportingView(LoginRequiredMixin, View):
         if(request.user.is_staff):
             application = ApplicationReport.objects.filter(status=True)
         elif(request.user.is_expert):
-            apps = DesignatedExpert.objects.filter(expert=request.user, status=True)
-            application = []
+            apps = DesignatedExpert.objects.filter(app__status=True, expert=request.user)
+            application = list()
             for app in apps:
-                try:
-                    a_ = get_object_or_404(Application, pk=app.app.pk)
-                    application.append(ApplicationReport.objects.get(app=a_.pk))
-                except Exception as e:
-                    print(e)
+                reports = ApplicationReport.objects.filter(app__pk=app.app.pk, status=True)
+                [application.append(i) for i in reports]
         elif(not request.user.is_expert and not request.user.is_staff):
             application = ApplicationReport.objects.filter(app__user=request.user)
         for app in application:
-            notifications = len(ApplicationRemark.objects.filter(application=app.id))
+            notifications = len(ApplicationRemark.objects.filter(application=app.id, status=False))
             app.notifications = notifications
         for item in application:
             statuses.append(item.status)
@@ -236,8 +233,10 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
 
 def delete_remarks(request, pk):
     obj = get_object_or_404(ApplicationReport, pk=pk)
-    remarks = ApplicationRemark.objects.filter(application=obj)
-    remarks.delete()
+    remarks = ApplicationRemark.objects.filter(application=obj, status=False)
+    for remark in remarks:
+        remark.status = True
+        remark.save()
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))
 
 

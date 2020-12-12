@@ -59,5 +59,9 @@ class ReportsDetailMixin:
             remark = form.save(commit=False)
             remark.application = obj
             remark.user = request.user
+            if remark.user == obj.user:
+                remark.status = True
             remark.save()
+        obj.status = False
+        obj.save()
         return redirect('reports_detail_url', id=id)

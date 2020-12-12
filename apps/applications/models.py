@@ -176,6 +176,7 @@ class Application(models.Model):
 
 class DesignatedExpert(models.Model):
     rate = [
+        (0, 0),
         (1, 1),
         (2, 2),
         (3, 3),
@@ -188,7 +189,7 @@ class DesignatedExpert(models.Model):
         CASCADE,
         verbose_name=_('Эксперт'),
         limit_choices_to={'is_expert': True, 'is_active': True})
-    rating = PositiveIntegerField(_('Оценка'), choices=rate, blank=True, null=True)
+    rating = PositiveIntegerField(_('Оценка'), choices=rate, default=0)
 
     def __str__(self):
         return f'{self.app}: {self.expert} - {self.rating}'
@@ -243,6 +244,9 @@ class ApplicationReport(models.Model):
         _("одобрен или нет"),
         default=False)
 
+    class Meta:
+        ordering = ['-year', '-quarter']
+
     def get_delete_url(self):
         return reverse('report_delete_url', kwargs={'pk': self.pk})
 
@@ -264,6 +268,7 @@ class ApplicationRemark(models.Model):
     text = TextField(
         _('Текст замечания'))
     created_at = DateTimeField(auto_now_add=True)
+    status = BooleanField(_('Просмотрено'), default=False)
 
     class Meta:
         ordering = ['-created_at']
