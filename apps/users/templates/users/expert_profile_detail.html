@@ -27,20 +27,20 @@ Expert profile
 </style>
 
 <div class="box">
-	<p text-align = 'center'><img src="/media/files/1.jpg" width="200" height="200"></p>
+	<p text-align = 'center'><img src="{{request.user.expertprofile.photo}}" width="200" height="200"></p>
 </div>
 
 
 
 <div class="information">
-	<h3>все</h3>
-	<h4>еще</h4>
-	<ul class="list basic_info">
-	<li>нужно</li>
-	<li>доделать</li>
-	<li>businessplan@donald</li>
-	<li>Santa monica bullevard</li>
-	</ul>
+    <h3>{{request.user.last_name}} {{request.user.first_name}} {{request.user.middle_name}}</h3>
+    <h3>{{request.user.email}}</h3>
+    <h3>Номер телефона : {{request.user.expertprofile.phone_number}}</h3>
+    <h3>Место работы : {{request.user.expertprofile.work_place}}</h3>
+    <h3>Должность : {{request.user.expertprofile.position}}</h3>
+    <h3>Сфера профессиональных интересов : {{request.user.expertprofile.interests}}</h3>
+    <h3>Образование : {{request.user.expertprofile.education}}</h3>
+    <h3>Степень образования : {{request.user.expertprofile.degree}}</h3>
 </div>
 <div class="container1"><a class="btn btn-info" href="{% url 'expert_profile_update_url' user.pk %}">Редактировать профиль</a></div>
 {% endblock content %}

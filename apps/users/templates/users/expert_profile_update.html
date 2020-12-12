@@ -7,11 +7,15 @@ Expert Profile Update
 
 
 {% block content %}
-
+<style type="text/css">
+	div.container{
+		margin-top: 50px; 
+	}
+</style>
 <div class="container">
 <form method="post">
   {% csrf_token %}
-  {{ form}}
+  {{ form.as_p}}
   <button type="submit" value="Update" class='btn btn-primary'>Сохранить</button>
 </form>
 {% endblock content %}
