@@ -1,8 +1,11 @@
 from pathlib import Path
 
 from django.urls import reverse_lazy
+from myconfig import MyConfig
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+CONFIG = MyConfig(['settings.toml', '.secrets.toml'])
 
 SECRET_KEY = 'cl^sglcth^0ixg&!$nnq9@*0ah(h2bb11$)0dgmwh2#-3v80g1'
 
@@ -53,12 +56,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+try:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': CONFIG.db_name,
+            'USER': CONFIG.db_user,
+            'PASSWORD': CONFIG.db_password,
+            'HOST': CONFIG.db_host,
+            'PORT': CONFIG.db_port,
+        }
     }
-}
+except Exception:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # User model
 AUTH_USER_MODEL = "users.CustomUser"
@@ -110,8 +125,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'grasagrant@gmail.com'
-EMAIL_HOST_PASSWORD = 'grasa123'
+EMAIL_HOST_USER = CONFIG.email_user
+EMAIL_HOST_PASSWORD = CONFIG.email_password
 EMAIL_PORT = 587
 
 MEDIA_ROOT = BASE_DIR.joinpath('media')
