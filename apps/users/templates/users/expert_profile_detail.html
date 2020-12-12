@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load utags %}
 
 {% block title %}
 Expert profile
@@ -6,41 +7,44 @@ Expert profile
 
 {% block content %}
 <style>
-   div.box {
-    width: 210px;
-    height: 210px;
-    border: 2px solid black;
-    padding: 5px;
-    margin-top: 100px;
-    display: inline-block;
-  	vertical-align: top;
+.box {
+    margin: 0 auto;
 }
-    div.information {
-    	display: inline-block;
-    	vertical-align: top;
-    	margin-top: 100px;
-    	margin-left: 100px;
-    }
-    div.container1{
-    	margin-top: 10%;
-    }
+
+.box img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    float: left;
+}
+
+.box a {
+    width: 250px;
+    display: block;
+    clear: left;
+}
+
+.information {
+    margin-left: 300px;
+    display: block;
+    position: absolute;
+}
 </style>
 
 <div class="box">
-	<p text-align = 'center'><img src="{{request.user.expertprofile.photo}}" width="200" height="200"></p>
+    <div class="information">
+        <h3>{{ object.profile.last_name }} {{ object.profile.first_name}} {{ object.profile.middle_name}}</h3>
+        <h3>{{ object.profile.email }}</h3>
+        <h3>Номер телефона : {{ object.phone_number }}</h3>
+        <h3>Место работы : {{ object.work_place }}</h3>
+        <h3>Должность : {{ object.position }}</h3>
+        <h3>Сфера профессиональных интересов : {{ object.interests }}</h3>
+        <h3>Образование : {{ object.education}}</h3>
+        <h3>Степень образования : {{ object.degree }}</h3>
+    </div>
+    <img class="mb-4"  src="{{ object.photo|media_folder_users }}">
+    {% if user.pk == object.profile.pk %}
+        <a class="btn btn-info" href="{% url 'expert_profile_update_url' object.pk %}">Редактировать профиль</a>
+    {% endif %}
 </div>
-
-
-
-<div class="information">
-    <h3>{{request.user.last_name}} {{request.user.first_name}} {{request.user.middle_name}}</h3>
-    <h3>{{request.user.email}}</h3>
-    <h3>Номер телефона : {{request.user.expertprofile.phone_number}}</h3>
-    <h3>Место работы : {{request.user.expertprofile.work_place}}</h3>
-    <h3>Должность : {{request.user.expertprofile.position}}</h3>
-    <h3>Сфера профессиональных интересов : {{request.user.expertprofile.interests}}</h3>
-    <h3>Образование : {{request.user.expertprofile.education}}</h3>
-    <h3>Степень образования : {{request.user.expertprofile.degree}}</h3>
-</div>
-<div class="container1"><a class="btn btn-info" href="{% url 'expert_profile_update_url' user.pk %}">Редактировать профиль</a></div>
 {% endblock content %}

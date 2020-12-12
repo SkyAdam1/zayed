@@ -13,10 +13,10 @@ Expert Profile Update
 	}
 </style>
 <div class="container">
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form.as_p}}
-  <button type="submit" value="Update" class='btn btn-primary'>Сохранить</button>
+  {{ form.as_p }}
+  <button type="submit" class='btn btn-primary'>Сохранить</button>
 </form>
 {% endblock content %}
 </div>
