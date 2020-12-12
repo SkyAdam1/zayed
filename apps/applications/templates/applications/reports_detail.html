@@ -13,7 +13,7 @@ Reports remark
         </form>
 	</div>
     {% for remark in remarks %}
-    <div class="remark">
+    <div class="remark {% if remark.status %}seen{% else %}not-seen{% endif %}">
         <hr>
         <h4>{{ remark.user.username }}</h4>
         <p>{{ remark.text }}</p>
