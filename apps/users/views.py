@@ -94,6 +94,17 @@ class ActiveExpert(View):
             user = CustomUser.objects.filter(pk=pk).first()
             user.is_active = True
             user.save()
+            current_site = get_current_site(self.request)
+            mail_subject = 'Ваша заявка на статус эксперта была принята'
+            message = render_to_string('users/expert_activate_email.html', {
+                'user': user,
+                'domain': current_site,
+            })
+            to_email = user.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
         return HttpResponseRedirect(reverse_lazy('experts'))
 
 
@@ -125,7 +136,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def dispatch(self, *args, **kwargs):
         user = get_object_or_404(self.model, pk=self.kwargs['pk'])
         if self.request.user == user.profile:
-            return super(ExpertUpdateView, self).dispatch(*args, **kwargs)
+            return super(ProfileUpdateView, self).dispatch(*args, **kwargs)
         return HttpResponseRedirect(reverse_lazy('user_profile_detail_url', kwargs=self.kwargs))
 
     def get_success_url(self):

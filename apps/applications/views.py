@@ -152,11 +152,12 @@ def switch_application_status(request, id):
 def send_report(request, id):
     """отправление отчета"""
     report = get_object_or_404(ApplicationReport, pk=id)
-    if report.user == request.user or request.user.is_staff:
-        if report.status:
+    if report.status:
+        if request.user.is_staff:
             report.status = False
             report.save()
-        else:
+    else:
+        if report.user == request.user or request.user.is_staff:
             report.status = True
             report.save()
     return HttpResponseRedirect(reverse_lazy('applications_reporting_url'))

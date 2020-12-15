@@ -76,6 +76,4 @@ class ReportsDetailMixin:
             if remark.user == obj.user:
                 remark.status = True
             remark.save()
-        obj.status = False
-        obj.save()
         return redirect('reports_detail_url', id=id)
