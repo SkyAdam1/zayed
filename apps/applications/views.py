@@ -153,7 +153,7 @@ def send_report(request, id):
     """отправление отчета"""
     report = get_object_or_404(ApplicationReport, pk=id)
     if report.status:
-        if request.user.is_staff:
+        if request.user.is_staff or request.user.is_expert:
             report.status = False
             report.save()
     else:
@@ -165,7 +165,7 @@ def send_report(request, id):
 
 def switch_report_status(request, id):
     report = get_object_or_404(ApplicationReport, pk=id)
-    if report.user == request.user or request.user.is_staff:
+    if report.user == request.user or request.user.is_staff or request.user.is_expert:
         if report.approved:
             report.approved = False
             report.status = False

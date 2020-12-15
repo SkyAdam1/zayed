@@ -56,19 +56,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-try:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': CONFIG.db_name,
-            'USER': CONFIG.db_user,
-            'PASSWORD': CONFIG.db_password,
-            'HOST': CONFIG.db_host,
-            'PORT': CONFIG.db_port,
-        }
-    }
-except Exception:
-    DATABASES = {
+
+DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',

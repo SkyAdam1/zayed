@@ -1,4 +1,4 @@
 {% autoescape off %}
 Для активации аккаунта {{ user.username }}, перейдите по ссылке ниже:
-https://{{ domain }}{% url 'activate_url' uidb64=uid token=token %}
+<a>https://{{ domain }}{% url 'activate_url' uidb64=uid token=token %}</a>
 {% endautoescape %}
