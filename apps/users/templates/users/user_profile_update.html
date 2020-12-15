@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-User Profile Update
+  Изменить профиль | {{ object }}
 {% endblock title %}
 
 
@@ -15,7 +15,7 @@ User Profile Update
 <div class="container">
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form.as_p}}
+  {{ form.as_p }}
   <button type="submit" value="Update" class='btn btn-primary'>Сохранить</button>
 </form>
 {% endblock content %}

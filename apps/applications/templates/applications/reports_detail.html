@@ -1,10 +1,11 @@
 {% extends 'base_applications.html' %}
 
 {% block title %}
-Reports remark
+    Отчетность | {{ applications }}
 {% endblock title %}
 
 {% block content %}
+    <a href="http://{{ request.get_host }}/media/{{ applications.upload }}">Скачать файл</a>
 	<div class="col-8">
         <form id="add_form" method="post" enctype="multipart/form-data">
             {% csrf_token %}

@@ -221,14 +221,14 @@ Applicaton Detail
         <button form="add_form" type="submit" class="btn btn-primary mt-3">Оставить комментарий</button>
     </form>
     {% for comment in comments %}
-    <div class="comment">
+    <div class="remark">
         <hr>
         <h4>{{ comment.user.username }}</h4>
         <p>{{ comment.text }}</p>
         <small class="text-muted">{{ comment.created_at }}</small>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
 
 
 {% endblock content %}

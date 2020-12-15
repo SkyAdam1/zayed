@@ -2,7 +2,7 @@
 
 
 {% block title %}
-Appications output
+  Заявки
 {% endblock title %}
 
 
@@ -22,7 +22,7 @@ Appications output
           <th scope="col">Статус заявки</th>
         {% endif %}
         <th scope="col">Эксперты</th>
-        {% if request.user.is_expert and request.user.is_staff %}
+        {% if request.user.is_expert or request.user.is_staff %}
           <th scope="col">Оценка</th>
         {% endif %}
         <th scope="col">Подробнее</th>
@@ -100,14 +100,14 @@ Appications output
           {% endif %}
           {% if item.experts|length != 0 %}
             {% for expert in item.experts %}
-              <small>{{ expert.expert }},</small>
+              <small><a href="{% url 'expert_profile_detail_url' expert.pk %}">{{ expert.expert }}</a></small>
             {% endfor %}
           {% else %}
             <p>Эксперты не назначены</p>
           {% endif %}
         </td>
 
-        {% if request.user.is_expert and request.user.is_staff %}
+        {% if request.user.is_expert or request.user.is_staff %}
           <td>
             {% if request.user.is_expert and not request.user.is_staff %}
               <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ item }}">
@@ -136,9 +136,9 @@ Appications output
             {% endif %}
             {% for i in item.experts %}
               {% if i.rating > 0 %}
-                <p>{{ i.expert }} - {{ i.rating }}</p>
+                <a href="{% url 'expert_profile_detail_url' i.pk %}">{{ i.expert }} - {{ i.rating }}</a>
               {% else %}
-                <p><s>{{ i.expert }}</s></p>
+                <a href="{% url 'expert_profile_detail_url' i.pk %}"><s>{{ i.expert }}</s></a>
               {% endif %}
             {% endfor %}
           </td>

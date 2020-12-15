@@ -2,7 +2,7 @@
 
 
 {% block title %}
-Appications reporting
+  Отчетность
 {% endblock title %}
 
 {% block tabs %}
@@ -48,7 +48,7 @@ Appications reporting
         {% if True in statuses %}
         <td>
           {% if item.notifications == 0%}
-            {% if request.user.is_staff or request.user.is_expert %}
+            {% if request.user.is_staff %}
               {% if not item.approved %}
                   <a class="btn btn-info" href="{% url 'switch_status_rep' item.pk %}">Одобрить</a>
                   <p>Не одобрено</p>
@@ -64,6 +64,9 @@ Appications reporting
                 {% endif %}
             {% endif %}
           {% else %}
+            {% if request.user.is_staff %}
+              <a class="btn btn-info" href="{% url 'send_report' item.pk %}">Отправить на редактирование</a>
+            {% endif %}
             <p>Имеется замечание</p>
           {% endif %}
         </td>
@@ -74,7 +77,11 @@ Appications reporting
               <p>Отправлено</p>
             {% else %}
               {% if request.user == item.user %}
+                {% if item.notifications == 0 %}
                   <a class="btn btn-info" href="{% url 'send_report' item.pk %}">Отправить на проверку</a>
+                {% else %}
+                  <p>Нельзя отправить на проверку. Требуется внести изменения в отчет.</p>
+                {% endif %}
               {% else %}
                   <p>Не отправлено</p>
               {% endif %}
