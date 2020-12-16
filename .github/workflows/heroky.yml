@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: CDNievas/heroku-action@v1.0
+      - uses: akhileshns/heroku-deploy@v3.7.8
         with:
-          heroku_email: "azureswastika@gmail.com"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "zayed-innohub"
+          heroku_app_name: zayed-innohub
+          heroku_email: azureswastika@gmail.com
