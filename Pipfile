@@ -8,6 +8,10 @@ django = "*"
 pillow = "*"
 psycopg2 = "*"
 myconfig = "*"
+gunicorn = "*"
+django-heroku = "*"
+dj-database-url = "*"
+whitenoise = "*"
 
 [dev-packages]
 flake8 = "*"

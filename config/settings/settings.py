@@ -3,11 +3,11 @@ from pathlib import Path
 from django.urls import reverse_lazy
 from myconfig import MyConfig
 
+CONFIG = MyConfig()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CONFIG = MyConfig(['settings.toml', '.secrets.toml'])
-
-SECRET_KEY = 'cl^sglcth^0ixg&!$nnq9@*0ah(h2bb11$)0dgmwh2#-3v80g1'
+SECRET_KEY = CONFIG.secret_key
 
 DEBUG = True
 
@@ -58,11 +58,23 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': CONFIG.db_name,
+        'USER': CONFIG.db_user,
+        'PASSWORD': CONFIG.db_password,
+        'HOST': CONFIG.db_host,
+        'PORT': CONFIG.db_port,
     }
+}
+
+# Sqlite3
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
 # User model
 AUTH_USER_MODEL = "users.CustomUser"
