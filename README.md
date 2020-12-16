@@ -24,21 +24,20 @@ CREATE DATABASE <datebase name>
 
 ## Настройка проекта
 
-./*settings.toml*
+./*.env*
 
-```toml
-db_name = "<datebase name>"
-db_host = "<datebase host>"
-db_port = "<datebase port>"
-```
+```env
+settings = "dev"
+secret_key = "cl^sglcth^0ixg&!$nnq9@*0ah(h2bb11$)0dgmwh2#-3v80g1"
 
-./*.secrets.toml*
+db_name = ""
+db_host = ""
+db_port = ""
+db_user = ""
+db_password = ""
 
-```toml
-db_user = "<datebase owner name>"
-db_password = "<datebase owner password>"
-email_user = "<email>"
-email_password = "<email password>"
+email_user = ""
+email_password = ""
 ```
 
 ## Миграции Django
