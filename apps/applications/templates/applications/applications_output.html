@@ -100,7 +100,7 @@
           {% endif %}
           {% if item.experts|length != 0 %}
             {% for expert in item.experts %}
-              <small><a href="{% url 'expert_profile_detail_url' expert.pk %}">{{ expert.expert }}</a></small>
+              <small><a href="{% url 'expert_profile_detail_url' i.expert.expertprofile.pk %}">{{ expert.expert }}</a></small>
             {% endfor %}
           {% else %}
             <p>Эксперты не назначены</p>
@@ -136,9 +136,9 @@
             {% endif %}
             {% for i in item.experts %}
               {% if i.rating > 0 %}
-                <a href="{% url 'expert_profile_detail_url' i.pk %}">{{ i.expert }} - {{ i.rating }}</a>
+                <a href="{% url 'expert_profile_detail_url' i.expert.expertprofile.pk %}">{{ i.expert }} - {{ i.rating }}</a>
               {% else %}
-                <a href="{% url 'expert_profile_detail_url' i.pk %}"><s>{{ i.expert }}</s></a>
+                <a href="{% url 'expert_profile_detail_url' i.expert.expertprofile.pk %}"><s>{{ i.expert }}</s></a>
               {% endif %}
             {% endfor %}
           </td>
