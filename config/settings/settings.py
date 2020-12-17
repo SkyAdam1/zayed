@@ -3,15 +3,15 @@ from pathlib import Path
 from django.urls import reverse_lazy
 from myconfig import MyConfig
 
-CONFIG = MyConfig()
+CONFIG = MyConfig(['settings.toml'])
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = CONFIG.secret_key
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

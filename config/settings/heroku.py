@@ -8,7 +8,7 @@ from myconfig import MyConfig
 
 CONFIG = MyConfig()
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = CONFIG.secret_key
 
