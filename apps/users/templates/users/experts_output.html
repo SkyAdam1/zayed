@@ -10,6 +10,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th scope="col">ФИО</th>
         <th scope="col">Почта</th>
         <th scope="col">Действие</th>
       </tr>
@@ -17,6 +18,7 @@
     <tbody>
       {% for expert in experts  %}
       <tr>
+        <td>{{ expert.last_name }}{{ expert.first_name }}{{ expert.middle_name }}</td>
         <td>{{ expert.email }}</td>
         <td><a href="{% url 'active_expert' expert.pk %}" class="btn btn-info">Активировать</a></td>
       </tr>

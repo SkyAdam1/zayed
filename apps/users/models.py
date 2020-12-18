@@ -46,14 +46,14 @@ class CustomUser(AbstractUser):
 class UserProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
     photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
-    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200)
-    mail = CharField(_('Почтовый адрес'), max_length=200, blank=True, null=True,)
-    inn = CharField(_('Ваш ИНН'), blank=True, null=True, max_length=200)
-    ogrn = CharField(_('ОГРН'), blank=True, null=True, max_length=200)
-    legal_address = CharField(_('Юридический адрес'), max_length=200, blank=True, null=True,)
-    director_fio = CharField(_('ФИО Ген.Директора'), max_length=200, blank=True, null=True,)
-    rs = CharField(_('Расчетный счет'), blank=True, null=True, max_length=200)
-    bank = CharField(_('Банк'), max_length=200,  blank=True, null=True)
+    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200, default='')
+    mail = CharField(_('Почтовый адрес'), max_length=200, blank=True, null=True, default='')
+    inn = CharField(_('Ваш ИНН'), blank=True, null=True, max_length=200, default='')
+    ogrn = CharField(_('ОГРН'), blank=True, null=True, max_length=200, default='')
+    legal_address = CharField(_('Юридический адрес'), max_length=200, blank=True, null=True, default='')
+    director_fio = CharField(_('ФИО Ген.Директора'), max_length=200, blank=True, null=True, default='')
+    rs = CharField(_('Расчетный счет'), blank=True, null=True, max_length=200, default='')
+    bank = CharField(_('Банк'), max_length=200,  blank=True, null=True, default='')
 
     def __str__(self):
         return self.profile.username
@@ -85,16 +85,16 @@ class UserProfile(models.Model):
 class ExpertProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
     photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
-    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200)
-    work_place = CharField(_('Место работы'), blank=True, null=True, max_length=200)
-    position = CharField(_('Занимаемая должность'), blank=True, null=True, max_length=200)
-    interests = CharField(_('Сфера профессиональных интересов'), blank=True, null=True, max_length=200)
+    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200, default='')
+    work_place = CharField(_('Место работы'), blank=True, null=True, max_length=200, default='')
+    position = CharField(_('Занимаемая должность'), blank=True, null=True, max_length=200, default='')
+    interests = CharField(_('Сфера профессиональных интересов'), blank=True, null=True, max_length=200, default='')
     edu = [
         ('Высшее', 'Высшее'),
         ('Среднее профессиональное', 'Среднее профессиональное'),
     ]
-    education = CharField(_('Образование'), choices=edu, blank=True, null=True, max_length=200)
-    degree = CharField(_('Степень образования'), blank=True, null=True, max_length=200)
+    education = CharField(_('Образование'), choices=edu, blank=True, null=True, max_length=200, default='')
+    degree = CharField(_('Степень образования'), blank=True, null=True, max_length=200, default='')
 
     def __str__(self):
         return self.profile.username

@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 
@@ -40,7 +40,7 @@ class ObjectDetailMixin:
 
 class UserAuthenticatedMixin:
     """ограничение доступа для админов и экспертов"""
-    @method_decorator(user_passes_test(lambda u: not u.is_staff or not u.is_expert, login_url=reverse_lazy('applications_output_url')))
+    @method_decorator(user_passes_test(lambda u: not u.is_staff or not u.is_expert, login_url=reverse('applications_output_url')))
     def dispatch(self, *args, **kwargs):
         return super(UserAuthenticatedMixin, self).dispatch(*args, **kwargs)
 

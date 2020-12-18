@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.urls import reverse
+from django.shortcuts import reverse
 from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 
 
 class UserAuthenticatedMixin:
