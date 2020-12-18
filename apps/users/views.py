@@ -41,22 +41,23 @@ class UserRegistrationView(CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.is_active = False
+        if user.is_expert is True:
+            user.is_active = False
         user.save()
-        current_site = get_current_site(self.request)
-        mail_subject = 'Активация аккаунта'
-        message = render_to_string('users/user_activate_email.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': PasswordResetTokenGenerator().make_token(user),
-        })
-        to_email = form.cleaned_data.get('email')
-        email = EmailMessage(
-            mail_subject, message, to=[to_email]
-        )
-        email.send()
-        return HttpResponse('Пожалуйста, подтвердите свой адрес электронной почты, чтобы завершить регистрацию')
+        # current_site = get_current_site(self.request)
+        # mail_subject = 'Активация аккаунта'
+        # message = render_to_string('users/user_activate_email.html', {
+        #     'user': user,
+        #     'domain': current_site.domain,
+        #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        #     'token': PasswordResetTokenGenerator().make_token(user),
+        # })
+        # to_email = form.cleaned_data.get('email')
+        # email = EmailMessage(
+        #     mail_subject, message, to=[to_email]
+        # )
+        # email.send()
+        return HttpResponseRedirect(reverse_lazy('login_url'))
 
 
 class UserActivateView(View):
@@ -94,17 +95,17 @@ class ActiveExpert(View):
             user = CustomUser.objects.filter(pk=pk).first()
             user.is_active = True
             user.save()
-            current_site = get_current_site(self.request)
-            mail_subject = 'Ваша заявка на статус эксперта была принята'
-            message = render_to_string('users/expert_activate_email.html', {
-                'user': user,
-                'domain': current_site,
-            })
-            to_email = user.email
-            email = EmailMessage(
-                mail_subject, message, to=[to_email]
-            )
-            email.send()
+            # current_site = get_current_site(self.request)
+            # mail_subject = 'Ваша заявка на статус эксперта была принята'
+            # message = render_to_string('users/expert_activate_email.html', {
+            #     'user': user,
+            #     'domain': current_site,
+            # })
+            # to_email = user.email
+            # email = EmailMessage(
+            #     mail_subject, message, to=[to_email]
+            # )
+            # email.send()
         return HttpResponseRedirect(reverse_lazy('experts'))
 
 
