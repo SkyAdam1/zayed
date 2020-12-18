@@ -109,6 +109,8 @@ STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
+WHITENOISE_USE_FINDERS = True
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_USE_TLS = True
