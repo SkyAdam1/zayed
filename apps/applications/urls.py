@@ -2,8 +2,6 @@ from django.urls import path
 
 from . import views
 
-app_name = 'apps'
-
 urlpatterns = [
     path('', views.index, name='index_url'),
     path('application_edit/<slug:pk>', views.ApplicationUpdateView.as_view(), name='application_update_url'),
