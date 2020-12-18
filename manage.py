@@ -3,15 +3,10 @@
 import os
 import sys
 
-from config.settings.settings import CONFIG
-
 
 def main():
     """Run administrative tasks."""
-    if CONFIG.settings == 'dev':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.settings')
-    elif CONFIG.settings == 'heroku':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.heroku')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.heroku')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

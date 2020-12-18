@@ -4,17 +4,14 @@ import dj_database_url
 from pathlib import Path
 
 from django.urls import reverse_lazy
-from myconfig import MyConfig
-
-CONFIG = MyConfig()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = CONFIG.secret_key
+SECRET_KEY = "cl^sglcth^0ixg&!$nnq9@*0ah(h2bb11$)0dgmwh2#-3v80g1"
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'zayed-innohub.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'zayedinnohub.herokuapp.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -63,7 +60,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=CONFIG.DATABASE_URL
+        default="postgres://apbicieglkulut:468d79b2316a2bfcd53f4f0ac9f2173ff3af1d0d2f05b765dfd1601fa2454d25@ec2-52-208-138-246.eu-west-1.compute.amazonaws.com:5432/dascdith0hsvkc"
     )
 }
 
@@ -116,8 +113,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = CONFIG.email_user
-EMAIL_HOST_PASSWORD = CONFIG.email_password
+EMAIL_HOST_USER = "grasagrant@gmail.com"
+EMAIL_HOST_PASSWORD = "grasa123"
 EMAIL_PORT = 587
 
 MEDIA_ROOT = BASE_DIR.joinpath('media')
