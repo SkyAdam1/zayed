@@ -18,10 +18,12 @@
           <th scope='col'>Принята/Не принята</th>
         {% endif %}
         <th scope="col">Ссылка на проект</th>
-        {% if False in statuses %}
+        
           <th scope="col">Статус заявки</th>
-        {% endif %}
+       
+        {% if request.user.is_staff or request.user.is_expert %}
         <th scope="col">Эксперты</th>
+        {% endif%}
         {% if request.user.is_expert or request.user.is_staff %}
           <th scope="col">Оценка</th>
         {% endif %}
@@ -80,7 +82,7 @@
 
         <td><a href="{{ item.project_site }}">{{ item.project_site }}</a></td>
         
-        {% if False in statuses %}
+        
           <td>
             {% if item.status %}
               <p>Заявка отправлена</p>
@@ -92,19 +94,22 @@
               {% endif %}
             {% endif %}
           </td>
-        {% endif %}
+       
 
-        <td>
+        
           {% if request.user.is_staff %}
+          <td>
             <a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a>
           {% endif %}
           {% if item.experts|length != 0 %}
+            {% if request.user.is_staff or request.user.is_expert %}
             {% for expert in item.experts %}
               <small><a href="{% url 'expert_profile_detail_url' expert.expert.expertprofile.pk %}">{{ expert.expert }}</a></small>
             {% endfor %}
           {% else %}
             <p>Эксперты не назначены</p>
           {% endif %}
+            {% endif %}
         </td>
 
         {% if request.user.is_expert or request.user.is_staff %}
@@ -135,12 +140,15 @@
               </div>
             {% endif %}
             {% for i in item.experts %}
+            {% if request.user.is_staff or request.user.is_expert %}
               {% if i.rating > 0 %}
                 <a href="{% url 'expert_profile_detail_url' i.expert.expertprofile.pk %}">{{ i.expert }} - {{ i.rating }}</a>
               {% else %}
                 <a href="{% url 'expert_profile_detail_url' i.expert.expertprofile.pk %}"><s>{{ i.expert }}</s></a>
               {% endif %}
+            {% endif %}
             {% endfor %}
+
           </td>
         {% endif %}
 
