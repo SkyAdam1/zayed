@@ -31,6 +31,9 @@ class UserLoginView(UserAuthenticatedMixin, views.LoginView):
 class ExpertLoginView(View):
     template_name = 'users/login_expert.html'
 
+    def get(self, request):
+        return render(request, self.template_name)
+
 
 class UserLogoutView(views.LogoutView):
     next_page = reverse_lazy('login_url')
