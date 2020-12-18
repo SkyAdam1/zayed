@@ -7,6 +7,7 @@ urlpatterns = [
     path('experts/', views.Experts.as_view(), name='experts'),
     path('expert/<int:pk>', views.ActiveExpert.as_view(), name='active_expert'),
     path('login/', views.UserLoginView.as_view(), name='login_url'),
+    path('login_expert/', views.ExpertLoginView.as_view(), name='login_expert_url'),
     path('logout/', views.UserLogoutView.as_view(), name='logout_url'),
     path('registration/', views.UserRegistrationView.as_view(), name='registration_url'),
     path('activate/<uidb64>/<token>/', views.UserActivateView.as_view(), name='activate_url'),

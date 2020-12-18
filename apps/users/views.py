@@ -28,6 +28,10 @@ class UserLoginView(UserAuthenticatedMixin, views.LoginView):
         return self.success_url
 
 
+class ExpertLoginView(View):
+    template_name = 'users/login_expert.html'
+
+
 class UserLogoutView(views.LogoutView):
     next_page = reverse_lazy('login_url')
 
@@ -43,6 +47,8 @@ class UserRegistrationView(CreateView):
         user = form.save(commit=False)
         if user.is_expert is True:
             user.is_active = False
+            user.save()
+            return HttpResponseRedirect(reverse_lazy('login_expert_url'))
         user.save()
         # current_site = get_current_site(self.request)
         # mail_subject = 'Активация аккаунта'
