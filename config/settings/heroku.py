@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = "cl^sglcth^0ixg&!$nnq9@*0ah(h2bb11$)0dgmwh2#-3v80g1"
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -105,7 +105,7 @@ STATICFILES_DIRS = [
     BASE_DIR.joinpath('static')
 ]
 STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
