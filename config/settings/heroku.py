@@ -11,7 +11,7 @@ SECRET_KEY = "cl^sglcth^0ixg&!$nnq9@*0ah(h2bb11$)0dgmwh2#-3v80g1"
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'zayedinnohub.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
