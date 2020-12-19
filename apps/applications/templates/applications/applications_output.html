@@ -108,10 +108,11 @@
             {% for expert in item.experts %}
               <small><a href="{% url 'expert_profile_detail_url' expert.expert.expertprofile.pk %}">{{ expert.expert }}</a></small>
             {% endfor %}
-          {% else %}
-            <p>Эксперты не назначены</p>
-          {% endif %}
+            {% else %}
+              <p>Эксперты не назначены</p>
             {% endif %}
+          {% endif %}
+            
         </td>
 
         {% if request.user.is_expert or request.user.is_staff %}
