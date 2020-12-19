@@ -15,7 +15,7 @@
         <th scope="col">Название проекта</th>
         <th scope="col">Дата оформления</th>
         {% if True in statuses %}
-          <th scope='col'>Принята/Не принята</th>
+          <th scope='col'>Статус Заявки</th>
         {% endif %}
         <th scope="col">Ссылка на проект</th>
         {% if False in statuses %}
@@ -62,7 +62,7 @@
               {% if item.status %}
                 {% if not item.approved %}
                   <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Принять</a>
-                  <p>Не принята</p>
+                  <p>На рассмотрении</p>
                 {% else %}
                   <a class="btn btn-info" href="{% url 'switch_status_reporta' item.pk %}">Отказать</a>
                   <p>Принята</p>
@@ -74,7 +74,7 @@
               {% if item.approved %}
                 Принята
               {% else %}
-                Не принята
+                На рассмотрении
               {% endif %}
             {% endif %}
           </td>
