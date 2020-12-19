@@ -18,7 +18,7 @@
     <tbody>
       {% for expert in experts  %}
       <tr>
-        <td>{{ expert.last_name }}{{ expert.first_name }}{{ expert.middle_name }}</td>
+        <td>{{ expert.last_name }} {{ expert.first_name }} {{ expert.middle_name }}</td>
         <td>{{ expert.email }}</td>
         <td><a href="{% url 'active_expert' expert.pk %}" class="btn btn-info">Активировать</a></td>
       </tr>
