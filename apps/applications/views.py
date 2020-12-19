@@ -186,7 +186,7 @@ class ApplicationUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMix
         'market_size', 'marketing_description', 'sale_strategy', 'desciption_risk', 'client_count',
         'previous_investors', 'middle_cost', 'budget_development', 'middle_revenue', 'team_count',
         'fio_team', 'team_education', 'team_experience', 'position_member', 'team_create', 'ready_relocate',
-        'ready_development', 'adress_company', 'inn_company', 'fio', 'email', 'upload']
+        'ready_development', 'adress_company', 'inn_company', 'fio', 'email', 'upload', ]
     template_name = 'applications/application_update_form.html'
     success_url = reverse_lazy('applications_output_url')
 
