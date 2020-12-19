@@ -97,9 +97,8 @@
           </td>
         {% endif %}
        
-
-        <td>
           {% if request.user.is_staff %}
+          <td>
             <a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a>
           {% endif %}
           {% if item.experts|length != 0 %}
@@ -108,9 +107,8 @@
                 <small><a href="{% url 'expert_profile_detail_url' expert.expert.expertprofile.pk %}">{{ expert.expert }}</a></small>
               {% endfor %}
             {% endif %}
+          </td>
           {% endif %}
-            
-        </td>
 
         {% if request.user.is_expert or request.user.is_staff %}
           <td>
