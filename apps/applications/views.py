@@ -12,6 +12,11 @@ from .models import (Application, ApplicationComment, ApplicationRemark,
                      ApplicationReport, DesignatedExpert)
 from .utils import (ObjectDetailMixin, ReportsDetailMixin,
                     UserAuthenticatedMixin)
+import os
+from django.conf import settings
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 def index(request):
@@ -84,7 +89,7 @@ class ApplicationAddExpert(LoginRequiredMixin, CreateView):
                 exp.save()
         return redirect('applications_add_expert_url', pk)
 
-
+''' удаление эксперта '''
 def remove_expert(request, app, user):
     obj = get_object_or_404(DesignatedExpert, app=app, expert=user)
     if request.user.is_staff:
@@ -206,7 +211,7 @@ class ApplicationReportView(LoginRequiredMixin, UserAuthenticatedMixin, CreateVi
         form = forms.ApplicationReportForm(self.request.user)
         return form
 
-
+''' Детали отчета '''
 class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
     model = ApplicationReport
     template_name = 'applications/reports_detail.html'
@@ -238,7 +243,7 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView, UserAuthenticatedMixin):
     def get_success_url(self):
         return reverse_lazy('update_remarks_url', kwargs={'pk': self.object.pk})
 
-
+''' удаление замечаний '''
 def delete_remarks(request, pk):
     obj = get_object_or_404(ApplicationReport, pk=pk)
     remarks = ApplicationRemark.objects.filter(application=obj, status=False)
@@ -261,7 +266,7 @@ class ReportDelete(DeleteView, UserAuthenticatedMixin,  LoginRequiredMixin):
     success_url = reverse_lazy('applications_reporting_url')
     template_name = 'applications/report_delete.html'
 
-
+''' удаление комментариев '''
 def delete_comment(request, pk):
     obj = get_object_or_404(ApplicationComment, pk=pk)
     if request.user.is_staff or request.user.is_staff \
@@ -269,7 +274,7 @@ def delete_comment(request, pk):
         obj.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
+''' удаление замечания '''
 def delete_remark(request, pk):
     obj = get_object_or_404(ApplicationRemark, pk=pk)
     if request.user.is_staff or request.user.is_staff \
@@ -277,7 +282,7 @@ def delete_remark(request, pk):
         obj.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
+''' Экспорт в Excel '''
 def export_xls(request):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
@@ -309,4 +314,24 @@ def export_xls(request):
         for col_num in range(len(row)):
             ws.write(row_num, col_num, row[col_num], font_style)
     wb.save(response)
+    return response
+
+
+''' Экспорт в pdf '''
+def export_pdf(request):
+    template_path = 'applications/applications_output.html'
+    context = {'myvar': Application.objects.filter()}
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="ApplicationDetail.pdf"'
+    # Рендеринг темплейта
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # Создание PDF-файла
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # Если возникает ошибка
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response

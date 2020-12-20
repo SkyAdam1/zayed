@@ -27,4 +27,5 @@ urlpatterns = [
     path('delete_comment/<int:pk>/', views.delete_comment, name='delete_comment'),
     path('delete_remark/<int:pk>/', views.delete_remark, name='delete_remark'),
     path('export_xls/', views.export_xls, name='export_xls'),
+    path('export_pdf/', views.export_pdf, name = 'export_pdf')
 ]

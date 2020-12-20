@@ -171,6 +171,6 @@
   </table>
 </div>
 {% if request.user.is_staff %}
-  <a href="{% url 'export_xls' %}" class="text-muted">Экспортировать таблицу в Excel</a>
+  <a href="{% url 'export_xls' %}" type="button" class="btn btn-success ml-4" >Экспорт в Excel</a>
 {% endif %}
 {% endblock tabs %}

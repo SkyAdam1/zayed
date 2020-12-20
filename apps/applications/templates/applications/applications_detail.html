@@ -9,8 +9,8 @@
     <h1 class="mt-5">
         {{ applications.project_name }}
     </h1>
-    <p>
-        {{ applications.user }}
+    <p>      
+      <a href="{% url 'user_profile_detail_url' applications.user.userprofile.pk %}">{{ applications.user }}</a> 
     </p>
     <h3 class="mb-4">
         Ссылка на официальный сайт проекта
@@ -167,6 +167,7 @@
     </h3>
     <a href="http://{{ request.get_host }}/media/{{ applications.upload }}">Файл</a>
     <hr>
+    <a href="{%url 'export_pdf' %}" type="button" class="btn btn-danger">Экспорт в PDF</a>
     <form id="add_form" method="post">
         {% csrf_token %}
         {{ form }}
@@ -175,21 +176,21 @@
     {% for comment in comments %}
     <div class="remark">
         <hr>
-        <a href={% url 'delete_comment' comment.pk %} type="button" class="ml-2 mb-1 close">
+        <a href="{% url 'delete_comment' comment.pk %}" type="button" class="ml-2 mb-1 close">
             <span aria-hidden="true">&times;</span>
         </a>
         {% if comment.user.is_expert %}
-            <a href={% url 'expert_profile_detail_url' comment.user.expertprofile.pk %}>
+            <a href="{% url 'expert_profile_detail_url' comment.user.expertprofile.pk %}">
                 <img class="mb-4"  src="{{ comment.user.expertprofile.photo|media_folder_users }}">
             </a>
             <div class='text'>
-            <h3><a href={% url 'expert_profile_detail_url' comment.user.expertprofile.pk %} class="text-dark">{{ comment.user.username }}</a></h3>
+            <h3><a href="{% url 'expert_profile_detail_url' comment.user.expertprofile.pk %}" class="text-dark">{{ comment.user.username }}</a></h3>
         {% else %}
-            <a href={% url 'user_profile_detail_url' comment.user.userprofile.pk %} class="text-dark">
+            <a href="{% url 'user_profile_detail_url' comment.user.userprofile.pk %}" class="text-dark">
                 <img class="mb-4"  src="{{ comment.user.userprofile.photo|media_folder_users }}">
             </a>
             <div class='text'>
-            <h3><a href={% url 'user_profile_detail_url' comment.user.userprofile.pk %} class="text-dark">{{ comment.user.username }}</a></h3>
+            <h3><a href='{% url "user_profile_detail_url" comment.user.userprofile.pk %}' class="text-dark">{{ comment.user.username }}</a></h3>
         {% endif %}
         <p>{{ comment.text }}</p>
         <small class="text-muted">{{ comment.created_at }}</small>
