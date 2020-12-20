@@ -24,4 +24,6 @@ urlpatterns = [
     path('report_send/<int:id>/', views.send_report, name='send_report'),
 
     path('update_remarks/<int:pk>/', views.delete_remarks, name='update_remarks_url'),
+    path('delete_comment/<int:pk>/', views.delete_comment, name='delete_comment'),
+    path('delete_remark/<int:pk>/', views.delete_remark, name='delete_remark'),
 ]

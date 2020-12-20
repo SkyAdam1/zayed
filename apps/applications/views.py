@@ -253,3 +253,19 @@ class ReportDelete(DeleteView, UserAuthenticatedMixin,  LoginRequiredMixin):
     model = ApplicationReport
     success_url = reverse_lazy('applications_reporting_url')
     template_name = 'applications/report_delete.html'
+
+
+def delete_comment(request, pk):
+    obj = get_object_or_404(ApplicationComment, pk=pk)
+    if request.user.is_staff or request.user.is_staff \
+        or request.user == obj.application.user or request.user == obj.user:
+        obj.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def delete_remark(request, pk):
+    obj = get_object_or_404(ApplicationRemark, pk=pk)
+    if request.user.is_staff or request.user.is_staff \
+        or request.user == obj.application.user or request.user == obj.user:
+        obj.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
