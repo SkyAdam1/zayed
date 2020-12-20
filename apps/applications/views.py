@@ -199,6 +199,11 @@ class ApplicationReportView(LoginRequiredMixin, UserAuthenticatedMixin, CreateVi
     success_url = reverse_lazy('applications_output_url')
     form_class = forms.ApplicationReportForm
 
+    def get_form(self, *args, **kwargs):
+        form = super().get_form()
+        form = forms.ApplicationReportForm(self.request.user)
+        return form
+
 
 class ReportsDetail(LoginRequiredMixin, ReportsDetailMixin, View):
     model = ApplicationReport

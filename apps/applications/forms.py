@@ -60,8 +60,9 @@ class ApplicationReportForm(forms.ModelForm):
         model = ApplicationReport
         fields = ('app', 'upload', 'year', 'quarter')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['app'].queryset = Application.objects.filter(user=user)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
