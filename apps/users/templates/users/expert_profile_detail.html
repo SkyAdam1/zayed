@@ -6,41 +6,17 @@
 {% endblock title %}
 
 {% block content %}
-<style>
-.box {
-    margin: 0 auto;
-}
-
-.box img {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    float: left;
-}
-
-.box a {
-    width: 250px;
-    display: block;
-    clear: left;
-}
-
-.information {
-    margin-left: 300px;
-    display: block;
-    position: absolute;
-}
-</style>
 
 <div class="box">
     <div class="information">
-        <h3>{{ object.profile.last_name }} {{ object.profile.first_name}} {{ object.profile.middle_name}}</h3>
-        <h3>{{ object.profile.email }}</h3>
-        <h3>Номер телефона : {{ object.phone_number }}</h3>
-        <h3>Место работы : {{ object.work_place }}</h3>
-        <h3>Должность : {{ object.position }}</h3>
-        <h3>Сфера профессиональных интересов : {{ object.interests }}</h3>
-        <h3>Образование : {{ object.education}}</h3>
-        <h3>Степень образования : {{ object.degree }}</h3>
+        <h4>{{ object.profile.last_name }} {{ object.profile.first_name}} {{ object.profile.middle_name}}</h4>
+        <h4>{{ object.profile.email }}</h4>
+        <h4>Номер телефона: {{ object.phone_number }}</h4>
+        <h4>Место работы: {{ object.work_place }}</h4>
+        <h4>Должность: {{ object.position }}</h4>
+        <h4>Сфера профессиональных интересов: {{ object.interests }}</h4>
+        <h4>Образование: {{ object.education}}</h4>
+        <h4>Степень образования: {{ object.degree }}</h4>
     </div>
     <img class="mb-4"  src="{{ object.photo|media_folder_users }}">
     {% if user.pk == object.profile.pk %}
