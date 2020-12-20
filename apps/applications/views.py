@@ -1,3 +1,5 @@
+from django.http.response import HttpResponse
+import xlwt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -263,7 +265,7 @@ class ReportDelete(DeleteView, UserAuthenticatedMixin,  LoginRequiredMixin):
 def delete_comment(request, pk):
     obj = get_object_or_404(ApplicationComment, pk=pk)
     if request.user.is_staff or request.user.is_staff \
-        or request.user == obj.application.user or request.user == obj.user:
+            or request.user == obj.application.user or request.user == obj.user:
         obj.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -271,6 +273,40 @@ def delete_comment(request, pk):
 def delete_remark(request, pk):
     obj = get_object_or_404(ApplicationRemark, pk=pk)
     if request.user.is_staff or request.user.is_staff \
-        or request.user == obj.application.user or request.user == obj.user:
+            or request.user == obj.application.user or request.user == obj.user:
         obj.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def export_xls(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="users.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Заявки')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['#', 'Название проекта', 'Статус Заявки', 'Ссылка на проект', 'Эксперты и оценки']
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+    font_style = xlwt.XFStyle()
+    rows = Application.objects.filter(
+        status=True).values_list(
+            'pk', 'project_name', 'approved', 'project_site')
+    rows = [list(i) for i in rows]
+    for row in rows:
+        experts = DesignatedExpert.objects.filter(
+            app__pk=row[0], app__status=True).values_list(
+                'expert__username', 'rating')
+        experts = ['{} - {}'.format(experts[i][0], experts[i][1]) for i, x in enumerate(experts)]
+        row.append(', '.join(experts))
+    for i, row in enumerate(rows):
+        for x, item in enumerate(row):
+            if item is False:
+                rows[i][x] = 'Не принято/не обработано'
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+    wb.save(response)
+    return response
