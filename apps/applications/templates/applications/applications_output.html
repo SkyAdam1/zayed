@@ -97,15 +97,20 @@
           </td>
         {% endif %}
        
-          {% if request.user.is_staff %}
+          {% if request.user.is_staff or request.user.is_expert %}
           <td>
             <a class="btn btn-info" href="{% url 'applications_add_expert_url' item.pk %}">Назначить эксперта</a>
-          {% endif %}
-          {% if item.experts|length != 0 %}
-            {% if request.user.is_staff or request.user.is_expert %}
-              {% for expert in item.experts %}
-                <small><a href="{% url 'expert_profile_detail_url' expert.expert.expertprofile.pk %}">{{ expert.expert }}</a></small>
-              {% endfor %}
+
+            {% if item.experts|length != 0 %}
+
+              {% if request.user.is_staff or request.user.is_expert %}
+
+                {% for expert in item.experts %}
+                  <small><a href="{% url 'expert_profile_detail_url' expert.expert.expertprofile.pk %}">{{ expert.expert }}</a></small>
+                {% endfor %}
+
+              {% endif %}
+
             {% endif %}
           </td>
           {% endif %}
