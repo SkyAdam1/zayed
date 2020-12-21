@@ -167,7 +167,9 @@
         Прикрепленный документ
     </h3>
     <a href="http://{{ request.get_host }}/media/{{ applications.upload }}">Файл</a></br>
-    <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger">Экспорт в PDF</a>
+    {% if request.user.is_staff %}
+        <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a>
+    {% endif %}
     <hr>
     <form id="add_form" method="post">
         {% csrf_token %}
