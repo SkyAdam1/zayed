@@ -7,6 +7,7 @@ urlpatterns = [
     path('application_edit/<slug:pk>', views.ApplicationUpdateView.as_view(), name='application_update_url'),
     path('applications/', views.ApplicationsOutputView.as_view(), name='applications_output_url'),
     path('application/<int:pk>/', views.ApplicationsOutputView.as_view(), name='applications_output_pk_url'),
+    path('application/<int:pk>/pdf/', views.export_pdf, name='applications_export'),
     path('application_add_expert/<int:pk>/', views.ApplicationAddExpert.as_view(), name='applications_add_expert_url'),
     path('application_remove_expert/<int:app>/<int:user>/', views.remove_expert, name='remove_expert_url'),
     path('application_create/', views.ApplicationsCreateView.as_view(), name='applications_create_url'),
