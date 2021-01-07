@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<form actions="{{application.get_update_url}}" method='post'>
+<form actions="{{application.get_update_url}}" method='post' enctype="multipart/form-data">
 	{% csrf_token %}
 
 	{% for field in form %}

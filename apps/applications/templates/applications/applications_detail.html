@@ -1,220 +1,176 @@
 {% extends 'base_applications.html' %}
-
+{% load static %}
+{% load utags %}
 
 {% block title %}
-Applicaton Detail
+    {{ applications.project_name }}
 {% endblock title %}
 
-
-
 {% block content %}
-<div class="container">
     <h1 class="mt-5">
         {{ applications.project_name }}
     </h1>
-    <p>
-        {{ applications.user }}
+    <p>      
+      <a href="{% url 'user_profile_detail_url' applications.user.userprofile.pk %}">{{ applications.user }}</a> 
     </p>
-    <h4 class="mb-4">
-        Ссылка на официальный сайт проекта:
-        <a href = '{{ item.project_site }}' >{{applications.project_site}}</a>
-    </h4>
-    <h4 class="mb-4">
-        Дата начала работы на проектом:
-        {{applications.data_project_start}}
-    </h4>
-    <h4 class="mb-4">
-    Является ли юридическим лицом:
+    <h3 class="mb-4">
+        Ссылка на официальный сайт проекта
+    </h3>
+    <a href = '{{ item.project_site }}' >{{applications.project_site}}</a>
+    <h3 class="mb-4">
+        Дата начала работы на проектом
+    </h3>
+    <p>{{applications.data_project_start}}</p>
+    <h3 class="mb-4">
+    Является ли юридическим лицом
+    </h3>
+    <p>
     {% if applications.legal_entity %}
         Да
     {% else %}
         Нет
     {% endif %}
-    </h4>
-    <h4 class="mb-4">
-        На какой стадии развития находится проект:
-        {{applications.project_stage}}
-    </h4>
-    <h4 class="mb-4">
-        Описание продукта/сервиса:
-        {{applications.project_description }}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Описание бизнес-модели:
-        {{applications.businessmodel_description}}
-    </h4>
-    <h4 class="mb-4">
+    </p>
+    <h3 class="mb-4">
+        На какой стадии развития находится проект
+    </h3>
+    <p>{{applications.project_stage}}</p>
+    <h3 class="mb-4">
+        Описание продукта/сервиса
+    </h3>
+    <p>{{applications.project_description }}</p>
+    <h3 class="mb-4">
+        Описание бизнес-модели
+    </h3>
+    <p>{{applications.businessmodel_description}}</p>
+    <h3 class="mb-4">
         Какую проблему решает продукт/сервис:
-        {{applications.problem_decision }}
-    </h4>
-    <h4 class="mb-4">
-        Как на данный момент потребители решают данную проблему:
-        {{applications.consumer_decision}}
-    </h4>
-    <h4 class="mb-4">
-        Чем продукт / сервис отличается от текущего способа решения проблемы:
-        {{applications.product_difference}}
-    </h4>
-    <h4 class="mb-4">
+    </h3>
+    <p>{{applications.problem_decision }}</p>
+    <h3 class="mb-4">
+        Как на данный момент потребители решают данную проблему
+    </h3>
+    <p>{{applications.consumer_decision}}</p>
+    <h3 class="mb-4">
+        Чем продукт / сервис отличается от текущего способа решения проблемы
+    </h3>
+    <p>{{applications.product_difference}}</p>
+    <h3 class="mb-4">
         Ссылка на фото/видео продукта:
-        <a href = 'item.photo_video_project' >{{applications.photo_video_project}}</a>
-    </h4>
-    <h4 class="mb-4">
+    </h3>
+    <a href='{{ item.photo_video_project }}' >{{applications.photo_video_project}}</a>
+    <h3 class="mb-4">
         Насколько проработана патентоспособность продукта/услуги:
         {{applications.patentability}}
-    </h4>
-    <h4 class="mb-4">
-        Оценка объема рынка:
-        {{applications.market_size}}
-
-
-    </h4>
-    <h4 class="mb-4">
+    </h3>
+    <h3 class="mb-4">
+        Оценка объема рынка
+    </h3>
+    <p>{{applications.market_size}}</p>
+    <h3 class="mb-4">
         Описание маркетинговой стратегии:
-        {{applications.marketing_description}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Описание стратегии продаж:
-        {{applications.sale_strategy}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Описание существующих рисков:
-        {{applications.desciption_risk }}
-
-
-    </h4>
-    <h4 class="mb-4">
+    </h3>
+    <p>{{applications.marketing_description}}</p>
+    <h3 class="mb-4">
+        Описание стратегии продаж
+    </h3>
+    <p>{{applications.sale_strategy}}</p>
+    <h3 class="mb-4">
+        Описание существующих рисков
+    </h3>
+    <p>{{ applications.desciption_risk }}</p>
+    <h3 class="mb-4">
         Количество клиентов на данный момент:
-        {{applications.client_count}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Предыдущие инвесторы (ФИО, сумма инвестиций):
-        {{applications.previous_investors}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Какая среднегодовая сумма издержек у компании / проекта за последние 2 года:
-        {{applications.middle_cost}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Какая сумма инвестирования необходима для дальнейшего развития:
-        {{applications.budget_development}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Какая среднегодовая сумма выручки у компании / проекта за последние 2 года:
-        {{applications.middle_revenue }}
-
-
-    </h4>
-    <h4 class="mb-4">
+    </h3>
+    <p>{{applications.client_count}}</p>
+    <h3 class="mb-4">
+        Предыдущие инвесторы (ФИО, сумма инвестиций)
+    </h3>
+    <p>{{applications.previous_investors}}</p>
+    <h3 class="mb-4">
+        Какая среднегодовая сумма издержек у компании / проекта за последние 2 года
+    </h3>
+    <p>{{applications.middle_cost}}</p>
+    <h3 class="mb-4">
+        Какая сумма инвестирования необходима для дальнейшего развития
+    </h3>
+    <p>{{applications.budget_development}}</p>
+    <h3 class="mb-4">
+        Какая среднегодовая сумма выручки у компании / проекта за последние 2 года
+    </h3>
+    <p>{{applications.middle_revenue }}</p>
+    <h3 class="mb-4">
         Количество человек в команде:
-        {{applications.team_count}}
-
-
-    </h4>
-    <h4 class="mb-4">
+    </h3>
+    <p>{{applications.team_count}}</p>
+    <h3 class="mb-4">
         ФИО членов команды:
-        {{applications.fio_team}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Полученное образование членов команды:
-        {{applications.team_education}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Опыт работы членов команды:
-        {{applications.team_experience}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Текущая занимаемая должность членов команды:
-        {{applications.position_member}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Текущее место жительства членов команды:
-        {{applications.residence_member}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Как познакомились и пришли к решению работать вместе:
-        {{applications.team_create}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Готова ли команда переехать на время акселерационной программы в г.Грозный Чеченская Республика:
+    </h3>
+    <p>{{applications.fio_team}}</p>
+    <h3 class="mb-4">
+        Полученное образование членов команды
+    </h3>
+    {{applications.team_education}}
+    <h3 class="mb-4">
+        Опыт работы членов команды
+    </h3>
+    <p>{{applications.team_experience}}</p>
+    <h3 class="mb-4">
+        Текущая занимаемая должность членов команды
+    </h3>
+    <p>{{applications.position_member}}</p>
+    <h3 class="mb-4">
+        Текущее место жительства членов команды
+    </h3>
+    <p>{{applications.residence_member}}</p>
+    <h3 class="mb-4">
+        Как познакомились и пришли к решению работать вместе
+    </h3>
+    <p>{{applications.team_create}}</p>
+    <h3 class="mb-4">
+        Готова ли команда переехать на время акселерационной программы в г.Грозный Чеченская Республика
+    </h3>
+    <p>
         {% if applications.legal_entity %}
             Да
         {% else %}
             Нет
         {% endif %}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Готова ли ваша команда посвятить все свое время развитию проекта в соответствии с акселерационной программой:
+    </p>
+    <h3 class="mb-4">
+        Готова ли ваша команда посвятить все свое время развитию проекта в соответствии с акселерационной программой
+    </h3>
+    <p>
         {% if applications.legal_entity %}
             Да
         {% else %}
             Нет
         {% endif %}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Адрес компании:
-        {{applications.adress_company}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        ИНН компании:
-        {{applications.inn_company}}
-
-
-    </h4>
-    <h4 class="mb-4">
+    </p>
+    <h3 class="mb-4">
+        Адрес компании
+    </h3>
+    <p>{{applications.adress_company}}</p>
+    <h3 class="mb-4">
+        ИНН компании
+    </h3>
+    <p>{{applications.inn_company}}</p>
+    <h3 class="mb-4">
         ФИО контактного лица:
-        {{applications.fio}}
-
-
-    </h4>
-
-    <h4 class="mb-4">
-        Загруженный файл:
-        {{applications.upload}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Почта контактного лица:
-        {{applications.email}}
-
-
-    </h4>
-    <h4 class="mb-4">
-        Прикрепленный документ: <a href="http://{{ request.get_host }}/media/{{ applications.upload }}">Файл</a>
-    </h4>
+    </h3>
+    <p>{{applications.fio}}</p>
+    <h3 class="mb-4">
+        Почта контактного лица
+    </h3>
+    <p>{{applications.email}}</p>
+    <h3 class="mb-4">
+        Прикрепленный документ
+    </h3>
+    <a href="http://{{ request.get_host }}/media/{{ applications.upload }}">Файл</a></br>
+    {% if request.user.is_staff %}
+        <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a>
+    {% endif %}
+    <hr>
     <form id="add_form" method="post">
         {% csrf_token %}
         {{ form }}
@@ -223,12 +179,27 @@ Applicaton Detail
     {% for comment in comments %}
     <div class="remark">
         <hr>
-        <h4>{{ comment.user.username }}</h4>
+        <a href="{% url 'delete_comment' comment.pk %}" type="button" class="ml-2 mb-1 close">
+            <span aria-hidden="true">&times;</span>
+        </a>
+        {% if comment.user.is_expert %}
+            <a href="{% url 'expert_profile_detail_url' comment.user.expertprofile.pk %}">
+                <img class="mb-4"  src="{{ comment.user.expertprofile.photo|media_folder_users }}">
+            </a>
+            <div class='text'>
+            <h3><a href="{% url 'expert_profile_detail_url' comment.user.expertprofile.pk %}" class="text-dark">{{ comment.user.username }}</a></h3>
+        {% else %}
+            <a href="{% url 'user_profile_detail_url' comment.user.userprofile.pk %}" class="text-dark">
+                <img class="mb-4"  src="{{ comment.user.userprofile.photo|media_folder_users }}">
+            </a>
+            <div class='text'>
+            <h3><a href='{% url "user_profile_detail_url" comment.user.userprofile.pk %}' class="text-dark">{{ comment.user.username }}</a></h3>
+        {% endif %}
         <p>{{ comment.text }}</p>
         <small class="text-muted">{{ comment.created_at }}</small>
+        </div>
     </div>
     {% endfor %}
-</div>
 
 
 {% endblock content %}

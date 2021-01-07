@@ -12,6 +12,8 @@ gunicorn = "*"
 django-heroku = "*"
 dj-database-url = "*"
 whitenoise = "*"
+xlwt = "*"
+xhtml2pdf = "*"
 
 [dev-packages]
 flake8 = "*"

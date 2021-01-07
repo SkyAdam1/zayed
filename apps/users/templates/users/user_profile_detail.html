@@ -6,43 +6,19 @@
 {% endblock title %}
 
 {% block content %}
-<style>
-.box {
-    margin: 0 auto;
-}
-
-.box img {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    float: left;
-}
-
-.box a {
-    width: 250px;
-    display: block;
-    clear: left;
-}
-
-.information {
-    margin-left: 300px;
-    display: block;
-    position: absolute;
-}
-</style>
 
 <div class="box">
     <div class="information">
-        <h3>{{ object.profile.last_name }} {{ object.profile.first_name}} {{ object.profile.middle_name}}</h3>
-        <h3>{{ object.profile.email }}</h3>
-        <h3>Номер телефона : {{ object.phone_number }}</h3>
-        <h3>Почтовый адрес : {{ object.mail }}</h3>
-        <h3>ИНН : {{ object.inn }}</h3>
-        <h3>ОГРН : {{ object.ogrn}}</h3>
-        <h3>Юр.Адрес : {{ object.legal_address }}</h3>
-        <h3>ФИО Ген.Директора : {{ object.director_fio }}</h3>
-        <h3>Расчетный счет : {{ object.rs }}</h3>
-        <h3>Банк : {{ object.bank }}</h3>
+        <h4>{{ object.profile.last_name }} {{ object.profile.first_name}} {{ object.profile.middle_name}}</h4>
+        <h4>{{ object.profile.email }}</h4>
+        <h4>Номер телефона: {{ object.phone_number }}</h4>
+        <h4>Почтовый адрес: {{ object.mail }}</h4>
+        <h4>ИНН: {{ object.inn }}</h4>
+        <h4>ОГРН: {{ object.ogrn}}</h4>
+        <h4>Юр.Адрес: {{ object.legal_address }}</h4>
+        <h4>ФИО Ген.Директора: {{ object.director_fio }}</h4>
+        <h4>Расчетный счет: {{ object.rs }}</h4>
+        <h4>Банк: {{ object.bank }}</h4>
     </div>
     <img class="mb-4" src="{{ object.photo|media_folder_users }}">
     {% if user.pk == object.profile.pk %}
