@@ -5,15 +5,15 @@ from .models import CustomUser, UserProfile, ExpertProfile
 
 
 class CustomUserCreationForm(user_forms.UserCreationForm):
-    class Meta():
+    class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CustomUserChangeForm(user_forms.UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CustomUserLoginForm(user_forms.AuthenticationForm, forms.ModelForm):
@@ -21,44 +21,71 @@ class CustomUserLoginForm(user_forms.AuthenticationForm, forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password')
+        fields = ("username", "password")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs["class"] = "form-control"
 
 
 class CustomUserRegistrationForm(user_forms.UserCreationForm):
     """Форма для регистрации"""
 
-    class Meta():
+    class Meta:
         model = CustomUser
-        fields = ('username', 'last_name', 'first_name', 'middle_name', 'is_expert', 'email', 'password1', 'password2')
+        fields = (
+            "username",
+            "last_name",
+            "first_name",
+            "middle_name",
+            "is_expert",
+            "email",
+            "password1",
+            "password2",
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs["class"] = "form-control"
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('photo', 'phone_number', 'mail', 'inn', 'ogrn', 'legal_address', 'director_fio', 'rs', 'bank')
+        fields = (
+            "photo",
+            "phone_number",
+            "mail",
+            "inn",
+            "ogrn",
+            "legal_address",
+            "director_fio",
+            "rs",
+            "bank",
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs["class"] = "form-control"
 
 
 class ExpertProfileForm(forms.ModelForm):
     class Meta:
         model = ExpertProfile
-        fields = ('photo', 'phone_number', 'work_place', 'position', 'interests', 'education', 'degree')
+        fields = (
+            "photo",
+            "phone_number",
+            "work_place",
+            "position",
+            "interests",
+            "education",
+            "degree",
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs["class"] = "form-control"

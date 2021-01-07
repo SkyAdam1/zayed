@@ -15,27 +15,27 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-    '''Кастомная модель пользователей'''
+    """Кастомная модель пользователей"""
 
     email = EmailField(
-        ('email address'),
+        ("email address"),
         unique=True,
-        error_messages={
-            'unique': _('Такой email уже зарегистрирован')})
+        error_messages={"unique": _("Такой email уже зарегистрирован")},
+    )
     is_expert = BooleanField(
-        _('cтатус эксперта'),
+        _("cтатус эксперта"),
         default=False,
-        help_text=_('Отметьте, если пользователь является экспертом.'))
+        help_text=_("Отметьте, если пользователь является экспертом."),
+    )
     is_active = BooleanField(
-        _('active'),
+        _("active"),
         default=True,
         help_text=_(
-            'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'))
-    middle_name = CharField(
-        _('отчество'),
-        max_length=150,
-        blank=True)
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+    middle_name = CharField(_("отчество"), max_length=150, blank=True)
 
     objects = CustomUserManager()
 
@@ -45,29 +45,41 @@ class CustomUser(AbstractUser):
 
 class UserProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
-    photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
-    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200, default='')
-    mail = CharField(_('Почтовый адрес'), max_length=200, blank=True, null=True, default='')
-    inn = CharField(_('Ваш ИНН'), blank=True, null=True, max_length=200, default='')
-    ogrn = CharField(_('ОГРН'), blank=True, null=True, max_length=200, default='')
-    legal_address = CharField(_('Юридический адрес'), max_length=200, blank=True, null=True, default='')
-    director_fio = CharField(_('ФИО Ген.Директора'), max_length=200, blank=True, null=True, default='')
-    rs = CharField(_('Расчетный счет'), blank=True, null=True, max_length=200, default='')
-    bank = CharField(_('Банк'), max_length=200,  blank=True, null=True, default='')
+    photo = models.ImageField(
+        _("Фото профиля"), upload_to="avatar_photos/", null=True, blank=True
+    )
+    phone_number = CharField(
+        _("Номер телефона для связи"), blank=True, null=True, max_length=200, default=""
+    )
+    mail = CharField(
+        _("Почтовый адрес"), max_length=200, blank=True, null=True, default=""
+    )
+    inn = CharField(_("Ваш ИНН"), blank=True, null=True, max_length=200, default="")
+    ogrn = CharField(_("ОГРН"), blank=True, null=True, max_length=200, default="")
+    legal_address = CharField(
+        _("Юридический адрес"), max_length=200, blank=True, null=True, default=""
+    )
+    director_fio = CharField(
+        _("ФИО Ген.Директора"), max_length=200, blank=True, null=True, default=""
+    )
+    rs = CharField(
+        _("Расчетный счет"), blank=True, null=True, max_length=200, default=""
+    )
+    bank = CharField(_("Банк"), max_length=200, blank=True, null=True, default="")
 
     def __str__(self):
         return self.profile.username
 
     def save(self, *args, **kwargs):
         if self.photo:
-            name = Path(self.photo.name).stem + '.jpg'
+            name = Path(self.photo.name).stem + ".jpg"
             photo = Image.open(self.photo)
-            if photo.mode in ('RGBA', 'LA'):
-                background = Image.new(photo.mode[:-1], photo.size, '#fff')
+            if photo.mode in ("RGBA", "LA"):
+                background = Image.new(photo.mode[:-1], photo.size, "#fff")
                 background.paste(photo, photo.split()[-1])
                 photo = background
             image_io = BytesIO()
-            photo.save(image_io, format='JPEG', quality=100)
+            photo.save(image_io, format="JPEG", quality=100)
             self.photo.save(name, ContentFile(image_io.getvalue()), save=False)
         super(self.__class__, self).save(*args, **kwargs)
 
@@ -84,31 +96,49 @@ class UserProfile(models.Model):
 
 class ExpertProfile(models.Model):
     profile = OneToOneField(CustomUser, on_delete=models.CASCADE)
-    photo = models.ImageField(_('Фото профиля'), upload_to='avatar_photos/', null=True, blank=True)
-    phone_number = CharField(_('Номер телефона для связи'), blank=True, null=True, max_length=200, default='')
-    work_place = CharField(_('Место работы'), blank=True, null=True, max_length=200, default='')
-    position = CharField(_('Занимаемая должность'), blank=True, null=True, max_length=200, default='')
-    interests = CharField(_('Сфера профессиональных интересов'), blank=True, null=True, max_length=200, default='')
+    photo = models.ImageField(
+        _("Фото профиля"), upload_to="avatar_photos/", null=True, blank=True
+    )
+    phone_number = CharField(
+        _("Номер телефона для связи"), blank=True, null=True, max_length=200, default=""
+    )
+    work_place = CharField(
+        _("Место работы"), blank=True, null=True, max_length=200, default=""
+    )
+    position = CharField(
+        _("Занимаемая должность"), blank=True, null=True, max_length=200, default=""
+    )
+    interests = CharField(
+        _("Сфера профессиональных интересов"),
+        blank=True,
+        null=True,
+        max_length=200,
+        default="",
+    )
     edu = [
-        ('Высшее', 'Высшее'),
-        ('Среднее профессиональное', 'Среднее профессиональное'),
+        ("Высшее", "Высшее"),
+        ("Среднее профессиональное", "Среднее профессиональное"),
     ]
-    education = CharField(_('Образование'), choices=edu, blank=True, null=True, max_length=200, default='')
-    degree = CharField(_('Степень образования'), blank=True, null=True, max_length=200, default='')
+    education = CharField(
+        _("Образование"), choices=edu, blank=True, null=True, max_length=200, default=""
+    )
+    degree = CharField(
+        _("Степень образования"), blank=True, null=True, max_length=200, default=""
+    )
 
     def __str__(self):
         return self.profile.username
 
     def save(self, *args, **kwargs):
         if self.photo:
-            name = Path(self.photo.name).stem + '.jpg'
+            name = Path(self.photo.name).stem + ".jpg"
             photo = Image.open(self.photo)
-            if photo.mode in ('RGBA', 'LA'):
-                background = Image.new(photo.mode[:-1], photo.size, '#fff')
+            if photo.mode in ("RGBA", "LA"):
+                background = Image.new(photo.mode[:-1], photo.size, "#fff")
                 background.paste(photo, photo.split()[-1])
                 photo = background
             image_io = BytesIO()
-            photo.save(image_io, format='JPEG', quality=100)
+            photo.save(image_io, format="JPEG", quality=100)
             self.photo.save(name, ContentFile(image_io.getvalue()), save=False)
         super(self.__class__, self).save(*args, **kwargs)
 

@@ -1,7 +1,12 @@
 from django.contrib import admin
 
-from .models import (Application, ApplicationComment, ApplicationRemark,
-                     ApplicationReport, DesignatedExpert)
+from .models import (
+    Application,
+    ApplicationComment,
+    ApplicationRemark,
+    ApplicationReport,
+    DesignatedExpert,
+)
 
 admin.site.register(Application)
 admin.site.register(ApplicationComment)

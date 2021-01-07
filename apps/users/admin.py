@@ -11,29 +11,44 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ('username', 'email', 'is_staff', 'is_active', 'is_expert')
-    list_filter = ('is_staff', 'is_active', 'is_expert')
+    list_display = ("username", "email", "is_staff", "is_active", "is_expert")
+    list_filter = ("is_staff", "is_active", "is_expert")
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
-        ('Персональная информация', {'fields': ('last_name', 'first_name', 'middle_name')}),
-        ('Права доступа', {'fields': ('is_superuser', 'is_staff', 'is_active', 'is_expert')}),
-        ('Важные даты', {'fields': ('date_joined', 'last_login')}),
+        (None, {"fields": ("username", "email", "password")}),
+        (
+            "Персональная информация",
+            {"fields": ("last_name", "first_name", "middle_name")},
+        ),
+        (
+            "Права доступа",
+            {"fields": ("is_superuser", "is_staff", "is_active", "is_expert")},
+        ),
+        ("Важные даты", {"fields": ("date_joined", "last_login")}),
     )
 
     add_fieldsets = (
         (
             None,
             {
-                'classes': ('wide',),
-                'fields': (
-                    'username', 'email', 'password1', 'password2', 'last_name', 'first_name',
-                    'middle_name', 'is_superuser', 'is_staff', 'is_active', 'is_expert'
-                    )
-            }
+                "classes": ("wide",),
+                "fields": (
+                    "username",
+                    "email",
+                    "password1",
+                    "password2",
+                    "last_name",
+                    "first_name",
+                    "middle_name",
+                    "is_superuser",
+                    "is_staff",
+                    "is_active",
+                    "is_expert",
+                ),
+            },
         ),
     )
-    search_fields = ('username',)
-    ordering = ('username',)
+    search_fields = ("username",)
+    ordering = ("username",)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
