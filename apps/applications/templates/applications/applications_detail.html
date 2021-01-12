@@ -168,7 +168,7 @@
     </h3>
     <a href="http://{{ request.get_host }}/media/{{ applications.upload }}">Файл</a></br>
     {% if request.user.is_staff %}
-        <a href="https://pdflayer.com/php_helper_scripts/pdf_api.php?url={% url 'applications_detail_pdf_url' applications.pk %}&secret_key=f82a12cfd458f22aa4361d46e20a411a" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a>
+        <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a>
     {% endif %}
     <hr>
     <form id="add_form" method="post">

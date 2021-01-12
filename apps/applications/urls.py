@@ -46,11 +46,6 @@ urlpatterns = [
         name="applications_detail_url",
     ),
     path(
-        "application_detail/<int:id>/pdf",
-        views.ApplicationsDetailPdfView.as_view(),
-        name="applications_detail_pdf_url",
-    ),
-    path(
         "applications_status/<int:id>",
         views.switch_application_status,
         name="switch_status",
