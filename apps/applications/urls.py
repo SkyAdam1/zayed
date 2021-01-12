@@ -19,7 +19,6 @@ urlpatterns = [
         views.ApplicationsOutputView.as_view(),
         name="applications_output_pk_url",
     ),
-    path("application/<int:pk>/pdf/", views.export_pdf, name="applications_export"),
     path(
         "application_add_expert/<int:pk>/",
         views.ApplicationAddExpert.as_view(),

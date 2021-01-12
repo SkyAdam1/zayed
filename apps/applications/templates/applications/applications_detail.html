@@ -169,7 +169,6 @@
     <a href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}/media/{{ applications.upload }}">Файл</a></br>
     {% if request.user.is_staff %}
         <button type="button" class="btn btn-primary" onclick="toPdf()">Экспорт в PDF</button>
-        {% comment %} <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a> {% endcomment %}
     {% endif %}
     <hr>
     <form id="add_form" method="post">
