@@ -16,11 +16,11 @@
     <h3 class="mb-4">
         Ссылка на официальный сайт проекта
     </h3>
-    <a href = '{{ item.project_site }}' >{{applications.project_site}}</a>
+    <a href='{{ item.project_site }}' >{{applications.project_site}}</a>
     <h3 class="mb-4">
         Дата начала работы на проектом
     </h3>
-    <p>{{applications.data_project_start}}</p>
+    <p>{{ applications.data_project_start }}</p>
     <h3 class="mb-4">
     Является ли юридическим лицом
     </h3>
@@ -166,9 +166,10 @@
     <h3 class="mb-4">
         Прикрепленный документ
     </h3>
-    <a href="http://{{ request.get_host }}/media/{{ applications.upload }}">Файл</a></br>
+    <a href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}/media/{{ applications.upload }}">Файл</a></br>
     {% if request.user.is_staff %}
-        <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a>
+        <button type="button" class="btn btn-primary" onclick="toPdf()">Экспорт в PDF</button>
+        {% comment %} <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a> {% endcomment %}
     {% endif %}
     <hr>
     <form id="add_form" method="post">
@@ -200,6 +201,213 @@
         </div>
     </div>
     {% endfor %}
-
-
 {% endblock content %}
+{% block script %}
+    <script src="{% static 'js/pdfmake.min.js' %}"></script>
+    <script src="{% static 'js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript">
+    function toPdf() {
+        var data = document.getElementsByClassName('container')[0].textContent
+        var docDefinition = {
+            content: [{
+                    text: '{{ applications.project_name }}',
+                    style: 'header'
+                },
+                {
+                    text: 'Краткая информация',
+                    style: 'subheader'
+                },
+                {
+                    text: '{{ applications.user }}',
+                    link: '{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{% url "user_profile_detail_url" applications.user.userprofile.pk %}',
+                    style: 'small'
+                },
+                {
+                    text: 'Дата начала работы на проектом: {{ applications.data_project_start }}',
+                    style: 'small'
+                },
+                {
+                    text: '{% if applications.legal_entity %}Является{% else %}Не является{% endif %} юридическим лицом',
+                    style: 'small'
+                },
+                {
+                    text: 'Сайт проекта',
+                    link: '{{ applications.project_site }}',
+                    style: 'small'
+                },
+                {
+                    text: 'Cтадия разработки',
+                    style: 'subheader'
+                },
+                '{{applications.project_stage}}',
+                {
+                    text: 'Описание продукта/сервиса',
+                    style: 'subheader'
+                },
+                '{{applications.project_description }}',
+                {
+                    text: 'Описание бизнес-модели',
+                    style: 'subheader'
+                },
+                '{{applications.businessmodel_description}}',
+                {
+                    text: 'Какую проблему решает продукт/сервис?',
+                    style: 'subheader'
+                },
+                '{{applications.problem_decision }}',
+                {
+                    text: 'Как на данный момент потребители решают данную проблему?',
+                    style: 'subheader'
+                },
+                '{{applications.consumer_decision}}',
+                {
+                    text: 'Чем продукт / сервис отличается от текущего способа решения проблемы?',
+                    style: 'subheader'
+                },
+                '{{applications.product_difference}}',
+                {
+                    text: 'Ссылка на фото/видео продукта',
+                    link: '{{ item.photo_video_project }}',
+                    style: 'subheader'
+                },
+                {
+                    text: 'Насколько проработана патентоспособность продукта/услуги?',
+                    style: 'subheader'
+                },
+                '{{applications.patentability}}',
+                {
+                    text: 'Оценка объема рынка',
+                    style: 'subheader'
+                },
+                '{{applications.market_size}}',
+                {
+                    text: 'Оценка объема рынка',
+                    style: 'subheader'
+                },
+                '{{applications.market_size}}',
+                {
+                    text: 'Описание маркетинговой стратегии',
+                    style: 'subheader'
+                },
+                '{{applications.marketing_description}}',
+                {
+                    text: 'Описание стратегии продаж',
+                    style: 'subheader'
+                },
+                '{{applications.sale_strategy}}',
+                {
+                    text: 'Описание существующих рисков',
+                    style: 'subheader'
+                },
+                '{{applications.desciption_risk}}',
+                {
+                    text: 'Количество клиентов на данный момент',
+                    style: 'subheader'
+                },
+                '{{applications.client_count}}',
+                {
+                    text: 'Предыдущие инвесторы (ФИО, сумма инвестиций)',
+                    style: 'subheader'
+                },
+                '{{applications.previous_investors}}',
+                {
+                    text: 'Какая среднегодовая сумма издержек у компании / проекта за последние 2 года',
+                    style: 'subheader'
+                },
+                '{{applications.middle_cost}}',
+                {
+                    text: 'Какая сумма инвестирования необходима для дальнейшего развития',
+                    style: 'subheader'
+                },
+                '{{applications.budget_development}}',
+                {
+                    text: ' Какая среднегодовая сумма выручки у компании / проекта за последние 2 года',
+                    style: 'subheader'
+                },
+                '{{applications.middle_revenue}}',
+                {
+                    text: 'Количество человек в команде',
+                    style: 'subheader'
+                },
+                '{{applications.team_count}}',
+                {
+                    text: 'ФИО членов команды',
+                    style: 'subheader'
+                },
+                '{{applications.fio_team}}',
+                {
+                    text: 'Полученное образование членов команды',
+                    style: 'subheader'
+                },
+                '{{applications.team_education}}',
+                {
+                    text: 'Опыт работы членов команды',
+                    style: 'subheader'
+                },
+                '{{applications.team_experience}}',
+                {
+                    text: 'Текущая занимаемая должность членов команды',
+                    style: 'subheader'
+                },
+                '{{applications.position_member}}',
+                {
+                    text: 'Текущее место жительства членов команды',
+                    style: 'subheader'
+                },
+                '{{applications.residence_member}}',
+                {
+                    text: 'Как познакомились и пришли к решению работать вместе',
+                    style: 'subheader'
+                },
+                '{{applications.team_create}}',
+                {
+                    text: 'Готова ли команда посвятить все свое время развитию проекта в соответствии с акселерационной программой?',
+                    style: 'subheader'
+                },
+                '{% if applications.legal_entity %}Да{% else %}Нет{% endif %}',
+                {
+                    text: 'Адрес компании',
+                    style: 'subheader'
+                },
+                '{{applications.adress_company}}',
+                {
+                    text: 'ИНН компании',
+                    style: 'subheader'
+                },
+                '{{applications.inn_company}}',
+                {
+                    text: 'ФИО контактного лица',
+                    style: 'subheader'
+                },
+                '{{applications.fio}}',
+                {
+                    text: 'Почта контактного лица',
+                    style: 'subheader'
+                },
+                '{{applications.email}}',
+                {
+                    text: 'Вложенный файл',
+                    link: '{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}/media/{{ applications.upload }}'
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true
+                },
+                subheader: {
+                    fontSize: 15,
+                    bold: true
+                },
+                quote: {
+                    italics: true
+                },
+                small: {
+                    fontSize: 10
+                }
+            }
+        }
+        pdfMake.createPdf(docDefinition).download('ApplicationDetail.pdf');
+    }
+    </script>
+{% endblock script %}
