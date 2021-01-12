@@ -11,7 +11,8 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.views.generic.edit import DeleteView, UpdateView
 from xhtml2pdf import pisa
-
+import time
+import pyautogui
 from . import forms
 from .models import (
     Application,
@@ -126,6 +127,15 @@ class ApplicationsCreateView(LoginRequiredMixin, UserAuthenticatedMixin, CreateV
 
 
 class ApplicationsDetailView(LoginRequiredMixin, ObjectDetailMixin, View):
+    """обзор заявки"""
+
+    model = Application
+    template_name = "applications/applications_detail.html"
+    form_class = forms.ApplicationCommentForm
+    success_url = reverse_lazy("applications_detail_url")
+
+
+class ApplicationsDetailPdfView(ObjectDetailMixin, View):
     """обзор заявки"""
 
     model = Application
@@ -404,19 +414,7 @@ def fetch_pdf_resources(uri, rel):
 
 
 def export_pdf(request, pk):
-    obj = get_object_or_404(Application, pk=pk)
-    template_path = "applications/applications_detail.html"
-    context = {"applications": obj, "to_pdf": True}
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = 'attachment; filename="ApplicationDetail.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    pisa.CreatePDF(
-        BytesIO(html.encode("UTF-8")),
-        response,
-        encoding="utf-8",
-        link_callback=fetch_pdf_resources,
-    )
-    return response
+    pyautogui.hotkey("ctrl", "s")
+    time.sleep(1)
+    pyautogui.typewrite(SEQUENCE + ".html")
+    pyautogui.hotkey("enter")
