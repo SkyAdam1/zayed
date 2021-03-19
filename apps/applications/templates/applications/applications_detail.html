@@ -10,8 +10,12 @@
     <h1 class="mt-5">
         {{ applications.project_name }}
     </h1>
-    <p>      
-      <a href="{% url 'user_profile_detail_url' applications.user.userprofile.pk %}">{{ applications.user }}</a> 
+    <p>
+        {% if applications.user.is_expert %}
+            <a href="{% url 'expert_profile_detail_url' applications.user.expertprofile.pk %}">{{ applications.user }}</a> 
+        {% else %}
+            <a href="{% url 'user_profile_detail_url' applications.user.userprofile.pk %}">{{ applications.user }}</a> 
+        {% endif %}
     </p>
     <h3 class="mb-4">
         Ссылка на официальный сайт проекта
@@ -168,7 +172,7 @@
     </h3>
     <a href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}/media/{{ applications.upload }}">Файл</a></br>
     {% if request.user.is_staff %}
-        <button type="button" class="btn btn-primary" onclick="toPdf()">Экспорт в PDF</button>
+        <button type="button" class="btn btn-danger" onclick="toPdf()">Экспорт в PDF</button>
         {% comment %} <a href="{% url 'applications_export' applications.pk %}" type="button" class="btn btn-danger mt-5">Экспорт в PDF</a> {% endcomment %}
     {% endif %}
     <hr>
@@ -219,7 +223,11 @@
                 },
                 {
                     text: '{{ applications.user }}',
-                    link: '{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{% url "user_profile_detail_url" applications.user.userprofile.pk %}',
+                    {% if applications.user.is_expert %}
+                        link: '{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{% url "expert_profile_detail_url" applications.user.expertprofile.pk %}',
+                    {% else %}
+                        link: '{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.META.HTTP_HOST }}{% url "user_profile_detail_url" applications.user.userprofile.pk %}',
+                    {% endif %}
                     style: 'small'
                 },
                 {
@@ -393,11 +401,14 @@
             styles: {
                 header: {
                     fontSize: 18,
-                    bold: true
+                    bold: true,
+                    alignment: 'center',
+                    margin: [ 0, 0, 0, 10 ]
                 },
                 subheader: {
                     fontSize: 15,
-                    bold: true
+                    bold: true,
+                    margin: [ 0, 10, 0, 5 ]
                 },
                 quote: {
                     italics: true

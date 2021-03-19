@@ -1,16 +1,11 @@
-from io import BytesIO
-import os
-from django.conf import settings
 import xlwt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View
 from django.views.generic.edit import DeleteView, UpdateView
-from xhtml2pdf import pisa
 
 from . import forms
 from .models import (
@@ -390,33 +385,4 @@ def export_xls(request):
         for col_num in range(len(row)):
             ws.write(row_num, col_num, row[col_num], font_style)
     wb.save(response)
-    return response
-
-
-def fetch_pdf_resources(uri, rel):
-    if uri.find(settings.MEDIA_URL) != -1:
-        path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
-    elif uri.find(settings.STATIC_URL) != -1:
-        path = os.path.join(settings.STATIC_ROOT, uri.replace(settings.STATIC_URL, ""))
-    else:
-        path = None
-    return path
-
-
-def export_pdf(request, pk):
-    obj = get_object_or_404(Application, pk=pk)
-    template_path = "applications/applications_detail.html"
-    context = {"applications": obj, "to_pdf": True}
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = 'attachment; filename="ApplicationDetail.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    pisa.CreatePDF(
-        BytesIO(html.encode("UTF-8")),
-        response,
-        encoding="utf-8",
-        link_callback=fetch_pdf_resources,
-    )
     return response
